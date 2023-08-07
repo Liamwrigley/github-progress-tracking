@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post('/push', async (req, res) => {
     const webhook = new WebhookClient({
-        url: 'https://discord.com/api/webhooks/1137714263230791773/4gjImZBaE9K563luQjH6TyW0mMvkSwKbX4xM-FMCegjN0G8X3GfFoh7KbO2zVSJ8iyaZ'
+        url: process.env.WEBHOOK_URL
     })
 
     await webhook.send({content: 'user has pushed'})
