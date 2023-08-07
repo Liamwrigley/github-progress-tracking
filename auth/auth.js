@@ -1,5 +1,5 @@
 const axios = require('axios');
-const github = require('../Github/createWebhook')
+const github = require('./createWebhook')
 
 const express = require('express');
 const router = express.Router();
