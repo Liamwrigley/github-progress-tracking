@@ -13,6 +13,7 @@ router.post('/push/:discordId', async (req, res) => {
         url: process.env.WEBHOOK_URL
     })
 
+    // nothing - just testing push
     const data = JSON.parse(req.body);
     console.log(data)
 
