@@ -13,6 +13,9 @@ router.post('/push/:discordId', async (req, res) => {
         url: process.env.WEBHOOK_URL
     })
 
+    const data = JSON.parse(req.body);
+    console.log(data)
+
     await webhook.send({content: `<@${req.params.discordId}> has pushed`})
     
     res.status(200).send("Successfully processed.");
