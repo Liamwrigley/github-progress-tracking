@@ -89,13 +89,14 @@ router.get("/github-select-repo", forceAuth, async (req, res) => {
 
 router.post("/github-submit-repo", forceAuth, async (req, res) => {
     var token = req.session.token;
+    var discordId = req.session.discordId
     var hostname = helpers.getBaseUrl(req)
     console.log("hostname", hostname);
 
     const repoData = JSON.parse(req.body.repoData);
 
     const repoName = repoData.url.replace("https://github.com/", "");
-    await github.CreateWebook(token, hostname, repoName);
+    await github.CreateWebook(token, hostname, repoName, discordId);
 
     console.log("post webhook create attempt");
     res.redirect("/auth/end-session");
