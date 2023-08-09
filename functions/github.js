@@ -1,11 +1,11 @@
 const axios = require('axios');
 
-exports.CreateWebook = async (token, hostUrl, repo) => {
+exports.CreateWebook = async (token, hostUrl, repo, discordId) => {
     const webhookConfig = { 
         name: 'web', 
         active: true, 
         config: {
-            url: `${hostUrl}/event/push`,
+            url: `${hostUrl}/event/push/${discordId}`,
             content_type: 'json',
             secret: 'YOUR_SECRET', // Optional
             events: ['push'], // Customize as needed
