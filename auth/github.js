@@ -92,6 +92,7 @@ router.post("/github-submit-repo", forceAuth, async (req, res) => {
     var discordId = req.session.discordId
     var hostname = helpers.getBaseUrl(req)
     console.log("hostname", hostname);
+    console.log("session", req.session);
 
     const repoData = JSON.parse(req.body.repoData);
 
