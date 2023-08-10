@@ -127,8 +127,7 @@ router.post("/github-submit-repo", forceAuth, async (req, res, next) => {
     res.redirect("/auth/testing");
 });
 
-router.get('/testing', endSession, (req, res) => {
-    console.log("finalising")
+router.get('/', endSession, (req, res) => {
     res.render('index', { title: 'happy coding!' })
 })
 

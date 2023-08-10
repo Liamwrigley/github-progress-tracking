@@ -66,7 +66,7 @@ userSchema.methods.UpdateFromPush = function (_userTime) {
 
 
 const DoesUserExist = async (_discordId) => {
-    var user = await User.exists({ discordId: _discordId })
+    var user = await User.exists({ _id: _discordId })
     return user != null
 }
 
