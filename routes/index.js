@@ -4,7 +4,6 @@ const router = express.Router();
 
 
 router.get('/', (req, res) => {
-
     res.render('index', { title: "Github Progress Tracker", message: "message goes here" })
 })
 

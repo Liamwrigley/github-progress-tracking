@@ -9,6 +9,17 @@ exports.forceAuth = (req, res, next) => {
     next();
 };
 
+exports.endSession = (req, res, next) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.send("Error clearing session");
+        }
+        res.clearCookie("connect.sid");
+        console.log('session ended')
+        next()
+    });
+}
+
 
 
 

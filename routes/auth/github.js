@@ -3,6 +3,7 @@ const github = require("../../functions/github");
 const helpers = require("../../functions/helpers");
 const middleware = require('./middleware')
 const forceAuth = middleware.forceAuth;
+const endSession = middleware.endSession;
 const db = require('../../db/connect')
 
 const express = require("express");
@@ -38,11 +39,7 @@ router.get("/github-oath-callback", async (req, res) => {
 
     axios
         .post("https://github.com/login/oauth/access_token", body, options)
-        .then((res) => {
-            console.log("\n\n\nHERE\n\n", res.data)
-            console.log("\n\n\nHERE\n\n")
-            return res.data["access_token"]
-        })
+        .then((res) => res.data["access_token"])
         .then((_token) => {
             // Use the access token for authentication in future requests
             // console.log(_token);
@@ -93,7 +90,7 @@ router.get("/github-select-repo", forceAuth, async (req, res) => {
         });
 });
 
-router.post("/github-submit-repo", forceAuth, async (req, res) => {
+router.post("/github-submit-repo", forceAuth, async (req, res, next) => {
     var token = req.session.token;
     var discordId = req.session.discordId
     var discordUsername = req.session.discordUsername
@@ -103,17 +100,12 @@ router.post("/github-submit-repo", forceAuth, async (req, res) => {
     const repoData = JSON.parse(req.body.repoData)
 
     const repoName = repoData.url.replace("https://github.com/", "");
+
+    // should have error handling
     await github.CreateWebook(token, hostname, repoName, discordId);
 
-    var saveObj = {
-        discordUsername: discordUsername,
-        discordId: discordId,
-        tz: repoData.timezone,
-        repoName: repoName.split("/")[1],
-        githubName: repoName.split("/")[0]
-    }
-
-    const user = new db.User({
+    // should check if this exists before we create
+    const user = await db.User.create({
         _id: discordId,
         discordUsername: discordUsername,
         timezone: repoData.timezone,
@@ -121,9 +113,9 @@ router.post("/github-submit-repo", forceAuth, async (req, res) => {
         githubName: repoName.split("/")[0]
     })
 
-    console.log('we would save: ', saveObj)
-    console.log("post webhook create attempt");
-    res.redirect("/auth/end-session");
+    //res.redirect("/auth/end-session");
+}, endSession, (req, res) => {
+    res.render('index', { title: 'happy coding!' })
 });
 
 module.exports = router;

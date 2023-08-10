@@ -27,12 +27,13 @@ const userSchema = new mongoose.Schema({
     timezone: { type: String, required: true },
     repoName: { type: String, required: true },
     githubName: { type: String, required: true },
-    githubId: { type: String, required: true },
     totalPushes: { type: Number, default: 0 },
     currentStreak: { type: Number, default: 0 },
     bestStreak: { type: Number, default: 0 },
+    hasCurrentStreak: { type: Boolean, default: false },
     lastPush_UTC: { type: Date },
     endStreakAt_UTC: { type: Date },
+    nextStreakAt_UTC: { type: Date },
 }, {
     timestamps: true
 });
@@ -40,18 +41,25 @@ const userSchema = new mongoose.Schema({
 
 userSchema.methods.UpdateFromPush = (_userTime) => {
     this.totalPushes++;
-    this.currentStreak++;
-    if (this.currentStreak > this.bestStreak) {
-        this.bestStreak = this.currentStreak;
-    }
-
-    //handle time conversions
-    /*
-     - lastPush_UTC is just the timestamp from github converted to UTC
-     - endStreakAt_UTC is the github timestamp add 2 days, strip time back to 12:00am and convert to UTC
-    */
+    this.hasCurrentStreak = true;
     this.lastPush_UTC = moment.parseZone(_userTime).utc();
-    this.endStreakAt_UTC = moment(_userTime).add(2, 'day').startOf('day').utc();
+
+    if (this.lastPush_UTC >= this.nextStreakAt_UTC) {
+
+        this.currentStreak++;
+        if (this.currentStreak > this.bestStreak) {
+            this.bestStreak = this.currentStreak;
+        }
+
+        //handle time conversions
+        /*
+        - lastPush_UTC is just the timestamp from github converted to UTC
+        - nextStreakAt_UTC is the github timestamp add 1 day, strip time back to 12:00am and convert to UTC
+        - endStreakAt_UTC is the github timestamp add 2 days, strip time back to 12:00am and convert to UTC
+        */
+        this.nextStreakAt_UTC = moment(_userTime).add(1, 'day').startOf('day').utc();
+        this.endStreakAt_UTC = moment(_userTime).add(2, 'day').startOf('day').utc();
+    }
 }
 
 
