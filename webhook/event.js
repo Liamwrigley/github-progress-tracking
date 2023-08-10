@@ -15,23 +15,13 @@ module.exports = (io) => {
             url: process.env.WEBHOOK_URL
         })
 
-        console.log("event")
-
-        if (typeof req.body === 'object') {
-            console.log('Body is already an object', req.body);
-        } else {
-            console.log('Trying to parse body', req.body);
-            const parsedBody = JSON.parse(req.body);
+        var event = req.body
+        console.log(event.head_commit.timestamp)
+        db.User.findById(req.params.discordId)
+        if (user) {
+            user.UpdateFromPush(event.head_commit.timestamp)
         }
-        // var event = JSON.parse(req.body)
-        // console.log(event.head_commit.timestamp)
-        // db.User.findById(req.params.discordId)
-        // if (user) {
-        //     user.UpdateFromPush()
-        // }
 
-        // console.log(JSON.parse)
-        // test event
 
         await webhook.send({ content: `<@${req.params.discordId}> has pushed` })
 
