@@ -81,8 +81,10 @@ router.get("/github-select-repo", forceAuth, async (req, res) => {
             repos.forEach((repo) => {
                 repoList.push(repo);
             });
+            let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
             res.render("repoSelect", {
-                repoList: repoList
+                repoList: repoList,
+                tz: timeZone
             });
         });
 });
