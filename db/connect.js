@@ -37,7 +37,6 @@ const userSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
-const User = mongoose.model('User', userSchema);
 
 
 userSchema.methods.UpdateFromPush = function (_userTime) {
@@ -63,6 +62,7 @@ userSchema.methods.UpdateFromPush = function (_userTime) {
     }
 }
 
+const User = mongoose.model('User', userSchema);
 
 
 const DoesUserExist = async (_discordId) => {
