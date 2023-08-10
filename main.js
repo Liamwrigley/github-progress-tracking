@@ -4,8 +4,7 @@ const config = require('./config.json')
 const crypto = require('crypto');
 const cors = require('cors');
 const ejsLayouts = require('express-ejs-layouts');
-
-
+const db = require('./db/connect')
 
 const express = require("express")
 const session = require('express-session');
@@ -57,7 +56,10 @@ app.use('/', indexRoute)
 app.use('/realtime', realtimeRoute)
 
 
-
+//DB
+db.connection.on('connected', () => {
+    console.log('Confirmed connection from main file.');
+});
 
 
 server.listen(config.PORT, () => {
