@@ -103,6 +103,7 @@ router.post("/github-submit-repo", forceAuth, async (req, res, next) => {
 
     // should have error handling
     await github.CreateWebook(token, hostname, repoName, discordId);
+    console.log('webhook done')
 
     // should check if this exists before we create
     const user = await db.User.create({
@@ -112,6 +113,7 @@ router.post("/github-submit-repo", forceAuth, async (req, res, next) => {
         repoName: repoName.split("/")[1],
         githubName: repoName.split("/")[0]
     })
+    console.log('user done')
 
     //res.redirect("/auth/end-session");
 }, endSession, (req, res) => {
