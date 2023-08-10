@@ -15,6 +15,8 @@ const app = express();
 app.set('view engine', 'ejs');
 app.use(ejsLayouts);
 
+app.use(express.json());
+
 // http
 app.use(express.urlencoded({ extended: true }));
 
