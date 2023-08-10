@@ -16,8 +16,15 @@ module.exports = (io) => {
         })
 
         console.log("event")
-        var event = JSON.parse(req.body)
-        console.log(event.head_commit.timestamp)
+
+        if (typeof req.body === 'object') {
+            console.log('Body is already an object', req.body);
+        } else {
+            console.log('Trying to parse body', req.body);
+            const parsedBody = JSON.parse(req.body);
+        }
+        // var event = JSON.parse(req.body)
+        // console.log(event.head_commit.timestamp)
         // db.User.findById(req.params.discordId)
         // if (user) {
         //     user.UpdateFromPush()
