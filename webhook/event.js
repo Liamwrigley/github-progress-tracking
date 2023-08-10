@@ -17,9 +17,15 @@ module.exports = (io) => {
 
         var event = req.body
         console.log(event.head_commit.timestamp)
-        db.User.findById(req.params.discordId)
-        if (user) {
-            user.UpdateFromPush(event.head_commit.timestamp)
+        try {
+
+            const user = await db.User.findById(req.params.discordId)
+            if (user) {
+                user.UpdateFromPush(event.head_commit.timestamp)
+                await user.save();
+            }
+        } catch (err) {
+            console.log("Error updating user on push event\n", err)
         }
 
 
