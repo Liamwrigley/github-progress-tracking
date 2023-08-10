@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
     hasCurrentStreak: { type: Boolean, default: false },
     lastPush_UTC: { type: Date },
     endStreakAt_UTC: { type: Date },
-    nextStreakAt_UTC: { type: Date },
+    nextStreakAt_UTC: { type: Date, default: () => Date.now() },
 }, {
     timestamps: true
 });
