@@ -3,7 +3,7 @@ const github = require("../functions/github");
 const helpers = require("../functions/helpers");
 const middleware = require('./middleware')
 const forceAuth = middleware.forceAuth;
-const getCurrentTimeInZone = middleware.getCurrentTimeInZone;
+const getCurrentTimeInZone = helpers.getCurrentTimeInZone;
 
 const express = require("express");
 const router = express.Router();
