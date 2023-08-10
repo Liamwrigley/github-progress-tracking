@@ -24,6 +24,7 @@ module.exports = (io) => {
         // }
 
         // console.log(JSON.parse)
+        // test event
 
         await webhook.send({ content: `<@${req.params.discordId}> has pushed` })
 
