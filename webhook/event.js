@@ -25,6 +25,7 @@ module.exports = (io) => {
                 await user.save();
             }
         } catch (err) {
+            //test push
             console.log("Error updating user on push event\n", err)
         }
 
