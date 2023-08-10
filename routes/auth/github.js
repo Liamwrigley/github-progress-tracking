@@ -93,9 +93,7 @@ router.get("/github-select-repo", forceAuth, async (req, res) => {
 router.post("/github-submit-repo", forceAuth, async (req, res, next) => {
     var token = req.session.token;
     var discordId = req.session.discordId
-    var discordUsername = req.session.discordUsername
     var hostname = helpers.getBaseUrl(req)
-    console.log("hostname", hostname);
 
     const repoData = JSON.parse(req.body.repoData)
 
@@ -109,14 +107,14 @@ router.post("/github-submit-repo", forceAuth, async (req, res, next) => {
         return res.status(500).send("Error creating webhook");
     }
 
-
     // should check if this exists before we create
     var userExists = await db.DoesUserExist(discordId);
     if (!userExists) {
 
         const user = await db.User.create({
             _id: discordId,
-            discordUsername: discordUsername,
+            discordUsername: req.session.discordUsername,
+            discordAvatar: req.session.discordAvatar,
             timezone: repoData.timezone,
             repoName: repoName.split("/")[1],
             githubName: repoName.split("/")[0]

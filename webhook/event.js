@@ -16,24 +16,25 @@ module.exports = (io) => {
         })
 
         var event = req.body
-        console.log(event.head_commit.timestamp)
+        var user = null;
         try {
 
-            const user = await db.User.findById(req.params.discordId)
+            user = await db.User.findById(req.params.discordId)
             if (user) {
                 user.UpdateFromPush(event.head_commit.timestamp)
                 await user.save();
             }
+
+
+            await webhook.send({ content: `<@${req.params.discordId}> has pushed` })
+
+            io.emit('/realtime', { message: `<@${req.params.discordId}> has pushed`, discordAvatar: `https://cdn.discordapp.com/avatars/${user._id}/${user.discordAvatar}.png` });
+
+            res.status(200).send("Successfully processed.");
         } catch (err) {
+            res.status(500).send("Error updating user on push event")
             console.log("Error updating user on push event\n", err)
         }
-
-
-        await webhook.send({ content: `<@${req.params.discordId}> has pushed` })
-
-        io.emit('/realtime', { message: `<@${req.params.discordId}> has pushed` });
-
-        res.status(200).send("Successfully processed.");
     })
 
     return router;

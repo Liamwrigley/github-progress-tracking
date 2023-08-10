@@ -24,6 +24,7 @@ mongoose.connection.on('disconnected', () => {
 const userSchema = new mongoose.Schema({
     _id: { type: String }, // this is discord id
     discordUsername: { type: String, required: true },
+    discordAvatar: { type: String, required: true },
     timezone: { type: String, required: true },
     repoName: { type: String, required: true },
     githubName: { type: String, required: true },
