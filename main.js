@@ -25,14 +25,14 @@ app.use(cors({
 
 app.use(session({
   secret: "secretKey",//crypto.randomBytes(256).toString('hex'),
-//   resave: false,
-//   saveUninitialized: true,
-//   cookie: {
-//     maxAge: 10 * 60 * 1000,  // 10 minutes
-//     secure: process.env.PRODUCTION == "true", // Set to true if using HTTPS
-//     httpOnly: true,
-//     sameSite: 'strict'
-//   }
+  //   resave: false,
+  //   saveUninitialized: true,
+  //   cookie: {
+  //     maxAge: 10 * 60 * 1000,  // 10 minutes
+  //     secure: process.env.PRODUCTION == "true", // Set to true if using HTTPS
+  //     httpOnly: true,
+  //     sameSite: 'strict'
+  //   }
 }))
 
 //socket io
@@ -58,10 +58,10 @@ app.use('/realtime', realtimeRoute)
 
 //DB
 db.connection.on('connected', () => {
-    console.log('Confirmed connection from main file.');
+  console.log('Confirmed connection from main file.');
 });
 
 
 server.listen(config.PORT, () => {
-    console.log(`Server started on port ${config.PORT}`)
+  console.log(`Server started on port ${config.PORT}`)
 })
