@@ -124,10 +124,12 @@ router.post("/github-submit-repo", forceAuth, async (req, res, next) => {
         console.log('user done')
     }
 
-    //res.redirect("/auth/end-session");
-}, endSession, (req, res) => {
+    res.redirect("/auth/testing");
+});
+
+router.get('/testing', endSession, (req, res) => {
     console.log("finalising")
     res.render('index', { title: 'happy coding!' })
-});
+})
 
 module.exports = router;
