@@ -84,8 +84,7 @@ router.get("/github-select-repo", forceAuth, async (req, res) => {
             });
             getCurrentTimeInZone
             res.render("repoSelect", {
-                repoList: repoList,
-                tz: getCurrentTimeInZone(Intl.DateTimeFormat().resolvedOptions().timeZone)
+                repoList: repoList
             });
         });
 });
@@ -96,13 +95,14 @@ router.post("/github-submit-repo", forceAuth, async (req, res) => {
     var hostname = helpers.getBaseUrl(req)
     console.log("hostname", hostname);
 
-    const repoData = JSON.parse(req.body.repoData);
+    const body = JSON.parse(req.body)
+    const repoData = body.repoData
 
     const repoName = repoData.url.replace("https://github.com/", "");
     await github.CreateWebook(token, hostname, repoName, discordId);
 
     // also get timezone here
-    var timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+    var timeZone = body.timezone
 
     console.log("post webhook create attempt");
     res.redirect("/auth/end-session");

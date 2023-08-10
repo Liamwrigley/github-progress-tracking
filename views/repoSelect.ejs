@@ -47,7 +47,7 @@
                 <p>
                   <a href="" id="repoUrl" target="_blank">View Repository</a>
                 </p>
-                <p>Timezone: <%= tz %><br/><sub>This is important as it is what is used to determine your streaks.</sub></p>
+                <p>Timezone: <span id="timezone"></span><br/><sub>This is important as it is what is used to determine your streaks.</sub></p>
                 
               </div>
             </div>
@@ -74,6 +74,7 @@
           name: selectedOption.value,
           description: description,
           url: url,
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
         };
         document.getElementById("repoData").value = JSON.stringify(repoData);
       }
@@ -86,6 +87,9 @@
 
       // Handle the default/initial selection
       updateRepoDetails(repoDropdown);
+
+      //timezone
+      document.getElementById("timezone").textContent = Intl.DateTimeFormat().resolvedOptions().timeZone
     </script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
