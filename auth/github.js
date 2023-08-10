@@ -96,7 +96,9 @@ router.post("/github-submit-repo", forceAuth, async (req, res) => {
     console.log("hostname", hostname);
 
     const body = JSON.parse(req.body)
+    console.log(body)
     const repoData = body.repoData
+    console.log(repoData)
 
     const repoName = repoData.url.replace("https://github.com/", "");
     await github.CreateWebook(token, hostname, repoName, discordId);
