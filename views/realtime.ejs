@@ -8,7 +8,7 @@
 <script>
     const socket = io.connect();
 
-    socket.on('realtime', function (data) {
+    socket.on('/realtime', function (data) {
         console.log('data gotten', data)
         const list = document.getElementById('eventsList');
         const listItem = document.createElement('li');
