@@ -124,7 +124,7 @@ router.post("/github-submit-repo", forceAuth, async (req, res, next) => {
         console.log('user done')
     }
 
-    res.redirect("/auth/testing");
+    res.redirect("/auth/");
 });
 
 router.get('/', endSession, (req, res) => {
