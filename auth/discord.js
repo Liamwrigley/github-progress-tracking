@@ -73,13 +73,9 @@ router.get('/discord-save', forceAuth, async (req, res) => {
             authorization: `Bearer ${token}`
         }
     });
-    var username = user.data.username;
-    var userId = user.data.id;
 
-    //save to db
-    console.log("here is where i'd save to db...")
-
-    req.session.discordId = userId;
+    req.session.discordId = user.data.id;
+    req.session.discordUsername = user.data.username;
     req.session.token = null
 
     req.session.save((err) => {

@@ -3,7 +3,6 @@ const github = require("../functions/github");
 const helpers = require("../functions/helpers");
 const middleware = require('./middleware')
 const forceAuth = middleware.forceAuth;
-const getCurrentTimeInZone = helpers.getCurrentTimeInZone;
 
 const express = require("express");
 const router = express.Router();
@@ -82,7 +81,6 @@ router.get("/github-select-repo", forceAuth, async (req, res) => {
             repos.forEach((repo) => {
                 repoList.push(repo);
             });
-            getCurrentTimeInZone
             res.render("repoSelect", {
                 repoList: repoList
             });
@@ -92,6 +90,7 @@ router.get("/github-select-repo", forceAuth, async (req, res) => {
 router.post("/github-submit-repo", forceAuth, async (req, res) => {
     var token = req.session.token;
     var discordId = req.session.discordId
+    var discordUsername = req.session.discordUsername
     var hostname = helpers.getBaseUrl(req)
     console.log("hostname", hostname);
 
@@ -101,6 +100,7 @@ router.post("/github-submit-repo", forceAuth, async (req, res) => {
     await github.CreateWebook(token, hostname, repoName, discordId);
 
     var saveObj = {
+        discordUsername: discordUsername,
         discordId: discordId,
         tz: repoData.timezone,
         repoName: repoName.split("/")[1],
