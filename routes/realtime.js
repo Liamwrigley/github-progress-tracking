@@ -1,9 +1,6 @@
+const express = require("express");
+const router = express.Router();
 
-
-module.exports = (io) => {
-    const express = require("express");
-    const router = express.Router();
-}
 router.get('/', (req, res) => {
     // var hostname = req.get("host");
     // console.log("hostname", hostname);
@@ -13,4 +10,4 @@ router.get('/', (req, res) => {
     res.render('realtime', {title: "realtime", message: "message goes here"})
 })
 
-// module.exports = router;
+module.exports = router;

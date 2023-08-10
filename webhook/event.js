@@ -20,5 +20,6 @@ module.exports = (io) => {
         
         res.status(200).send("Successfully processed.");
     })
-
+    
+    return router;
 }
