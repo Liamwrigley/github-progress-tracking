@@ -26,7 +26,8 @@
 
         // If there's a message, set the text content
         if (data.message) {
-            listItem.textContent = data.message;
+            const textElem = document.createTextNode(data.message); // using createTextNode to safely add text content
+            listItem.appendChild(textElem);
         }
 
         list.appendChild(listItem);
