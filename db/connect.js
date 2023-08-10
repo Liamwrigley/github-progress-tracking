@@ -37,9 +37,10 @@ const userSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
+const User = mongoose.model('User', userSchema);
 
 
-userSchema.methods.UpdateFromPush = (_userTime) => {
+userSchema.methods.UpdateFromPush = function (_userTime) {
     this.totalPushes++;
     this.hasCurrentStreak = true;
     this.lastPush_UTC = moment.parseZone(_userTime).utc();
@@ -63,12 +64,15 @@ userSchema.methods.UpdateFromPush = (_userTime) => {
 }
 
 
-const User = mongoose.model('User', userSchema);
 
-
+const DoesUserExist = async (_discordId) => {
+    var user = await User.exists({ discordId: _discordId })
+    return user != null
+}
 
 
 module.exports = {
     connection: mongoose.connection,
-    User: User
+    User: User,
+    DoesUserExist: DoesUserExist,
 }
