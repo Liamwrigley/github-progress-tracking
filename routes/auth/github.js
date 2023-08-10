@@ -102,21 +102,31 @@ router.post("/github-submit-repo", forceAuth, async (req, res, next) => {
     const repoName = repoData.url.replace("https://github.com/", "");
 
     // should have error handling
-    await github.CreateWebook(token, hostname, repoName, discordId);
-    console.log('webhook done')
+    try {
+        await github.CreateWebook(token, hostname, repoName, discordId);
+    } catch (err) {
+        console.error("Error creating webhook:", error);
+        return res.status(500).send("Error creating webhook");
+    }
+
 
     // should check if this exists before we create
-    const user = await db.User.create({
-        _id: discordId,
-        discordUsername: discordUsername,
-        timezone: repoData.timezone,
-        repoName: repoName.split("/")[1],
-        githubName: repoName.split("/")[0]
-    })
-    console.log('user done')
+    var userExists = await db.DoesUserExist(discordId);
+    if (!userExists) {
+
+        const user = await db.User.create({
+            _id: discordId,
+            discordUsername: discordUsername,
+            timezone: repoData.timezone,
+            repoName: repoName.split("/")[1],
+            githubName: repoName.split("/")[0]
+        })
+        console.log('user done')
+    }
 
     //res.redirect("/auth/end-session");
 }, endSession, (req, res) => {
+    console.log("finalising")
     res.render('index', { title: 'happy coding!' })
 });
 
