@@ -82,6 +82,7 @@ router.get("/github-select-repo", forceAuth, async (req, res) => {
                 repoList.push(repo);
             });
             res.render("repoSelect", {
+                title: "Select Repository",
                 repoList: repoList
             });
         });
