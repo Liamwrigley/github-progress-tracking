@@ -22,7 +22,7 @@ mongoose.connection.on('disconnected', () => {
 
 
 const userSchema = new mongoose.Schema({
-    _id: { type: String },
+    _id: { type: String }, // this is discord id
     discordUsername: { type: String, required: true },
     timezone: { type: String, required: true },
     repoName: { type: String, required: true },
@@ -37,11 +37,7 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 });
 
-/*
-Remember that the pre('save') middleware will only run for document.save().
-If you use update methods like Model.updateOne(), Model.findByIdAndUpdate(), etc.,
-you might want to consider using pre('update') and pre('findOneAndUpdate') middleware as well.
-*/
+
 userSchema.methods.UpdateFromPush = (_userTime) => {
     this.totalPushes++;
     this.currentStreak++;
@@ -51,30 +47,15 @@ userSchema.methods.UpdateFromPush = (_userTime) => {
 
     //handle time conversions
     /*
-    1. add 2 days to userTime and remove time component (day 1 action means they have until 12:00am day 3)
-    2. convert into UTC and store as endStreakAt
+     - lastPush_UTC is just the timestamp from github converted to UTC
+     - endStreakAt_UTC is the github timestamp add 2 days, strip time back to 12:00am and convert to UTC
     */
-    let userTime = moment.parseZone(_userTime);
-    this.lastPush_UTC = userTime.utc();
-
-    userTime.Add(2, 'day').startOf('day');
-
-    this.endStreakAt_UTC = userTime.utc();
-
-
+    this.lastPush_UTC = moment.parseZone(_userTime).utc();
+    this.endStreakAt_UTC = moment(_userTime).add(2, 'day').startOf('day').utc();
 }
 
 
-userSchema.pre('save', function (next) {
-    if (this.isModified('lastPush_UTC')) {
-        //convert 
-    }
-})
-
 const User = mongoose.model('User', userSchema);
-
-
-
 
 
 
