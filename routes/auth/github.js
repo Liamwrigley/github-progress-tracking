@@ -1,6 +1,6 @@
 const axios = require("axios");
-const github = require("../functions/github");
-const helpers = require("../functions/helpers");
+const github = require("../../functions/github");
+const helpers = require("../../functions/helpers");
 const middleware = require('./middleware')
 const forceAuth = middleware.forceAuth;
 

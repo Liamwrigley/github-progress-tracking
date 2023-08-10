@@ -1,6 +1,6 @@
 const axios = require("axios");
 const middleware = require('./middleware')
-const helpers = require("../functions/helpers")
+const helpers = require("../../functions/helpers")
 const forceAuth = middleware.forceAuth;
 
 const express = require("express");
@@ -76,6 +76,7 @@ router.get('/discord-save', forceAuth, async (req, res) => {
 
     req.session.discordId = user.data.id;
     req.session.discordUsername = user.data.username;
+    req.session.discordAvatar = user.data.avatar;
     req.session.token = null
 
     req.session.save((err) => {

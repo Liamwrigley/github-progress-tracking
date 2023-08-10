@@ -3,24 +3,27 @@ require('dotenv').config();
 const config = require('./config.json')
 const crypto = require('crypto');
 const cors = require('cors');
+const ejsLayouts = require('express-ejs-layouts');
 
 
 
 const express = require("express")
 const session = require('express-session');
 const app = express();
-const authGithubRoutes = require("./auth/github")
-const authDiscordRoutes = require("./auth/discord")
-const authHelperRoutes = require("./auth/helpers")
-const eventRoutes = require("./webhook/event")
+
+
+// layouts
+app.set('view engine', 'ejs');
+app.use(ejsLayouts);
+
+// http
+app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({
   origin: ['http://localhost:4001', 'https://github-tracker.rowrisoft.xyz/'],  // or wherever your client is running
   credentials: true,  // this allows cookies to be sent with requests
 }));
-app.use(express.urlencoded({ extended: true }));
-app.set('view engine', 'ejs');
-// app.use(session({secret: 'testing'}))
+
 app.use(session({
   secret: "secretKey",//crypto.randomBytes(256).toString('hex'),
 //   resave: false,
@@ -33,24 +36,29 @@ app.use(session({
 //   }
 }))
 
+//socket io
+const http = require('http');
+const socketIo = require('socket.io');
+const server = http.createServer(app);
+const io = socketIo(server);
+
 //routes
+const authGithubRoutes = require("./routes/auth/github")
+const authDiscordRoutes = require("./routes/auth/discord")
+const authHelperRoutes = require("./routes/auth/helpers")
+const eventRoutes = require("./webhook/event")
+const indexRoute = require('./routes/index');
+const realtimeRoute = require('./routes/realtime');
 app.use('/auth', authGithubRoutes)
 app.use('/auth', authDiscordRoutes)
 app.use('/auth', authHelperRoutes)
-app.use('/event', eventRoutes)
+app.use('/event', eventRoutes(io))
+app.use('/', indexRoute)
+app.use('/realtime', realtimeRoute)
 
-app.get('/', (req, res) => {
-    var hostname = req.get("host");
-    console.log("hostname", hostname);
-    let timeInfo = Intl.DateTimeFormat().resolvedOptions();
-    let timeZone = timeInfo.timeZone;
-    console.log(timeZone)
-    res.render('index', {title: "test title", message: "message goes here"})
-})
 
-app.get('/ping', (req, res) => {
-    res.status(200).send();
-})
+
+
 
 app.listen(config.PORT, () => {
     console.log(`Server started on port ${config.PORT}`)

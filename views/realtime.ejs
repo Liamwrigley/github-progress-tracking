@@ -1,0 +1,18 @@
+<img src="https://cdn.discordapp.com/avatars/181435740264202240/9e78e69953fcaa9d5147b0f309a0824d.png" />
+
+<h1>Realtime Events</h1>
+<!-- The list where the events will appear -->
+<ul id="eventsList"></ul>
+
+<!-- Include socket.io client and the script for real-time updates -->
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io.connect();
+
+    socket.on('realtime', function (data) {
+        const list = document.getElementById('eventsList');
+        const listItem = document.createElement('li');
+        listItem.textContent = data.message;
+        list.appendChild(listItem);
+    });
+</script>
