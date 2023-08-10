@@ -60,6 +60,6 @@ app.use('/realtime', realtimeRoute)
 
 
 
-app.listen(config.PORT, () => {
+server.listen(config.PORT, () => {
     console.log(`Server started on port ${config.PORT}`)
 })
