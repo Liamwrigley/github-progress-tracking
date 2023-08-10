@@ -95,18 +95,16 @@ router.post("/github-submit-repo", forceAuth, async (req, res) => {
     var hostname = helpers.getBaseUrl(req)
     console.log("hostname", hostname);
 
-    const timezone = JSON.parse(req.body.timezone)
-    console.log(timezone)
     const repoData = JSON.parse(req.body.repoData)
-    console.log(repoData)
 
     const repoName = repoData.url.replace("https://github.com/", "");
     await github.CreateWebook(token, hostname, repoName, discordId);
 
     var saveObj = {
         discordId: discordId,
-        tz: timezone,
-        repoName: repoName
+        tz: repoData.timezone,
+        repoName: repoName.split("/")[1],
+        githubName: repoName.split("/")[0]
     }
     console.log('we would save: ', saveObj)
     console.log("post webhook create attempt");
