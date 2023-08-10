@@ -15,18 +15,18 @@
         // Create a new list item
         const listItem = document.createElement('li');
 
-        // If there's a message, set the text content
-        if (data.message) {
-            listItem.textContent = data.message;
-        }
-
         // If there's an image URL, create an img element and set the src
         if (data.discordAvatar) {
             const imageElem = document.createElement('img');
-            imageElem.src = data.imageUrl;
+            imageElem.src = data.discordAvatar;
             imageElem.alt = "Received image"; // you can change this to something more descriptive if needed
             imageElem.className = "discord-avatar"
             listItem.appendChild(imageElem);
+        }
+
+        // If there's a message, set the text content
+        if (data.message) {
+            listItem.textContent = data.message;
         }
 
         list.appendChild(listItem);
