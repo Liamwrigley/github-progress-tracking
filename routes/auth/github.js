@@ -39,7 +39,8 @@ router.get("/github-oath-callback", async (req, res) => {
     axios
         .post("https://github.com/login/oauth/access_token", body, options)
         .then((res) => {
-            console.log(res.data)
+            console.log("\n\n\nHERE\n\n", res.data)
+            console.log("\n\n\nHERE\n\n")
             return res.data["access_token"]
         })
         .then((_token) => {
