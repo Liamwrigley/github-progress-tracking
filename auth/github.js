@@ -3,6 +3,7 @@ const github = require("../functions/github");
 const helpers = require("../functions/helpers");
 const middleware = require('./middleware')
 const forceAuth = middleware.forceAuth;
+const getCurrentTimeInZone = middleware.getCurrentTimeInZone;
 
 const express = require("express");
 const router = express.Router();
@@ -81,10 +82,10 @@ router.get("/github-select-repo", forceAuth, async (req, res) => {
             repos.forEach((repo) => {
                 repoList.push(repo);
             });
-            let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            getCurrentTimeInZone
             res.render("repoSelect", {
                 repoList: repoList,
-                tz: timeZone
+                tz: getCurrentTimeInZone(Intl.DateTimeFormat().resolvedOptions().timeZone)
             });
         });
 });
@@ -99,6 +100,9 @@ router.post("/github-submit-repo", forceAuth, async (req, res) => {
 
     const repoName = repoData.url.replace("https://github.com/", "");
     await github.CreateWebook(token, hostname, repoName, discordId);
+
+    // also get timezone here
+    var timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
 
     console.log("post webhook create attempt");
     res.redirect("/auth/end-session");

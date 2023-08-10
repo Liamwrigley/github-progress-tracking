@@ -42,6 +42,9 @@ app.use('/event', eventRoutes)
 app.get('/', (req, res) => {
     var hostname = req.get("host");
     console.log("hostname", hostname);
+    let timeInfo = Intl.DateTimeFormat().resolvedOptions();
+    let timeZone = timeInfo.timeZone;
+    console.log(timeZone)
     res.render('index', {title: "test title", message: "message goes here"})
 })
 
