@@ -117,11 +117,17 @@ router.post("/github-submit-repo", forceAuth, async (req, res, next) => {
         await webhook_helper.sendWebhook("Welcome!", { "Discord": `<@${discordId}>` })
     }
 
-    res.redirect("/auth/complete");
+    res.redirect(`/auth/complete/${discordId}`);
 });
 
-router.get('/complete', endSession, (req, res) => {
-    res.render('index', { title: 'happy coding!' })
+router.get('/complete/:discordId', forceAuth, endSession, async (req, res) => {
+    var user = { discordUsername: "-", githubName: "-", repoName: "-", timezone: "-" };
+    try {
+        user = await db.User.findById(req.params.discordId)
+    } catch (err) {
+        await webhook_helper.sendErrorReport("finalising", err)
+    }
+    res.render('authFinal', { title: 'happy coding!', user: user })
 })
 
 module.exports = router;

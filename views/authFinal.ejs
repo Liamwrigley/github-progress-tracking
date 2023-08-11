@@ -1,0 +1,26 @@
+<div class="modal modal-sheet position-static d-block p-4 py-md-5" tabindex="-1" role="dialog" id="modalTour">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-body p-5">
+                <h2 class="fw-bold mb-0">Welcome <%= user.discordUsername %>, goodluck!</h2>
+                <ul class="d-grid gap-4 my-5 list-unstyled small">
+                    <li class="d-flex gap-4">
+                        <div>
+                            <h5 class="mb-0">Info</h5>
+                            <span>Github Username: <%= user.githubName %></span>
+                            <span>Tracking: <%= user.repoName %></span>
+                            <span>Timezone: <%= user.timezone %></span>
+                        </div>
+                    </li>
+                    <li class="d-flex gap-4">
+                        <div>
+                            <h5 class="mb-0">Your streak starts when you do!</h5>
+                            Once you make your first push to GitHub, your streak will start and you will have until 12am
+                            the following day to keep it going.
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
