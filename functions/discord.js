@@ -27,8 +27,8 @@ exports.sendWebhook = async (title, data, webhookUrl = WEBHOOK_URL) => {
     const wh = createWebhookClient(webhookUrl);
 
     var embed = buildEmbed(color = 0x00FFFF, title = title);
-    data.entries.forEach((k, v) => {
-        embed.addFields({ name: k, value: v })
+    Object.keys(data).forEach((key, i) => {
+        embed.addFields({ name: key, value: data[key] })
     });
 
     await wh.send({ embeds: [embed] })
