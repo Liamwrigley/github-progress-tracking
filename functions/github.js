@@ -56,7 +56,7 @@ const getAndCalculateStreak = async (repo, token) => {
 exports.CalculateCurrentStreak = async (data, token) => {
     const threeDaysAgo = moment().subtract(3, 'd').startOf('day');
     console.log(threeDaysAgo.format())
-    data.forEach(r => console.log(moment(r.updated_at).format(), moment(r.updated_at) > threeDaysAgo));
+    data.forEach(r => console.log(r.name, moment(r.updated_at).format(), moment(r.updated_at) > threeDaysAgo));
 
     const recentRepos = await data.filter(r => moment(r.updated_at) > threeDaysAgo);
 
