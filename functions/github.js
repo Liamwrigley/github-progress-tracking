@@ -42,7 +42,7 @@ const getAndCalculateStreak = async (repo, token) => {
             Authorization: `token ${token}`
         }
     });
-
+    console.log('results from #2', result)
     var pushEvents = result.data.filter(event => event.type === 'PushEvent' && event.actor.login === repo.owner.login);
     pushEvents.sort((a, b) => new Date(b.date) - new Date(a.Date))
 
@@ -56,7 +56,7 @@ const getAndCalculateStreak = async (repo, token) => {
 exports.CalculateCurrentStreak = async (data, token) => {
     const threeDaysAgo = moment().subtract(3, 'd').startOf('day');
     console.log(threeDaysAgo.format())
-    data.forEach(r => console.log(moment(r.updated_at).format()));
+    data.forEach(r => console.log(moment(r.updated_at).format(), moment(r.updated_at) > threeDaysAgo));
 
     const recentRepos = await data.filter(r => moment(r.updated_at) > threeDaysAgo);
 
