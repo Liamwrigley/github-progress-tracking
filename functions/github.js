@@ -44,7 +44,7 @@ const getAndCalculateStreak = async (repo, token) => {
     var pushEvents = result.data.filter(event => event.type === 'PushEvent' && event.actor.login === repo.owner.login);
     pushEvents.sort((a, b) => new Date(b.date) - new Date(a.Date))
 
-    console.log("pushevents", pushEvents)
+    console.log("pushevents", pushEvents.length)
     let streak = 0;
 
     return streak;
@@ -55,7 +55,7 @@ exports.CalculateCurrentStreak = async (data, token) => {
 
     const threeDaysAgo = new Date(Date.now() - (3 * 24 * 60 * 60 * 1000));
 
-    const recentRepos = await data.filter(r => new Date(r.updated_at) > threeDaysAgo)
+    const recentRepos = data.filter(r => new Date(r.updated_at) > threeDaysAgo)
         .map(async r => {
             const streak = getAndCalculateStreak(repo, token)
             return {
@@ -64,7 +64,9 @@ exports.CalculateCurrentStreak = async (data, token) => {
             }
         });
 
-    console.log('recentRepos', recentRepos)
+    var outcome = await Promise.all(recentRepos)
+
+    console.log('recentRepos', outcome)
 
 
 
