@@ -34,4 +34,10 @@ exports.CreateWebook = async (token, hostUrl, repo, discordId) => {
     return result
 }
 
+exports.CalculateCurrentStreak = async (data) => {
+    let streak = 0;
 
+
+
+    return streak;
+}

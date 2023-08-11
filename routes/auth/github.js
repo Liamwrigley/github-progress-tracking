@@ -73,11 +73,12 @@ router.get("/github-select-repo", forceAuth, async (req, res) => {
             }
         }
         )
-        .then((resp) => {
+        .then(async (resp) => {
             var repoList = [];
             const repos = resp.data;
-            repos.forEach((repo) => {
-                repoList.push(repo);
+            await repos.forEach(async (repo) => {
+                var currentStreak = await github.CalculateCurrentStreak(repo)
+                repoList.push({ ...repo, currentStreak: currentStreak });
             });
             res.render("repoSelect", {
                 title: "Select Repository",

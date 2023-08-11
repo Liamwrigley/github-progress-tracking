@@ -1,100 +1,96 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
-  <head>
-    <title>Select Repository</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
-      crossorigin="anonymous"
-    />
-  </head>
-  <body>
-    <div class="vh-100 d-flex justify-content-center align-items-center">
-      <div class="border rounded p-5 bg-dark-subtle">
-        <div class="row pb-3 align-items-center">
-          <h2>Select a Repository to Track</h2>
-        </div>
-        <div class="row pb-3 align-items-center">
-          <div class="alert alert-warning">
-            <p>
-              This will add a webhook to the selected repo that will alert us
-              when a repo changes.
-            </p>
-          </div>
-        </div>
-        <div class="row pb-3 align-items-center">
-          <form action="/auth/github-submit-repo" method="post" class="p-0">
-            <div class="form-group my-3">
-              <label for="repoDropdown" class="form-label"
-                >Select your repository</label
-              >
-              <select class="form-select" id="repoDropdown" name="repoName">
-                <% repoList.forEach((repo) => { %>
-                <option
-                  value="<%= repo.name %>"
-                  data-description="<%= repo.description %>"
-                  data-url="<%= repo.html_url %>"
-                >
-                  <%= repo.name %>
-                </option>
-                <% }); %>
-              </select>
-              <div class="py-4" id="repoDetails">
-                <p>
-                  <strong>Description:</strong> <span id="description"></span>
-                </p>
-                <p>
-                  <a href="" id="repoUrl" target="_blank">View Repository</a>
-                </p>
-                <p>Timezone: <span id="timezone"></span><br/><sub>This is important as it is what is used to determine your streaks.</sub></p>
-                
-              </div>
-            </div>
-            <input type="hidden" name="repoData" id="repoData" />
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
+
+<head>
+  <title>Select Repository</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous" />
+</head>
+
+<body>
+  <div class="vh-100 d-flex justify-content-center align-items-center">
+    <div class="border rounded p-5 bg-dark-subtle">
+      <div class="row pb-3 align-items-center">
+        <h2>Select a Repository to Track</h2>
+      </div>
+      <div class="row pb-3 align-items-center">
+        <div class="alert alert-warning">
+          <p>
+            This will add a webhook to the selected repo that will alert us
+            when a repo changes.
+          </p>
         </div>
       </div>
+      <div class="row pb-3 align-items-center">
+        <form action="/auth/github-submit-repo" method="post" class="p-0">
+          <div class="form-group my-3">
+            <label for="repoDropdown" class="form-label">Select your repository</label>
+            <select class="form-select" id="repoDropdown" name="repoName">
+              <% repoList.forEach((repo)=> { %>
+                <option value="<%= repo.name %>" data-description="<%= repo.description %>"
+                  data-url="<%= repo.html_url %>" data-streak="<%= repo.currentStreak %>">
+                </option>
+                >
+                <%= repo.name %>
+                  </option>
+                  <% }); %>
+            </select>
+            <div class="py-4" id="repoDetails">
+              <p>
+                <strong>Description:</strong> <span id="description"></span>
+              </p>
+              <p>
+                <a href="" id="repoUrl" target="_blank">View Repository</a>
+              </p>
+              <p>Current Streak: <span id="streak"></span></p>
+
+            </div>
+          </div>
+          <input type="hidden" name="repoData" id="repoData" />
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
     </div>
-    <script>
-      function updateRepoDetails(dropdown) {
-        const selectedOption = dropdown.options[dropdown.selectedIndex];
+  </div>
+  <script>
+    function updateRepoDetails(dropdown) {
+      const selectedOption = dropdown.options[dropdown.selectedIndex];
 
-        // Extract data from the selected option
-        const description = selectedOption.getAttribute("data-description");
-        const url = selectedOption.getAttribute("data-url");
+      // Extract data from the selected option
+      const description = selectedOption.getAttribute("data-description");
+      const url = selectedOption.getAttribute("data-url");
+      const streak = selectedOption.getAttribute("data-streak");
 
-        // Update the display area with the selected repository's details
-        document.getElementById("description").textContent = description;
-        document.getElementById("repoUrl").href = url;
+      // Update the display area with the selected repository's details
+      document.getElementById("description").textContent = description;
+      document.getElementById("repoUrl").href = url;
+      document.getElementById("streak").href = streak;
 
-        // Store the JSON representation of the repo in the hidden field
-        const repoData = {
-          name: selectedOption.value,
-          description: description,
-          url: url,
-          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-        };
-        document.getElementById("repoData").value = JSON.stringify(repoData);
-      }
+      // Store the JSON representation of the repo in the hidden field
+      const repoData = {
+        name: selectedOption.value,
+        description: description,
+        url: url,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+      };
+      document.getElementById("repoData").value = JSON.stringify(repoData);
+    }
 
-      const repoDropdown = document.getElementById("repoDropdown");
+    const repoDropdown = document.getElementById("repoDropdown");
 
-      repoDropdown.addEventListener("change", function () {
-        updateRepoDetails(this);
-      });
+    repoDropdown.addEventListener("change", function () {
+      updateRepoDetails(this);
+    });
 
-      // Handle the default/initial selection
-      updateRepoDetails(repoDropdown);
+    // Handle the default/initial selection
+    updateRepoDetails(repoDropdown);
 
-      //timezone
-      document.getElementById("timezone").textContent = Intl.DateTimeFormat().resolvedOptions().timeZone
-    </script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-      crossorigin="anonymous"
-    ></script>
-  </body>
+    //timezone
+    document.getElementById("timezone").textContent = Intl.DateTimeFormat().resolvedOptions().timeZone
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
+</body>
+
 </html>
