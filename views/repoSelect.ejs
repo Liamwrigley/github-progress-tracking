@@ -42,7 +42,7 @@
               <p>
                 <a href="" id="repoUrl" target="_blank">View Repository</a>
               </p>
-              <p>Current Streak: <span id="streak"></span></p>
+              <strong>Current Streak: <span id="streak"></span></strong>
 
             </div>
           </div>
@@ -64,7 +64,7 @@
       // Update the display area with the selected repository's details
       document.getElementById("description").textContent = description;
       document.getElementById("repoUrl").href = url;
-      document.getElementById("streak").href = streak;
+      document.getElementById("streak").textContent = streak;
 
       // Store the JSON representation of the repo in the hidden field
       const repoData = {
