@@ -25,7 +25,7 @@ mongoose.connection.on('disconnected', () => {
 const eventSchema = new mongoose.Schema({
     ts: { type: Date, required: true, default: () => moment().utc() },
     user: {
-        type: mongoose.SchemaTypes.ObjectId,
+        type: String,
         ref: 'User',
         required: true
     }
