@@ -95,19 +95,19 @@ router.post("/github-submit-repo", forceAuth, async (req, res, next) => {
 
     const repoName = repoData.url.replace("https://github.com/", "");
 
-    // should have error handling
-    var githubWebhook;
-    try {
-        githubWebhook = await github.CreateWebook(token, hostname, repoName, discordId);
-    } catch (err) {
-        console.error("Error creating webhook:", err);
-        return res.status(500).send("Error creating webhook");
-    }
-
     // should check if this exists before we create
     var userExists = await db.DoesUserExist(discordId);
-    if (!userExists) {
 
+    //TODO: make it so users can only have 1 webhook. Needs to be changable or removable
+    // need to check if the webhook still exists, if it does not, add new one.
+    if (!userExists) {
+        var githubWebhook;
+        try {
+            githubWebhook = await github.CreateWebook(token, hostname, repoName, discordId);
+        } catch (err) {
+            console.error("Error creating webhook:", err);
+            return res.status(500).send("Error creating webhook");
+        }
         const user = await db.User.create({
             _id: discordId,
             discordUsername: req.session.discordUsername,

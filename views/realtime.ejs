@@ -1,8 +1,14 @@
-<img src="https://cdn.discordapp.com/avatars/181435740264202240/9e78e69953fcaa9d5147b0f309a0824d.png" />
-
 <h1>Realtime Events</h1>
 <!-- The list where the events will appear -->
-<ul id="eventsList"></ul>
+<ul id="eventsList">
+    <% data.forEach(event=> { %>
+        <li data-timestamp="<%= event.ts %>">
+            <img src="<%= event.discordAvatar %>" alt="<%= event.username %>" class="discord-avatar">
+            <%= event.username %>: Current Streak - <%= event.currentStreak %>
+                    <span class="timeSince">a moment ago</span> <!-- placeholder text -->
+        </li>
+        <% }); %>
+</ul>
 
 <!-- Include socket.io client and the script for real-time updates -->
 <script>
@@ -10,25 +16,41 @@
 
     socket.on('/realtime', function (data) {
         const list = document.getElementById('eventsList');
-
-        // Create a new list item
         const listItem = document.createElement('li');
 
-        // If there's an image URL, create an img element and set the src
         if (data.discordAvatar) {
             const imageElem = document.createElement('img');
             imageElem.src = data.discordAvatar;
-            imageElem.alt = "Received image"; // you can change this to something more descriptive if needed
-            imageElem.className = "discord-avatar"
+            imageElem.alt = "Received image";
+            imageElem.className = "discord-avatar";
             listItem.appendChild(imageElem);
         }
 
-        // If there's a message, set the text content
         if (data.message) {
-            const textElem = document.createTextNode(data.message); // using createTextNode to safely add text content
-            listItem.appendChild(textElem);
+            listItem.textContent = data.message;
         }
 
-        list.appendChild(listItem);
+        list.prepend(listItem); // Adds the new event at the top
+
+        // Optional: If you want to keep it at 50 items:
+        while (list.childNodes.length > 50) {
+            list.removeChild(list.lastChild);
+        }
     });
+
+    function updateTimeSince() {
+        const eventElements = document.querySelectorAll('[data-timestamp]');
+        eventElements.forEach(element => {
+            const timestamp = element.getAttribute('data-timestamp');
+            const timeSinceElement = element.querySelector('.timeSince');
+            timeSinceElement.textContent = moment(timestamp).fromNow();
+        });
+    }
+
+    // Call immediately to format all timestamps
+    updateTimeSince();
+
+    // Then update every minute
+    setInterval(updateTimeSince, 60000);
+
 </script>

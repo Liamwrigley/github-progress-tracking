@@ -9,14 +9,24 @@ module.exports = (io) => {
         var event = req.body
         var user = null;
         try {
-
             user = await db.User.findById(req.params.discordId)
             if (user) {
+                await db.Event.create({
+                    user: user._id
+                })
                 user.UpdateFromPush(event.head_commit.timestamp)
                 await user.save();
+
+                // io.emit('/realtime', { user: `<${user.discordUsername} has pushed`, discordAvatar: `https://cdn.discordapp.com/avatars/${user._id}/${user.discordAvatar}.png` });
+                io.emit('/realtime',
+                    {
+                        username: user.discordUsername,
+                        discordAvatar: `https://cdn.discordapp.com/avatars/${user._id}/${user.discordAvatar}.png`,
+                        currentStreak: user.currentStreak,
+                        ts: user.lastPush_UTC
+                    });
             }
 
-            io.emit('/realtime', { message: `<@${req.params.discordId}> has pushed`, discordAvatar: `https://cdn.discordapp.com/avatars/${user._id}/${user.discordAvatar}.png` });
 
             res.status(200).send("Successfully processed.");
         } catch (err) {

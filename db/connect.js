@@ -21,6 +21,23 @@ mongoose.connection.on('disconnected', () => {
 });
 
 
+//#region Events
+const eventSchema = new mongoose.Schema({
+    ts: { type: Date, required: true, default: () => moment().utc() },
+    user: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'User',
+        required: true
+    }
+}, {
+    timestamps: true
+});
+eventSchema.index({ ts: -1 })
+
+const Event = mongoose.model('Event', eventSchema);
+
+//#endregion
+
 //#region User
 
 const userSchema = new mongoose.Schema({
@@ -37,7 +54,7 @@ const userSchema = new mongoose.Schema({
     hasCurrentStreak: { type: Boolean, default: false },
     lastPush_UTC: { type: Date },
     endStreakAt_UTC: { type: Date },
-    nextStreakAt_UTC: { type: Date, default: () => Date.now() },
+    nextStreakAt_UTC: { type: Date, default: () => moment().utc() },
 }, {
     timestamps: true
 });
@@ -82,5 +99,6 @@ const DoesUserExist = async (_discordId) => {
 module.exports = {
     connection: mongoose.connection,
     User: User,
+    Event: Event,
     DoesUserExist: DoesUserExist,
 }
