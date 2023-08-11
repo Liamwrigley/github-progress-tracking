@@ -64,7 +64,7 @@ db.connection.on('connected', () => {
   console.log('Confirmed connection from main file.');
 });
 
-
+// streak control
 const streakEnder = require('./functions/streak');
 
 
