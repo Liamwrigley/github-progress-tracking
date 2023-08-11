@@ -35,6 +35,7 @@ exports.CreateWebook = async (token, hostUrl, repo, discordId) => {
 }
 
 const getAndCalculateStreak = async (repo, token) => {
+    console.log('getting data #2')
     var result = await axios.get(repo.events_url, {
         headers: {
             Authorization: `token ${token}`
@@ -55,7 +56,9 @@ exports.CalculateCurrentStreak = async (data, token) => {
 
     const recentRepos = data.filter(r => new Date(r.updated_at) > threeDaysAgo)
         .map(async r => {
+            console.log('getting data #1')
             const streak = await getAndCalculateStreak(repo, token)
+            console.log('getting data #3', streak)
             return {
                 ...r,
                 streak: streak
