@@ -1,5 +1,6 @@
 const axios = require('axios');
 const webhook_helper = require('./discord')
+const moment = require('moment-timezone');
 
 exports.CreateWebook = async (token, hostUrl, repo, discordId) => {
     const webhookConfig = {
@@ -53,11 +54,11 @@ const getAndCalculateStreak = async (repo, token) => {
 }
 
 exports.CalculateCurrentStreak = async (data, token) => {
-    const threeDaysAgo = new Date(Date.now() - (3 * 24 * 60 * 60 * 1000));
+    const threeDaysAgo = moment().subtract(3, 'd').startOf('day');
+    console.log(threeDaysAgo.format())
+    data.forEach(r => console.log(moment(r.updated_at).format()));
 
-    data.forEach(r => console.log(r.updated_at));
-
-    const recentRepos = await data.filter(r => new Date(r.updated_at) > threeDaysAgo);
+    const recentRepos = await data.filter(r => moment(r.updated_at) > threeDaysAgo);
 
     const reposWithStreaks = await Promise.all(
         recentRepos.map(async r => {
