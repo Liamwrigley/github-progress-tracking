@@ -65,27 +65,24 @@ router.get("/github-oath-callback", async (req, res) => {
 router.get("/github-select-repo", forceAuth, async (req, res) => {
     var token = req.session.token;
 
-    axios
-        .get(
-            "https://api.github.com/user/repos?type=owner&sort=created&direction=desc", {
-            headers: {
-                Authorization: `token ${token}`
-            }
+    var result = await axios.get(
+        "https://api.github.com/user/repos?type=owner&sort=created&direction=desc", {
+        headers: {
+            Authorization: `token ${token}`
         }
-        )
-        .then(async (resp) => {
-            var repoList = [];
-            const repos = resp.data;
-            await repos.forEach(async (repo) => {
-                var currentStreak = await github.CalculateCurrentStreak(repo)
-                repoList.push({ ...repo, currentStreak: currentStreak });
-            });
-            console.log(repoList)
-            res.render("repoSelect", {
-                title: "Select Repository",
-                repoList: repoList
-            });
-        });
+    });
+    console.log(result)
+    var repoList = [];
+    const repos = await github.CalculateCurrentStreak(result.data, token);
+    repos.forEach((repo) => {
+        repoList.push({ ...repo, currentStreak: currentStreak });
+    });
+
+    console.log(repoList)
+    res.render("repoSelect", {
+        title: "Select Repository",
+        repoList: repoList
+    });
 });
 
 router.post("/github-submit-repo", forceAuth, async (req, res, next) => {
