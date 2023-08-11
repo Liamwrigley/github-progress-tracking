@@ -34,10 +34,39 @@ exports.CreateWebook = async (token, hostUrl, repo, discordId) => {
     return result
 }
 
-exports.CalculateCurrentStreak = async (data) => {
+const getAndCalculateStreak = async (repo, token) => {
+    var result = await axios.get(repo.events_url, {
+        headers: {
+            Authorization: `token ${token}`
+        }
+    });
+
+    var pushEvents = result.data.filter(event => event.type === 'PushEvent' && event.actor.login === repo.owner.login);
+    pushEvents.sort((a, b) => new Date(b.date) - new Date(a.Date))
+
+    console.log("pushevents", pushEvents)
     let streak = 0;
 
-
-
     return streak;
+}
+
+exports.CalculateCurrentStreak = async (data, token) => {
+    let streak = 0;
+
+    const threeDaysAgo = new Date(Date.now() - (3 * 24 * 60 * 60 * 1000));
+
+    const recentRepos = data.filter(r => new Date(r.updated_at) > threeDaysAgo)
+        .map(async r => {
+            const streak = getAndCalculateStreak(repo, token)
+            return {
+                ...r,
+                streak: streak
+            }
+        });
+
+    console.log('recentRepos', recentRepos)
+
+
+
+    return data;
 }
