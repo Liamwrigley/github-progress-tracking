@@ -96,8 +96,9 @@ router.post("/github-submit-repo", forceAuth, async (req, res, next) => {
     const repoName = repoData.url.replace("https://github.com/", "");
 
     // should have error handling
+    var githubWebhook;
     try {
-        await github.CreateWebook(token, hostname, repoName, discordId);
+        githubWebhook = await github.CreateWebook(token, hostname, repoName, discordId);
     } catch (err) {
         console.error("Error creating webhook:", err);
         return res.status(500).send("Error creating webhook");
@@ -113,9 +114,10 @@ router.post("/github-submit-repo", forceAuth, async (req, res, next) => {
             discordAvatar: req.session.discordAvatar,
             timezone: repoData.timezone,
             repoName: repoName.split("/")[1],
-            githubName: repoName.split("/")[0]
+            githubName: repoName.split("/")[0],
+            webhookId: githubWebhook.id
         })
-        console.log('user added!')
+        await webhook_helper.sendWebhook("Welcome!", { "Discord": `<@${discordId}>` })
     }
 
     res.redirect("/auth/complete");

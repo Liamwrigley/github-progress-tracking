@@ -30,6 +30,7 @@ const userSchema = new mongoose.Schema({
     timezone: { type: String, required: true },
     repoName: { type: String, required: true },
     githubName: { type: String, required: true },
+    webhookId: { type: String, required: true },
     totalPushes: { type: Number, default: 0 },
     currentStreak: { type: Number, default: 0 },
     bestStreak: { type: Number, default: 0 },

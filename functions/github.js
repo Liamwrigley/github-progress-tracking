@@ -24,7 +24,8 @@ exports.CreateWebook = async (token, hostUrl, repo, discordId) => {
 
     try {
         result = await axios.post(`https://api.github.com/repos/${repo}/hooks`, webhookConfig, headers);
-        console.log('created github webhook', result)
+        console.log('created github webhook', result.data)
+        return result.data
     }
     catch (err) {
         await webhook_helper.sendErrorReport("creating webhook", err)
