@@ -51,13 +51,11 @@ const getAndCalculateStreak = async (repo, token) => {
 }
 
 exports.CalculateCurrentStreak = async (data, token) => {
-    let streak = 0;
-
     const threeDaysAgo = new Date(Date.now() - (3 * 24 * 60 * 60 * 1000));
 
     const recentRepos = data.filter(r => new Date(r.updated_at) > threeDaysAgo)
         .map(async r => {
-            const streak = getAndCalculateStreak(repo, token)
+            const streak = await getAndCalculateStreak(repo, token)
             return {
                 ...r,
                 streak: streak
