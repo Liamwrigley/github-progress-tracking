@@ -75,7 +75,7 @@ router.get("/github-select-repo", forceAuth, async (req, res) => {
     var repoList = [];
     const repos = await github.CalculateCurrentStreak(result.data, token);
     repos.forEach((repo) => {
-        repoList.push({ ...repo, currentStreak: currentStreak });
+        repoList.push(repo)
     });
 
     console.log(repoList)
