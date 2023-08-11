@@ -21,21 +21,21 @@
         if (data.discordAvatar) {
             const imageElem = document.createElement('img');
             imageElem.src = data.discordAvatar;
-            imageElem.alt = "Received image";
+            imageElem.alt = data.username;
             imageElem.className = "discord-avatar";
             listItem.appendChild(imageElem);
         }
 
-        if (data.message) {
-            listItem.textContent = data.message;
-        }
+        listItem.setAttribute("data-timestamp", data.ts);
+        listItem.innerHTML += `${data.username}: Current Streak - ${data.currentStreak} <span class="timeSince">a moment ago</span>`;
 
-        list.prepend(listItem); // Adds the new event at the top
+        list.prepend(listItem);
 
-        // Optional: If you want to keep it at 50 items:
         while (list.childNodes.length > 50) {
             list.removeChild(list.lastChild);
         }
+
+        updateTimeSince();
     });
 
     function updateTimeSince() {
