@@ -37,6 +37,3 @@ module.exports = (io) => {
 
     return router;
 }
-
-
-// test push event
