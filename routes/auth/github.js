@@ -80,6 +80,7 @@ router.get("/github-select-repo", forceAuth, async (req, res) => {
                 var currentStreak = await github.CalculateCurrentStreak(repo)
                 repoList.push({ ...repo, currentStreak: currentStreak });
             });
+            console.log(repoList)
             res.render("repoSelect", {
                 title: "Select Repository",
                 repoList: repoList
