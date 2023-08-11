@@ -21,6 +21,8 @@ mongoose.connection.on('disconnected', () => {
 });
 
 
+//#region User
+
 const userSchema = new mongoose.Schema({
     _id: { type: String }, // this is discord id
     discordUsername: { type: String, required: true },
@@ -38,6 +40,7 @@ const userSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
+userSchema.index({ endStreakAt_UTC: 1, hasCurrentStreak: 1 });
 
 
 userSchema.methods.UpdateFromPush = function (_userTime) {
@@ -63,6 +66,8 @@ userSchema.methods.UpdateFromPush = function (_userTime) {
     }
 }
 
+
+
 const User = mongoose.model('User', userSchema);
 
 
@@ -71,6 +76,7 @@ const DoesUserExist = async (_discordId) => {
     return user != null
 }
 
+//#endregion
 
 module.exports = {
     connection: mongoose.connection,

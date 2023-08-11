@@ -1,6 +1,7 @@
 const axios = require("axios");
 const middleware = require('./middleware')
 const helpers = require("../../functions/helpers")
+const webhook_helper = require("../../functions/discord")
 const forceAuth = middleware.forceAuth;
 
 const express = require("express");
@@ -34,14 +35,10 @@ router.get("/discord-oauth-callback", async (req, res) => {
     };
 
     axios.post("https://discord.com/api/oauth2/token", body, options)
-        .then((res) => {
-
-            console.log(res)
-            return res.data["access_token"]
-        })
+        .then((res) => res.data["access_token"])
         .then((_token) => {
+
             // Use the access token for authentication in future requests
-            console.log(_token);
             req.session.token = _token;
             req.session.save((err) => {
                 if (err) {
@@ -49,15 +46,14 @@ router.get("/discord-oauth-callback", async (req, res) => {
                         message: "Error saving session"
                     });
                 }
-                console.log("Session saved:", req.session);
                 res.redirect("/auth/discord-save");
             });
         })
-        .catch((err) => {
+        .catch(async (err) => {
             if (err.response && err.response.status === 401) {
-                console.log("error");
                 return res.redirect("/auth/discord");
             } else {
+                await webhook_helper.sendErrorReport("discord auth", err)
                 return res.status(500).json({
                     message: err.message
                 });
@@ -85,7 +81,6 @@ router.get('/discord-save', forceAuth, async (req, res) => {
                 message: "Error saving session"
             });
         }
-        console.log("Discord finished:", req.session);
         res.redirect("/auth/github");
     });
 })

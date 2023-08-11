@@ -9,7 +9,6 @@
     const socket = io.connect();
 
     socket.on('/realtime', function (data) {
-        console.log('data gotten', data)
         const list = document.getElementById('eventsList');
 
         // Create a new list item

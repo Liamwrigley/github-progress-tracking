@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const cors = require('cors');
 const ejsLayouts = require('express-ejs-layouts');
 const db = require('./db/connect')
+const webhook_helper = require('./functions/discord')
 
 const express = require("express")
 const session = require('express-session');
@@ -27,14 +28,14 @@ app.use(cors({
 
 app.use(session({
   secret: "secretKey",//crypto.randomBytes(256).toString('hex'),
-  //   resave: false,
-  //   saveUninitialized: true,
-  //   cookie: {
-  //     maxAge: 10 * 60 * 1000,  // 10 minutes
-  //     secure: process.env.PRODUCTION == "true", // Set to true if using HTTPS
-  //     httpOnly: true,
-  //     sameSite: 'strict'
-  //   }
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 10 * 60 * 1000,  // 10 minutes
+    secure: process.env.PRODUCTION == "true", // Set to true if using HTTPS
+    httpOnly: true,
+    sameSite: 'strict'
+  }
 }))
 
 //socket io
@@ -64,6 +65,11 @@ db.connection.on('connected', () => {
 });
 
 
-server.listen(config.PORT, () => {
+const streakEnder = require('./functions/streak');
+
+
+
+server.listen(config.PORT, async () => {
   console.log(`Server started on port ${config.PORT}`)
+  await webhook_helper.sendInfoReport(`<@181435740264202240> - Server has started on port: ${config.PORT}`)
 })

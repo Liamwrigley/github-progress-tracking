@@ -4,7 +4,7 @@
   "description": "application that sets up and tracks progress of users repo's",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha tests/*"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,13 @@
     "express-session": "^1.17.3",
     "moment-timezone": "^0.5.43",
     "mongoose": "^7.4.2",
+    "node-schedule": "^2.1.1",
     "socket.io": "^4.7.2"
+  },
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
+    "sinon": "^7.5.0",
+    "sinon-mongoose": "^2.3.0"
   }
 }
