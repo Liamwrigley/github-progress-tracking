@@ -36,7 +36,7 @@ router.get("/discord-oauth-callback", async (req, res) => {
 
     axios.post("https://discord.com/api/oauth2/token", body, options)
         .then((res) => res.data["access_token"])
-        .then((_token) => {
+        .then(_token => {
 
             // Use the access token for authentication in future requests
             req.session.token = _token;
