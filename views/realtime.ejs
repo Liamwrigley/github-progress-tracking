@@ -1,14 +1,16 @@
-<h1>Realtime Events</h1>
-<!-- The list where the events will appear -->
-<ul id="eventsList">
-    <% data.forEach(event=> { %>
-        <li data-timestamp="<%= event.ts %>">
-            <img src="<%= event.discordAvatar %>" alt="<%= event.username %>" class="discord-avatar">
-            <%= event.username %>: Current Streak - <%= event.currentStreak %>
-                    <span class="timeSince">a moment ago</span> <!-- placeholder text -->
-        </li>
-        <% }); %>
-</ul>
+<div class="container">
+    <h1>Realtime Events</h1>
+    <!-- The list where the events will appear -->
+    <ul id="eventsList">
+        <% data.forEach(event=> { %>
+            <li data-timestamp="<%= event.ts %>">
+                <img src="<%= event.discordAvatar %>" alt="<%= event.username %>" class="discord-avatar">
+                <%= event.username %>: Current Streak - <%= event.currentStreak %>
+                        <span class="timeSince">a moment ago</span> <!-- placeholder text -->
+            </li>
+            <% }); %>
+    </ul>
+</div>
 
 <!-- Include socket.io client and the script for real-time updates -->
 <script>

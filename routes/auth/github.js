@@ -71,14 +71,12 @@ router.get("/github-select-repo", forceAuth, async (req, res) => {
             Authorization: `token ${token}`
         }
     });
-    console.log("result")
+
     var repoList = [];
-    const repos = await github.CalculateCurrentStreak(result.data, token);
-    repos.forEach((repo) => {
+    result.data.forEach((repo) => {
         repoList.push(repo)
     });
 
-    console.log("repoList", repoList.length)
     res.render("repoSelect", {
         title: "Select Repository",
         repoList: repoList

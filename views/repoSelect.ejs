@@ -28,7 +28,7 @@
             <select class="form-select" id="repoDropdown" name="repoName">
               <% repoList.forEach((repo)=> { %>
                 <option value="<%= repo.name %>" data-description="<%= repo.description %>"
-                  data-url="<%= repo.html_url %>" data-streak="<%= repo.currentStreak %>">
+                  data-url="<%= repo.html_url %>">
                 </option>
                 >
                 <%= repo.name %>
@@ -42,8 +42,6 @@
               <p>
                 <a href="" id="repoUrl" target="_blank">View Repository</a>
               </p>
-              <strong>Current Streak: <span id="streak"></span></strong>
-
             </div>
           </div>
           <input type="hidden" name="repoData" id="repoData" />
@@ -59,12 +57,14 @@
       // Extract data from the selected option
       const description = selectedOption.getAttribute("data-description");
       const url = selectedOption.getAttribute("data-url");
-      const streak = selectedOption.getAttribute("data-streak");
+
+      if (description == null || description == "") {
+        description = "-"
+      }
 
       // Update the display area with the selected repository's details
       document.getElementById("description").textContent = description;
       document.getElementById("repoUrl").href = url;
-      document.getElementById("streak").textContent = streak;
 
       // Store the JSON representation of the repo in the hidden field
       const repoData = {
