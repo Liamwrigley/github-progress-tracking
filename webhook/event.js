@@ -6,25 +6,24 @@ module.exports = (io) => {
 
 
     router.post('/push/:discordId', async (req, res) => {
-        var event = req.body
+        var incomingEvent = req.body
         var user = null;
         try {
             user = await db.User.findById(req.params.discordId)
             if (user) {
-                user.UpdateFromPush(event.head_commit.timestamp)
+                user.UpdateFromPush(incomingEvent.head_commit.timestamp)
                 await user.save();
                 await db.Event.create({
                     user: user._id,
                     currentPushes: user.totalPushes
                 })
 
-                // io.emit('/realtime', { user: `<${user.discordUsername} has pushed`, discordAvatar: `https://cdn.discordapp.com/avatars/${user._id}/${user.discordAvatar}.png` });
                 io.emit('/realtime',
                     {
                         username: user.discordUsername,
                         discordAvatar: `https://cdn.discordapp.com/avatars/${user._id}/${user.discordAvatar}.png`,
                         currentStreak: user.currentStreak,
-                        totalPushes: event.currentPushes,
+                        totalPushes: user.totalPushes,
                         ts: user.lastPush_UTC
                     });
             }
