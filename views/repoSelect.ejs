@@ -1,24 +1,18 @@
-<div class="vh-100 d-flex justify-content-center align-items-center">
-  <div class="border rounded p-5 bg-dark-subtle">
-    <div class="row pb-3 align-items-center">
-      <h2>Select a Repository to Track!</h2>
-    </div>
-    <div class="row pb-3 align-items-center">
-      <div class="alert alert-primary d-flex align-items-center" role="alert">
-        <i class="bi bi-exclamation-triangle"></i>
+<div class="min-vh-100 d-flex justify-content-center align-items-center">
+  <div class="m-3 border rounded p-5 bg-dark-subtle">
+    <div class="w-25 hstack gap-3 align-items-center justify-content-center">
+      <div class="row pb-3 align-items-center">
+        <h2>Select a Repository to Track!</h2>
+      </div>
+
+      <div class="alert alert-warning d-flex align-items-center" role="alert">
+        <i class="bi bi-exclamation-triangle fs-2 me-2"></i>
         <div>
           This will add a webhook to the selected repo that will alert us
           when a repo changes.
         </div>
       </div>
-      <div class="alert alert-warning">
-        <p>
-          This will add a webhook to the selected repo that will alert us
-          when a repo changes.
-        </p>
-      </div>
-    </div>
-    <div class="row pb-3 align-items-center">
+
       <form action="/auth/github-submit-repo" method="post" class="p-0">
         <div class="form-group my-3">
           <label for="repoDropdown" class="form-label">Select your repository</label>
@@ -42,9 +36,20 @@
         <input type="hidden" name="repoData" id="repoData" />
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
+
     </div>
+    <!-- <div class="border rounded p-5 bg-dark-subtle"> -->
+    <!-- <div class="row pb-3 align-items-center">
+        <h2>Select a Repository to Track!</h2>
+      </div> -->
+    <!-- <div class="row pb-3 align-items-center">
+      </div> -->
+    <!-- <div class="row pb-3 align-items-center"> -->
+    <!-- </div> -->
+    <!-- </div> -->
   </div>
 </div>
+
 <script>
   function updateRepoDetails(dropdown) {
     const selectedOption = dropdown.options[dropdown.selectedIndex];
