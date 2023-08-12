@@ -14,20 +14,21 @@
                             <%= event.username %>
                         </strong>
                     </div>
-                    <div class="vr"></div>
+                    <!-- <div class="vr"></div> -->
                     <div class="w-25 hstack gap-2 align-items-center justify-content-center">
                         <strong>Current Streak: </strong>
                         <span>&#128293;</span>
                         <%= event.currentStreak %>
                     </div>
-                    <div class="vr"></div>
+                    <!-- <div class="vr"></div> -->
                     <div class="w-25 hstack gap-2 align-items-center justify-content-center">
                         <strong>Push #: </strong>
                         <i class="bi bi-github"></i>
                         <%= event.totalPushes %>
                     </div>
                     <div class="w-25 hstack gap-2 align-items-center justify-content-center">
-                        <span class="badge text-bg-secondary timeSince">a moment ago</span>
+                        <!-- <span class="badge text-bg-secondary timeSince">a moment ago</span> -->
+                        <p class="timeSince mb-0">a moment ago</p>
                     </div>
                 </li>
                 <% }); %>
