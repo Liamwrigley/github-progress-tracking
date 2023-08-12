@@ -1,5 +1,3 @@
-// https://github-tracker.rowrisoft.xyz/admin/deploy
-
 const { exec } = require('child_process');
 const express = require("express");
 const router = express.Router();
