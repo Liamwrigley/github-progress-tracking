@@ -28,7 +28,8 @@ const eventSchema = new mongoose.Schema({
         type: String,
         ref: 'User',
         required: true
-    }
+    },
+    currentPushes: { type: Number, required: true }
 }, {
     timestamps: true
 });
@@ -59,6 +60,7 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 });
 userSchema.index({ endStreakAt_UTC: 1, hasCurrentStreak: 1 });
+userSchema.index({ currentStreak: -1 });
 
 
 userSchema.methods.UpdateFromPush = function (_userTime) {
@@ -87,7 +89,13 @@ userSchema.methods.UpdateFromPush = function (_userTime) {
 
 
 const User = mongoose.model('User', userSchema);
-
+User.syncIndexes()
+    .then(() => {
+        console.log('Indexes synced');
+    })
+    .catch((error) => {
+        console.error('Error syncing indexes:', error);
+    });
 
 const DoesUserExist = async (_discordId) => {
     var user = await User.exists({ _id: _discordId })

@@ -11,11 +11,12 @@ module.exports = (io) => {
         try {
             user = await db.User.findById(req.params.discordId)
             if (user) {
-                await db.Event.create({
-                    user: user._id
-                })
                 user.UpdateFromPush(event.head_commit.timestamp)
                 await user.save();
+                await db.Event.create({
+                    user: user._id,
+                    currentPushes: user.totalPushes
+                })
 
                 // io.emit('/realtime', { user: `<${user.discordUsername} has pushed`, discordAvatar: `https://cdn.discordapp.com/avatars/${user._id}/${user.discordAvatar}.png` });
                 io.emit('/realtime',
@@ -23,6 +24,7 @@ module.exports = (io) => {
                         username: user.discordUsername,
                         discordAvatar: `https://cdn.discordapp.com/avatars/${user._id}/${user.discordAvatar}.png`,
                         currentStreak: user.currentStreak,
+                        totalPushes: event.currentPushes,
                         ts: user.lastPush_UTC
                     });
             }

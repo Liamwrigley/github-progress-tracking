@@ -58,15 +58,14 @@ app.use((req, res, next) => {
 const authGithubRoutes = require("./routes/auth/github")
 const authDiscordRoutes = require("./routes/auth/discord")
 const authHelperRoutes = require("./routes/auth/helpers")
+const leaderboardRoute = require('./routes/leaderboard');
 const eventRoutes = require("./webhook/event")
 const indexRoute = require('./routes/index');
 const realtimeRoute = require('./routes/realtime');
 const deployRoute = require('./deploy');
-app.use('/auth', authGithubRoutes)
-app.use('/auth', authDiscordRoutes)
-app.use('/auth', authHelperRoutes)
+app.use('/auth', [authGithubRoutes, authDiscordRoutes, authHelperRoutes])
 app.use('/event', eventRoutes(io))
-app.use('/', indexRoute)
+app.use('/', [indexRoute, leaderboardRoute])
 app.use('/realtime', realtimeRoute)
 app.use('/admin', deployRoute)
 

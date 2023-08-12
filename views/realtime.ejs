@@ -1,15 +1,47 @@
-<div class="container">
-    <h1>Realtime Events</h1>
-    <!-- The list where the events will appear -->
-    <ul id="eventsList">
-        <% data.forEach(event=> { %>
-            <li data-timestamp="<%= event.ts %>">
-                <img src="<%= event.discordAvatar %>" alt="<%= event.username %>" class="discord-avatar">
-                <%= event.username %>: Current Streak - <%= event.currentStreak %>
-                        <span class="timeSince">a moment ago</span> <!-- placeholder text -->
-            </li>
-            <% }); %>
-    </ul>
+<div class="min-vh-100 d-flex justify-content-center align-items-start ">
+    <div class="m-3 border rounded p-5 bg-dark-subtle w-100">
+        <div class="row pb-3 align-items-center">
+            <h2>Realtime Events</h2>
+        </div>
+        <!-- The list where the events will appear -->
+        <ul class="list-group list-group-flush">
+            <% data.forEach(event=> { %>
+                <li class="list-group-item d-flex justify-content-evenly" data-timestamp="<%= event.ts %>">
+                    <div class="hstack gap-3 align-items-center justify-content-center">
+                        <img style="max-height:40px;" src="<%= event.discordAvatar %>" alt="<%= event.username %>"
+                            class="discord-avatar rounded-circle">
+                        <strong>
+                            <%= event.username %>
+                        </strong>
+                    </div>
+                    <div class="vr"></div>
+                    <div class="hstack gap-2 align-items-center justify-content-center">
+                        <strong>Current Streak: </strong>
+                        <span>&#128293;</span>
+                        <%= event.currentStreak %>
+                    </div>
+                    <div class="vr"></div>
+                    <div class="hstack gap-2 align-items-center justify-content-center">
+                        <strong>Total Pushes: </strong>
+                        <i class="bi bi-github"></i>
+                        <%= event.totalPushes %>
+                    </div>
+                    <div class="hstack gap-2 align-items-center justify-content-center">
+                        <span class="badge text-bg-secondary timeSince">a moment ago</span>
+                    </div>
+                </li>
+                <% }); %>
+        </ul>
+        <!-- <ul id="eventsList">
+            <% data.forEach(event=> { %>
+                <li data-timestamp="<%= event.ts %>">
+                    <img src="<%= event.discordAvatar %>" alt="<%= event.username %>" class="discord-avatar">
+                    <%= event.username %>: Current Streak - <%= event.currentStreak %>
+                            <span class="timeSince">a moment ago</span>
+                </li>
+                <% }); %>
+        </ul> -->
+    </div>
 </div>
 
 <!-- Include socket.io client and the script for real-time updates -->

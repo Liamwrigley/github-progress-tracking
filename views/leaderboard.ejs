@@ -1,0 +1,50 @@
+<div class="vh-100 d-flex justify-content-center align-items-start ">
+    <div class="m-3 border rounded p-5 bg-dark-subtle w-100">
+        <div class="row pb-3 align-items-center">
+            <h2>Leaderboard (current streak)</h2>
+        </div>
+        <table class="table table-striped-columns">
+            <thead>
+                <tr>
+                    <th class="text-center" scope="col">#</th>
+                    <th class="text-center" scope="col">User</th>
+                    <th class="text-center" scope="col">Total Pushes</th>
+                    <th class="text-center" scope="col">Current Streak</th>
+                    <th class="text-center" scope="col">Best Streak</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% users.forEach((user, index)=> { %>
+                    <tr scope="row" class="align-middle">
+                        <td class="text-center">
+                            <%= index + 1 %>
+                        </td>
+                        <td class="text-center">
+                            <div class="hstack gap-3 align-items-center justify-content-center">
+                                <img style="max-height:40px;" src="<%= user.discordAvatar %>"
+                                    alt="<%= user.discordUsername %>" class="discord-avatar rounded-circle">
+                                <%= user.discordUsername %>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="hstack gap-2 align-items-center justify-content-center">
+                                <i class="bi bi-github"></i>
+                                <%= user.totalPushes %>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="hstack gap-2 align-items-center justify-content-center">
+                                <span>&#128293;</span>
+                                <%= user.currentStreak %>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <span>&#127942;</span>
+                            <%= user.bestStreak %>
+                        </td>
+                    </tr>
+                    <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div>
