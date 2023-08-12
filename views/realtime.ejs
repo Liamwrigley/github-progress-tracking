@@ -4,7 +4,7 @@
             <h2>Realtime Events</h2>
         </div>
         <!-- The list where the events will appear -->
-        <ul class="list-group list-group-flush">
+        <ul id="eventsList" class="list-group list-group-flush">
             <% data.forEach(event=> { %>
                 <li class="list-group-item d-flex justify-content-evenly" data-timestamp="<%= event.ts %>">
                     <div class="w-25 hstack gap-3 align-items-center justify-content-center">
@@ -32,15 +32,6 @@
                 </li>
                 <% }); %>
         </ul>
-        <!-- <ul id="eventsList">
-            <% data.forEach(event=> { %>
-                <li data-timestamp="<%= event.ts %>">
-                    <img src="<%= event.discordAvatar %>" alt="<%= event.username %>" class="discord-avatar">
-                    <%= event.username %>: Current Streak - <%= event.currentStreak %>
-                            <span class="timeSince">a moment ago</span>
-                </li>
-                <% }); %>
-        </ul> -->
     </div>
 </div>
 
