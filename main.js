@@ -3,6 +3,7 @@ require('dotenv').config();
 const config = require('./config.json')
 const crypto = require('crypto');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 const ejsLayouts = require('express-ejs-layouts');
 const db = require('./db/connect')
 const webhook_helper = require('./functions/discord')
@@ -16,7 +17,12 @@ const app = express();
 app.set('view engine', 'ejs');
 app.use(ejsLayouts);
 
-app.use(express.json());
+
+app.use(bodyParser.json({
+  verify: function (req, res, buf) {
+    req.rawBody = buf.toString();
+  }
+}));
 
 // http
 app.use(express.urlencoded({ extended: true }));

@@ -5,7 +5,7 @@ const router = express.Router();
 const webhook_helper = require('./functions/discord')
 
 const verifyGitHubPayload = (req, res, next) => {
-    const payload = JSON.stringify(req.body);
+    const payload = req.rawBody;
     if (!payload) {
         return res.status(400).send('Request body empty');
     }
@@ -17,6 +17,9 @@ const verifyGitHubPayload = (req, res, next) => {
     console.log("deploy key", process.env.DEPLOY_SECRET)
     const hmac = crypto.createHmac('sha256', process.env.DEPLOY_SECRET);
     const digest = 'sha256=' + hmac.update(payload).digest('hex');
+
+    console.log('Computed Digest:', digest);
+    console.log('Header Signature:', sig);
 
     if (sig !== digest) {
         return res.status(401).send('Mismatched X-Hub-Signature-256');
