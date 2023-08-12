@@ -41,20 +41,34 @@
 
     socket.on('/realtime', function (data) {
         const list = document.getElementById('eventsList');
-        const listItem = document.createElement('li');
 
-        if (data.discordAvatar) {
-            const imageElem = document.createElement('img');
-            imageElem.src = data.discordAvatar;
-            imageElem.alt = data.username;
-            imageElem.className = "discord-avatar";
-            listItem.appendChild(imageElem);
-        }
+        // Template literal for new list item
+        const listItemHTML = `
+        <li class="list-group-item d-flex justify-content-evenly" data-timestamp="${data.ts}">
+            <div class="w-25 hstack gap-3 align-items-center justify-content-center">
+                <img style="max-height:40px;" src="${data.discordAvatar}" alt="${data.username}" class="discord-avatar rounded-circle">
+                <strong>${data.username}</strong>
+            </div>
+            <div class="vr"></div>
+            <div class="w-25 hstack gap-2 align-items-center justify-content-center">
+                <strong>Current Streak: </strong>
+                <span>&#128293;</span>
+                ${data.currentStreak}
+            </div>
+            <div class="vr"></div>
+            <div class="w-25 hstack gap-2 align-items-center justify-content-center">
+                <strong>Push #: </strong>
+                <i class="bi bi-github"></i>
+                ${data.totalPushes}
+            </div>
+            <div class="w-25 hstack gap-2 align-items-center justify-content-center">
+                <span class="badge text-bg-secondary timeSince">a moment ago</span>
+            </div>
+        </li>
+    `;
 
-        listItem.setAttribute("data-timestamp", data.ts);
-        listItem.innerHTML += `${data.username}: Current Streak - ${data.currentStreak} <span class="timeSince">a moment ago</span>`;
-
-        list.prepend(listItem);
+        // Use the insertAdjacentHTML method to prepend the template to the list
+        list.insertAdjacentHTML('afterbegin', listItemHTML);
 
         while (list.childNodes.length > 50) {
             list.removeChild(list.lastChild);
