@@ -41,5 +41,3 @@ router.post("/deploy", verifyGitHubPayload, async (req, res) => {
 })
 
 module.exports = router;
-
-//test changes
