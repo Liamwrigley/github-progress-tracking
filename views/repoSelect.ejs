@@ -1,19 +1,18 @@
 <div class="min-vh-100 d-flex justify-content-center align-items-center">
-  <div class="m-3 border rounded p-5 bg-dark-subtle">
+  <div class="m-3 p-5 bg-dark-subtle">
     <div class="vstack gap-5 align-items-start justify-content-center">
       <h2>Select a Repository to Track!</h2>
 
       <div class="alert m-0 alert-warning d-flex align-items-center" role="alert">
         <i class="bi bi-exclamation-triangle fs-2 me-2"></i>
         <div>
-          This will add a webhook to the selected repo that will alert us
-          when a repo changes.
+          This will add a webhook to the selected reository.
         </div>
       </div>
 
       <form action="/auth/github-submit-repo" method="post" class="p-0 w-100">
         <div class="form-group vstack gap-4 align-items-start justify-content-center">
-          <div>
+          <div class="w-100">
             <label for="repoDropdown" class="form-label">Select your repository</label>
             <select class="form-select" id="repoDropdown" name="repoName">
               <% repoList.forEach((repo)=> { %>
@@ -24,7 +23,7 @@
                 <% }); %>
             </select>
           </div>
-          <div class="" id="repoDetails">
+          <div class="mb-2" id="repoDetails">
             <p>
               <strong>Description:</strong> <span id="description"></span>
             </p>
