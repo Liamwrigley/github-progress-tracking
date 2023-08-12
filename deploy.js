@@ -24,3 +24,5 @@ router.post("/deploy", async (req, res) => {
         res.status(401).send("Secret did not match")
     }
 })
+
+module.exports = router;
