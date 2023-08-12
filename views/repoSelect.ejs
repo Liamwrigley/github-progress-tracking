@@ -20,7 +20,6 @@
               <option value="<%= repo.name %>" data-description="<%= repo.description %>"
                 data-url="<%= repo.html_url %>">
               </option>
-              >
               <%= repo.name %>
                 </option>
                 <% }); %>
@@ -48,9 +47,9 @@
     const description = selectedOption.getAttribute("data-description");
     const url = selectedOption.getAttribute("data-url");
 
-    // if (description == null || description == "") {
-    //   description = "-"
-    // }
+    if (description == null || description == "") {
+      description = "-"
+    }
 
     // Update the display area with the selected repository's details
     document.getElementById("description").textContent = description;
