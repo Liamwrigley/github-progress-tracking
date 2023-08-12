@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 
 exports.forceAuth = (req, res, next) => {
     var token = req.session?.token;

@@ -1,6 +1,5 @@
 const { exec } = require('child_process');
 const express = require("express");
-const crypto = require('crypto');
 const router = express.Router();
 const webhook_helper = require('./functions/discord')
 const middleware = require('./functions/middleware')
