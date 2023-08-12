@@ -7,6 +7,8 @@ const bodyParser = require('body-parser');
 const ejsLayouts = require('express-ejs-layouts');
 const db = require('./db/connect')
 const webhook_helper = require('./functions/discord')
+var favicon = require('serve-favicon');
+
 
 const express = require("express")
 const session = require('express-session');
@@ -26,6 +28,8 @@ app.use(bodyParser.json({
 
 // http
 app.use(express.urlencoded({ extended: true }));
+app.use(favicon(__dirname + '/favicon.ico'));
+
 
 app.use(cors({
   origin: ['http://localhost:4001', 'https://github-tracker.rowrisoft.xyz/'],  // or wherever your client is running
