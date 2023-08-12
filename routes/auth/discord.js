@@ -1,5 +1,5 @@
 const axios = require("axios");
-const middleware = require('./middleware')
+const middleware = require('../../functions/middleware')
 const helpers = require("../../functions/helpers")
 const webhook_helper = require("../../functions/discord")
 const forceAuth = middleware.forceAuth;

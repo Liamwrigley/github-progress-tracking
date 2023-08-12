@@ -3,27 +3,8 @@ const express = require("express");
 const crypto = require('crypto');
 const router = express.Router();
 const webhook_helper = require('./functions/discord')
-
-const verifyGitHubPayload = (req, res, next) => {
-    const payload = req.rawBody;
-    if (!payload) {
-        return res.status(400).send('Request body empty');
-    }
-
-    const sig = req.get('X-Hub-Signature-256');
-    if (!sig) {
-        return res.status(401).send('Missing X-Hub-Signature-256');
-    }
-
-    const hmac = crypto.createHmac('sha256', process.env.DEPLOY_SECRET);
-    const digest = 'sha256=' + hmac.update(payload).digest('hex');
-
-    if (sig !== digest) {
-        return res.status(401).send('Mismatched X-Hub-Signature-256');
-    }
-
-    return next();
-}
+const middleware = require('./functions/middleware')
+const verifyGitHubPayload = middleware.verifyGitHubPayload;
 
 router.post("/deploy", verifyGitHubPayload, async (req, res) => {
     await webhook_helper.sendInfoReport("incomming deploy event")

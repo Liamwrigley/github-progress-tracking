@@ -3,9 +3,10 @@ module.exports = (io) => {
     const express = require('express');
     const router = express.Router();
     const db = require('../db/connect')
+    const middleware = require('../functions/middleware')
+    const verifyGitHubPayload = middleware.verifyGitHubPayload;
 
-
-    router.post('/push/:discordId', async (req, res) => {
+    router.post('/push/:discordId', verifyGitHubPayload, async (req, res) => {
         var incomingEvent = req.body
         var user = null;
         try {

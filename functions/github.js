@@ -9,7 +9,7 @@ exports.CreateWebook = async (token, hostUrl, repo, discordId) => {
         config: {
             url: `${hostUrl}/event/push/${discordId}`,
             content_type: 'json',
-            secret: 'YOUR_SECRET', // Optional
+            secret: process.env.DEPLOY_SECRET,
             events: ['push'], // Customize as needed
         }
     }
