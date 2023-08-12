@@ -19,10 +19,9 @@
             <% repoList.forEach((repo)=> { %>
               <option value="<%= repo.name %>" data-description="<%= repo.description %>"
                 data-url="<%= repo.html_url %>">
+                <%= repo.name %>
               </option>
-              <%= repo.name %>
-                </option>
-                <% }); %>
+              <% }); %>
           </select>
           <div class="py-4" id="repoDetails">
             <p>
