@@ -125,7 +125,7 @@ router.post("/github-submit-repo", forceAuth, async (req, res, next) => {
     res.redirect(`/auth/complete/${discordId}`);
 });
 
-router.get('/complete/:discordId', forceAuth, endSession, async (req, res) => {
+router.get('/complete/:discordId', endSession, async (req, res) => {
     var user = { discordUsername: "-", githubName: "-", repoName: "-", timezone: "-" };
     try {
         user = await db.User.findById(req.params.discordId)
