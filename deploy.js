@@ -31,7 +31,7 @@ const verifyGitHubPayload = (req, res, next) => {
 router.post("/deploy", verifyGitHubPayload, async (req, res) => {
     await webhook_helper.sendInfoReport("incomming deploy event")
 
-    exec('', (error, stdout, stderr) => {
+    exec('./deploy.sh', (error, stdout, stderr) => {
         if (error) {
             console.error(`exec error: ${error}`);
             return;
