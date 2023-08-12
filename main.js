@@ -51,6 +51,10 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 //routes
+app.use((req, res, next) => {
+  res.locals.currentRoute = req.path;
+  next();
+});
 const authGithubRoutes = require("./routes/auth/github")
 const authDiscordRoutes = require("./routes/auth/discord")
 const authHelperRoutes = require("./routes/auth/helpers")

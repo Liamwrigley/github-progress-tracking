@@ -80,8 +80,7 @@ router.get("/github-select-repo", forceAuth, async (req, res) => {
         }
         repoList.push({ ...repo, description: description })
     });
-    console.log('repoListCount', repoList.length)
-    console.log('repoList', repoList[0])
+
     res.render("repoSelect", {
         title: "Select Repository",
         repoList: repoList
