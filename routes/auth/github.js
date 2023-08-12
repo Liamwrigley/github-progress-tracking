@@ -74,7 +74,11 @@ router.get("/github-select-repo", forceAuth, async (req, res) => {
 
     var repoList = [];
     result.data.forEach((repo) => {
-        repoList.push(repo)
+        let description = repo.description
+        if (description == null || description == "") {
+            description = "-"
+        }
+        repoList.push({ ...repo, description: description })
     });
     console.log('repoListCount', repoList.length)
     console.log('repoList', repoList[0])

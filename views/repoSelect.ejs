@@ -46,10 +46,6 @@
     const description = selectedOption.getAttribute("data-description");
     const url = selectedOption.getAttribute("data-url");
 
-    if (description == null || description == "") {
-      description = "-"
-    }
-
     // Update the display area with the selected repository's details
     document.getElementById("description").textContent = description;
     document.getElementById("repoUrl").href = url;
