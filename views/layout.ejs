@@ -34,7 +34,7 @@
 
                     <div class="col-md-3 text-end">
                         <!-- <button type="button" class="btn btn-outline-warning me-2">Revoke</button> -->
-                        <% if ((!currentRoute.includes('/auth')) { %>
+                        <% if (!currentRoute.includes('/auth')) { %>
                             <button type="button" onclick="document.location.href='/auth/discord'"
                                 class="btn btn-success">Setup</button>
                             <% } %>
