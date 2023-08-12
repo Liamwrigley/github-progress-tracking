@@ -14,7 +14,7 @@ const verifyGitHubPayload = (req, res, next) => {
     if (!sig) {
         return res.status(401).send('Missing X-Hub-Signature-256');
     }
-
+    console.log("deploy key", process.env.DEPLOY_SECRET)
     const hmac = crypto.createHmac('sha256', process.env.DEPLOY_SECRET);
     const digest = 'sha256=' + hmac.update(payload).digest('hex');
 
