@@ -1,38 +1,36 @@
-.App {
-  text-align: center;
+/* HEADER */
+.custom-link::before {
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) scaleX(1);
+  width: 75%;
+  height: 2px;
+  background-color: currentColor;
+  transition: width 0.3s ease, transform 0.3s ease;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.custom-link:hover::before {
+  width: 50%;
+  transform: translateX(-50%) scaleX(0.9);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+
+/* STYLED BUTTON */
+button.styled-button {
+  position: relative;
+  z-index: 1;
+  background-color: transparent; /* Making sure the button has a transparent background */
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+button.styled-button span {
+  z-index: -1;
+  transform-origin: bottom left; /* Starting point for the hover effect */
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* The span scales from 0% width to 100% width on hover */
+button.styled-button:hover span {
+  transform: skewX(-12deg) skewY(-12deg);
 }

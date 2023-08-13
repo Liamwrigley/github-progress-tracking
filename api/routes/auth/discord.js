@@ -15,6 +15,9 @@ const getCallbackUrl = (req) => `${helpers.getBaseUrl(req)}/auth/discord-oauth-c
 
 router.get('/discord', (req, res) => {
     console.log("callback", getCallbackUrl(req))
+    // res.header("Access-Control-Allow-Origin", "*");
+    // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    // res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
     var url = `https://discord.com/oauth2/authorize?response_type=code&client_id=${DISCORD_CLIENT_ID}&scope=identify%20guilds&redirect_uri=${getCallbackUrl(req)}&prompt=none`
     res.redirect(url)
 })
@@ -38,7 +41,7 @@ router.get("/discord-oauth-callback", async (req, res) => {
     axios.post("https://discord.com/api/oauth2/token", body, options)
         .then((res) => res.data["access_token"])
         .then(_token => {
-
+            console.log('TOKEN GET')
             // Use the access token for authentication in future requests
             req.session.token = _token;
             req.session.save((err) => {
@@ -47,6 +50,7 @@ router.get("/discord-oauth-callback", async (req, res) => {
                         message: "Error saving session"
                     });
                 }
+                console.log('REDIRECT TO DISCORD-SAVE')
                 res.redirect("/auth/discord-save");
             });
         })
@@ -82,8 +86,15 @@ router.get('/discord-save', forceAuth, async (req, res) => {
                 message: "Error saving session"
             });
         }
-        res.redirect("/auth/github");
+        res.redirect('http://localhost:4002/auth')
+        // res.status(200).send(req.session)
+        // res.redirect("/auth/github");
     });
+})
+
+router.get("/testing", (req, res) => {
+    console.log(req.session)
+    res.status(200).send({ testing: "nice" })
 })
 
 

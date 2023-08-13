@@ -15,6 +15,28 @@ module.exports = {
       textColor: {
         'text-primary': '#e2e8f0'
       },
+      colors: {
+        custom: {
+          primarybg: '#16171A',
+          secondarybg: '#282A32',
+          tertiarybg: '#3C3E48',
+          primarytext: '#E4E5E7',
+          secondarytext: '#B2B3B5',
+          highlight: '#FF4444',
+          highlight2: '#4BA6A9',
+          hover: '#FF5A5A',
+          active: '#FF2F2F',
+          success: '#43B581',
+          info: '#7289DA',
+          warning: '#FAA61A',
+          error: '#F04747',
+        }
+      }
+    },
+  },
+  variants: {
+    extend: {
+      scale: ['group-hover'],
     },
   },
   plugins: [],

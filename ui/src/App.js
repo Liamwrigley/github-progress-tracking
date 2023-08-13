@@ -1,3 +1,4 @@
+import './App.css';
 import React from 'react';
 import {
   BrowserRouter as Router,
@@ -5,24 +6,25 @@ import {
   Route,
 } from 'react-router-dom';
 import { Layout } from './pages/layout'
+import { Auth } from './pages/auth'
 
 
-import './App.css';
 
+const links = [
+  { displayName: 'Home', route: '/' },
+  { displayName: 'Leaderboard', route: '/leaderboard' },
+  { displayName: 'Realtime Events', route: '/realtime' }
+]
 
 function App() {
+  console.log(process.env.REACT_APP_API_URL)
   return (
-    <Router>
-      <Layout>
+    <Router className="scroll-smooth">
+      <Layout links={links}>
         <Routes>
           <Route path="/realtime" element={<h1>Realtime</h1>} />
           <Route path="/leaderboard" element={<h1>Leaderboard</h1>} />
-          <Route path="/auth/:type" element={
-            <>
-              <h1>Auth</h1>
-              <a href="http://localhost:4001/auth/discord">start discord</a>
-            </>
-          } />
+          <Route path="/auth" element={<Auth />} />
           <Route path="/" element={<div>Home content or a Redirect</div>} />
         </Routes>
       </Layout>

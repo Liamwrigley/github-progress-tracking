@@ -2,10 +2,12 @@
   "scripts": {
     "start:api": "cd api && node .",
     "start:ui": "cd ui && npm start",
+    "build:ui": "cd ui && npm run build",
     "start": "concurrently \"npm run start:api\" \"npm run start:ui\"",
     "install:api": "cd api && npm install",
     "install:ui": "cd ui && npm install",
-    "install:all": "npm run install:api && npm run install:ui"
+    "install:all": "npm run install:api && npm run install:ui",
+    "deploy:all": "concurrently \"npm run start:api\" \"npm run build:ui\""
   },
   "devDependencies": {
     "concurrently": "^8.2.0"

@@ -30,11 +30,15 @@ app.use(bodyParser.json({
 app.use(express.urlencoded({ extended: true }));
 app.use(favicon(__dirname + '/favicon.ico'));
 
-
+const origins = ['http://localhost:4001/', 'http://localhost:4002/', 'https://github-tracker.rowrisoft.xyz/', 'https://api.github-tracker.rowrisoft.xyz/']
 app.use(cors({
-  origin: ['http://localhost:4001', 'https://github-tracker.rowrisoft.xyz/'],  // or wherever your client is running
-  credentials: true,  // this allows cookies to be sent with requests
+  origin: origins,
+  credentials: true,
+  methods: ["GET", "POST", "OPTIONS"],
+  preflightContinue: true,
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
 }));
+app.options('*', cors());
 
 app.use(session({
   secret: "secretKey",//crypto.randomBytes(256).toString('hex'),
@@ -57,8 +61,12 @@ const io = socketIo(server);
 //routes
 app.use((req, res, next) => {
   res.locals.currentRoute = req.path;
+  res.header("Access-Control-Allow-Origin", origins.join(", "));
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   next();
 });
+
 const authGithubRoutes = require("./routes/auth/github")
 const authDiscordRoutes = require("./routes/auth/discord")
 const authHelperRoutes = require("./routes/auth/helpers")
