@@ -1,40 +1,13 @@
 {
-  "name": "github-progress-tracking",
-  "version": "1.0.0",
-  "description": "application that sets up and tracks progress of users repo's",
-  "main": "main.js",
   "scripts": {
-    "test": "mocha tests/*"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Liamwrigley/github-progress-tracking.git"
-  },
-  "author": "Liam Wrigley (@LiamWrigley)",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Liamwrigley/github-progress-tracking/issues"
-  },
-  "homepage": "https://github.com/Liamwrigley/github-progress-tracking#readme",
-  "dependencies": {
-    "axios": "^1.4.0",
-    "cors": "^2.8.5",
-    "discord.js": "^14.12.1",
-    "dotenv": "^16.3.1",
-    "ejs": "^3.1.9",
-    "express": "^4.18.2",
-    "express-ejs-layouts": "^2.5.1",
-    "express-session": "^1.17.3",
-    "moment-timezone": "^0.5.43",
-    "mongoose": "^7.4.2",
-    "node-schedule": "^2.1.1",
-    "serve-favicon": "^2.5.0",
-    "socket.io": "^4.7.2"
+    "start:api": "cd api && node .",
+    "start:ui": "cd ui && npm start",
+    "start": "concurrently \"npm run start:api\" \"npm run start:ui\"",
+    "install:api": "cd api && npm install",
+    "install:ui": "cd ui && npm install",
+    "install:all": "npm run install:api && npm run install:ui"
   },
   "devDependencies": {
-    "chai": "^4.3.7",
-    "mocha": "^10.2.0",
-    "sinon": "^7.5.0",
-    "sinon-mongoose": "^2.3.0"
+    "concurrently": "^8.2.0"
   }
 }
