@@ -8,13 +8,13 @@ router.get('/', async (req, res) => {
         const recentEvents = await db.Event.find()
             .sort({ ts: -1 })
             .limit(50)
-            .populate('user', '_id discordUsername discordAvatar currentStreak lastPush_UTC')
+            .populate('user', '_id discordUsername discordAvatar lastPush_UTC')
             .exec();
 
         events = recentEvents.map(e => ({
             username: e.user.discordUsername,
             discordAvatar: `https://cdn.discordapp.com/avatars/${e.user._id}/${e.user.discordAvatar}.png`,
-            currentStreak: e.user.currentStreak,
+            currentStreak: e.currentStreak,
             totalPushes: e.currentPushes,
             ts: e.ts
         }))

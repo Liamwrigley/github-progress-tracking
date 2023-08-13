@@ -29,7 +29,8 @@ const eventSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    currentPushes: { type: Number, required: true }
+    currentPushes: { type: Number, required: true },
+    currentStreak: { type: Number, required: true }
 }, {
     timestamps: true
 });
