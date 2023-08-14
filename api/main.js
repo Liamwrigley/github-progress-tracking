@@ -30,9 +30,8 @@ app.use(bodyParser.json({
 app.use(express.urlencoded({ extended: true }));
 app.use(favicon(__dirname + '/favicon.ico'));
 
-const origins = ['http://localhost:4001/', 'http://localhost:4002/', 'https://github-tracker.rowrisoft.xyz/', 'https://api.github-tracker.rowrisoft.xyz/']
 app.use(cors({
-  origin: origins,
+  origin: ['http://localhost:4001/', 'http://localhost:4002/', 'https://github-tracker.rowrisoft.xyz/', 'https://api.github-tracker.rowrisoft.xyz/'],
   credentials: true,
   methods: ["GET", "POST", "OPTIONS"],
   preflightContinue: true,
@@ -54,14 +53,19 @@ app.use(session({
 
 //socket io
 const http = require('http');
-const socketIo = require('socket.io');
 const server = http.createServer(app);
-const io = socketIo(server);
+const socketIo = require('socket.io')
+const io = socketIo(server, {
+  cors: {
+    origin: "http://localhost:4002",
+    methods: ["GET", "POST"]
+  }
+});;
 
 //routes
 app.use((req, res, next) => {
   res.locals.currentRoute = req.path;
-  res.header("Access-Control-Allow-Origin", origins.join(", "));
+  res.header("Access-Control-Allow-Origin", "*"); // update in prod
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   next();

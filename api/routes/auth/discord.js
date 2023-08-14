@@ -97,6 +97,10 @@ router.get("/testing", (req, res) => {
     res.status(200).send({ testing: "nice" })
 })
 
+router.get("/testing2", (req, res) => {
+    console.log(req.session)
+    res.status(404).send({ message: "nice" })
+})
 
 
 

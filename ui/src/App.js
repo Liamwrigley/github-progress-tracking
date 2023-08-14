@@ -3,10 +3,13 @@ import React from 'react';
 import {
   BrowserRouter as Router,
   Routes,
-  Route,
+  Route
 } from 'react-router-dom';
-import { Layout } from './pages/layout'
+import { ToastContainer } from 'react-toastify';
+import { Layout } from './components/layout/layout'
 import { Auth } from './pages/auth'
+import { Leaderboard } from './pages/leaderboard';
+import { Realtime } from './pages/realtime';
 
 
 
@@ -17,16 +20,29 @@ const links = [
 ]
 
 function App() {
+
   console.log(process.env.REACT_APP_API_URL)
   return (
     <Router className="scroll-smooth">
       <Layout links={links}>
         <Routes>
-          <Route path="/realtime" element={<h1>Realtime</h1>} />
-          <Route path="/leaderboard" element={<h1>Leaderboard</h1>} />
+          <Route path="/realtime" element={<Realtime />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/" element={<div>Home content or a Redirect</div>} />
         </Routes>
+        <ToastContainer
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
       </Layout>
     </Router>
   );

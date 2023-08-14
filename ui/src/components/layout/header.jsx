@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { StyledButton } from './styledButton';
+import { StyledButton } from '../styledButton';
 
 export const Header = ({ links }) => {
     const location = useLocation()
