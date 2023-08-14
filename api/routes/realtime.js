@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
         events = recentEvents.map(e => ({
             username: e.user.discordUsername,
             discordAvatar: `https://cdn.discordapp.com/avatars/${e.user._id}/${e.user.discordAvatar}.png`,
-            currentStreak: e.user.currentStreak, //remove user
+            currentStreak: e.currentStreak, //remove user
             totalPushes: e.currentPushes,
             ts: e.ts
         }))

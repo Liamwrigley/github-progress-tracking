@@ -9,12 +9,17 @@
   width: 75%;
   height: 2px;
   background-color: currentColor;
-  transition: width 0.3s ease, transform 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .custom-link:hover::before {
   width: 50%;
   transform: translateX(-50%) scaleX(0.9);
+}
+
+.custom-link.active::before {
+  bottom: -15px;
+  height: 20px;
 }
 
 

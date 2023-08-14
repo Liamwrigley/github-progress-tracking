@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import io from 'socket.io-client'
 import { Get } from '../utility/ApiRequest'
 import { DiscordProfile } from "../components/discordProfile"
-import { TimeUntilOrSince } from "../components/timeUntilOrSince"
+import { TimeSince } from "../utility/timeHelpers"
 
 
 const SOCKET_URL = `${process.env.REACT_APP_API_URL}/realtime`
@@ -49,16 +49,14 @@ export const Realtime = () => {
 
     return (
         <>
-            <p>Realtime goes here.</p>
-            <p>loading: {loading.toString()}</p>
             {eventData.map(data => {
-                const time = TimeUntilOrSince(data.ts)
+                const time = TimeSince(data.ts)
                 return (
-                    <div className="columns-4">
+                    <div className="flex pb-4 group flex-row justify-start  items-center">
                         <DiscordProfile name={data.username} avatar={data.discordAvatar} />
-                        <p>{data.currentStreak}</p>
-                        <p>{data.totalPushes}</p>
-                        <p>{time}</p>
+                        <div className="basis-1/4" ><strong>Current Streak: <span>&#128293;</span></strong>{data.currentStreak}</div>
+                        <div className="basis-1/4" ><strong>Push #: </strong><i class="bi bi-github"></i> {data.totalPushes}</div>
+                        <div className="basis-1/4" ><strong></strong>{time}</div>
                     </div>
                 )
             })}
