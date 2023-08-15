@@ -36,10 +36,17 @@ module.exports = {
         slide: {
           '0%': { transform: 'translateX(-15px)', opacity: 0 },
           '100%': { transform: 'translateX(0px)', opacity: 1 },
+        },
+        blink: {
+          '0%': { opacity: 1 },
+          '50%': { opacity: 1 },
+          '51%': { opacity: 0 },
+          '100%': { opacity: 0 },
         }
       },
       animation: {
-        slide: 'slide 500ms ease-in'
+        slide: 'slide 500ms ease-in',
+        blink: 'blink 1s infinite'
       }
     },
   },

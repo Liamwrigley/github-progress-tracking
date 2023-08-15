@@ -30,14 +30,13 @@ export const Leaderboard = () => {
                     {
                         userData.map((data, i) => {
                             const latestPush = TimeSince(data.lastPush_UTC)
-                            console.log(data.endStreakAt_UTC)
                             const streakEnd = TimeUntil(data.endStreakAt_UTC)
                             return (
                                 <tr key={`${i}${data.ts}`} className="group/list">
                                     {/* USER */}
                                     <td>
                                         <div className="flex items-center space-x-3">
-                                            <div className="opacity-0 -translate-x-1 group-hover/list:opacity-100 group-hover/list:translate-x-0 duration-100">
+                                            <div className="group-hover/list:animate-blink opacity-0 -translate-x-1 group-hover/list:opacity-100 group-hover/list:translate-x-0 duration-100">
                                                 {/* <i className="bi bi-caret-right-fill"></i> */}
                                                 <i className="bi bi-chevron-right"></i>
                                             </div>
@@ -67,7 +66,7 @@ export const Leaderboard = () => {
                                     {/* BEST STREAK */}
                                     <td>
                                         <div className="flex items-center space-x-3">
-                                            <span>&#128293;</span> <span>{data.bestStreak}</span>
+                                            <span>&#127942;</span> <span>{data.bestStreak}</span>
                                         </div>
                                     </td>
                                     {/* LATEST PUSH */}

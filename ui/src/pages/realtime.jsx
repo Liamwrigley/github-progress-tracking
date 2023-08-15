@@ -56,9 +56,10 @@ export const Realtime = () => {
                             const time = TimeSince(data.ts)
                             return (
                                 <tr key={`${i}${data.ts}`} className="group/list">
+                                    {/* USER */}
                                     <td>
                                         <div className="flex items-center space-x-3">
-                                            <div className="opacity-0 -translate-x-1 group-hover/list:opacity-100 group-hover/list:translate-x-0 duration-100">
+                                            <div className="group-hover/list:animate-blink opacity-0 -translate-x-1 group-hover/list:opacity-100 group-hover/list:translate-x-0 duration-100">
                                                 {/* <i className="bi bi-caret-right-fill"></i> */}
                                                 <i className="bi bi-chevron-right"></i>
                                             </div>
@@ -73,16 +74,19 @@ export const Realtime = () => {
                                             </div>
                                         </div>
                                     </td>
+                                    {/* PUSH # */}
                                     <td>
                                         <div className="flex items-center space-x-3">
                                             <i className="bi bi-cloud-upload"></i> <span>{data.totalPushes}</span>
                                         </div>
                                     </td>
+                                    {/* CURRENT STREAK */}
                                     <td>
                                         <div className="flex items-center space-x-3">
                                             <span>&#128293;</span> <span>{data.currentStreak}</span>
                                         </div>
                                     </td>
+                                    {/* PUSHED */}
                                     <td>
                                         <div className="flex items-center space-x-3">
                                             <span>{time}</span>
