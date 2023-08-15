@@ -5,13 +5,14 @@ import {
   Routes,
   Route
 } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { Layout } from './components/layout/layout'
 import { Auth } from './pages/auth'
 import { Leaderboard } from './pages/leaderboard';
 import { Realtime } from './pages/realtime';
 
 
+const queryClient = new QueryClient();
 
 const links = [
   { displayName: 'Home', route: '/' },
@@ -23,28 +24,18 @@ function App() {
 
   console.log(process.env.REACT_APP_API_URL)
   return (
-    <Router className="scroll-smooth">
-      <Layout links={links}>
-        <Routes>
-          <Route path="/realtime" element={<Realtime />} />
-          <Route path="/leaderboard" element={<Leaderboard />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/" element={<div>Home content or a Redirect</div>} />
-        </Routes>
-        <ToastContainer
-          position="bottom-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="colored"
-        />
-      </Layout>
-    </Router>
+    <QueryClientProvider client={queryClient}>
+      <Router className="scroll-smooth">
+        <Layout links={links}>
+          <Routes>
+            <Route path="/realtime" element={<Realtime />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/" element={<div>Home content or a Redirect</div>} />
+          </Routes>
+        </Layout>
+      </Router>
+    </QueryClientProvider>
   );
 }
 

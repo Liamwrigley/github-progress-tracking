@@ -1,66 +1,99 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import io from 'socket.io-client'
 import { Get } from '../utility/ApiRequest'
-import { DiscordProfile } from "../components/discordProfile"
 import { TimeSince } from "../utility/timeHelpers"
+import { useQuery, useQueryClient } from 'react-query';
+
 
 
 const SOCKET_URL = `${process.env.REACT_APP_API_URL}/realtime`
+const fetchRealtimeData = () => Get('/realtime');
+
 
 export const Realtime = () => {
-    const [socket, setSocket] = useState(null)
-    const [loading, setLoading] = useState(true)
-    const [eventData, setEventData] = useState([])
+    const queryClient = useQueryClient();
+
+    const { data: eventData, isLoading } = useQuery('realtimeData', fetchRealtimeData);
+
+    const appendEventData = (newData) => {
+        queryClient.setQueryData('realtimeData', old => [newData, ...old]);
+    };
 
     useEffect(() => {
+        const newSocket = io(SOCKET_URL);
+        newSocket.on("/realtime", (update) => {
+            // Update your local state or cache here when new data is received
+            appendEventData(update)
+        });
 
-        const fetchDataAndInitSocket = async () => {
-            try {
-                const initialData = await Get("/realtime");
-                setEventData(initialData);
-                setLoading(false);
-
-                const newSocket = io(SOCKET_URL);
-                newSocket.on("/realtime", (update) => {
-                    console.log('recieved data from /realtime');
-                    setEventData(prevData => ([update, ...prevData]));
-                });
-
-                setSocket(newSocket);
-
-            } catch (err) {
-                setLoading(false);
-                console.log('failed in realtime', err);
-            }
-        };
-
-        fetchDataAndInitSocket();
-
-        // Cleanup logic
         return () => {
-            if (socket) {
-                socket.off('/realtime');
-                socket.close();
-            }
+            newSocket.off('/realtime');
+            newSocket.close();
         };
 
     }, []);
 
+    if (isLoading) {
+        return (
+            <></>
+        )
+    }
 
     return (
-        <>
-            {eventData.map(data => {
-                const time = TimeSince(data.ts)
-                return (
-                    <div className="flex pb-4 group flex-row justify-start  items-center">
-                        <DiscordProfile name={data.username} avatar={data.discordAvatar} />
-                        <div className="basis-1/4" ><strong>Current Streak: <span>&#128293;</span></strong>{data.currentStreak}</div>
-                        <div className="basis-1/4" ><strong>Push #: </strong><i class="bi bi-github"></i> {data.totalPushes}</div>
-                        <div className="basis-1/4" ><strong></strong>{time}</div>
-                    </div>
-                )
-            })}
-
-        </>
+        <div className="overflow-x-auto">
+            <table className="table table-md">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Push #</th>
+                        <th>Current Streak</th>
+                        <th>Pushed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        eventData.map((data, i) => {
+                            const time = TimeSince(data.ts)
+                            return (
+                                <tr key={`${i}${data.ts}`} className="group/list">
+                                    <td>
+                                        <div className="flex items-center space-x-3">
+                                            <div className="opacity-0 -translate-x-1 group-hover/list:opacity-100 group-hover/list:translate-x-0 duration-100">
+                                                {/* <i className="bi bi-caret-right-fill"></i> */}
+                                                <i className="bi bi-chevron-right"></i>
+                                            </div>
+                                            <div className="avatar group-hover/list:translate-x-2 duration-100">
+                                                <div className="mask mask-circle w-12 h-12">
+                                                    <img src={data.discordAvatar} alt="Avatar" />
+                                                </div>
+                                            </div>
+                                            <div className=" group-hover/list:translate-x-2 duration-100">
+                                                <div className="font-bold"><i className="bi bi-discord"></i> {data.username}</div>
+                                                <div className="text-sm opacity-50"><i className="bi bi-github"></i> {data.githubName}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div className="flex items-center space-x-3">
+                                            <i className="bi bi-cloud-upload"></i> <span>{data.totalPushes}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div className="flex items-center space-x-3">
+                                            <span>&#128293;</span> <span>{data.currentStreak}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div className="flex items-center space-x-3">
+                                            <span>{time}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )
+                        })
+                    }
+                </tbody>
+            </table>
+        </div>
     )
 }

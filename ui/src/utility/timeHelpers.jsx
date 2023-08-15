@@ -11,6 +11,7 @@ export const TimeSince = (ts) => {
 }
 
 export const TimeUntil = (ts) => {
+    console.log(dayjs.utc().format())
     var timeUtc = dayjs.utc(ts)
-    return timeUtc.to(dayjs.utc())
+    return dayjs.utc().to(timeUtc)
 }

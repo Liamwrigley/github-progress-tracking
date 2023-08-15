@@ -31,6 +31,15 @@ module.exports = {
           warning: '#FAA61A',
           error: '#F04747',
         }
+      },
+      keyframes: {
+        slide: {
+          '0%': { transform: 'translateX(-15px)', opacity: 0 },
+          '100%': { transform: 'translateX(0px)', opacity: 1 },
+        }
+      },
+      animation: {
+        slide: 'slide 500ms ease-in'
       }
     },
   },
@@ -39,5 +48,5 @@ module.exports = {
       scale: ['group-hover'],
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 }

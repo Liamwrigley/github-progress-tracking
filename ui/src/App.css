@@ -1,3 +1,21 @@
+/* Hide default scrollbar */
+body::-webkit-scrollbar {
+    width: 0.5em;
+    display: none;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0); /* semi-transparent black */
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background-clip: padding-box;  /* Prevents the background color from leaking outside the border */
+}
+
+body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+
 /* HEADER */
 .custom-link::before {
   content: '';

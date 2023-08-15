@@ -3,6 +3,8 @@ import { Header } from './header';
 import { Footer } from './footer';
 import { Body } from './body';
 import { useLocation } from 'react-router-dom';
+import { Toast } from './toast';
+
 
 
 export const Layout = ({ links, children }) => {
@@ -18,6 +20,7 @@ export const Layout = ({ links, children }) => {
                 {children}
             </Body>
             <Footer />
+            <Toast />
         </div>
     )
 }

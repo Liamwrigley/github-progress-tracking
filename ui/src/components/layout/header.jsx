@@ -7,7 +7,7 @@ export const Header = ({ links }) => {
     const isAuthRoute = location.pathname.startsWith('/auth')
 
     return (
-        <header className="p-4 bg-custom-secondarybg text-custom-secondarytext">
+        <header className="p-4 bg-custom-secondarybg text-custom-secondarytext z-50">
             <div className="container mx-auto flex justify-between items-center">
                 <div className="flex space-x-10">
                     {links.map((link, index) => {
