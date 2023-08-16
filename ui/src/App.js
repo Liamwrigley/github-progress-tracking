@@ -10,6 +10,7 @@ import { Layout } from './components/layout/layout'
 import { Auth } from './pages/auth'
 import { Leaderboard } from './pages/leaderboard';
 import { Realtime } from './pages/realtime';
+import { Home } from './components/layout/home';
 
 
 const queryClient = new QueryClient();
@@ -31,7 +32,7 @@ function App() {
             <Route path="/realtime" element={<Realtime />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/" element={<div>Home content or a Redirect</div>} />
+            <Route path="/" element={<Home />} />
           </Routes>
         </Layout>
       </Router>

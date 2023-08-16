@@ -50,8 +50,10 @@ router.get("/discord-oauth-callback", async (req, res) => {
                         message: "Error saving session"
                     });
                 }
+                console.log('session', req.session)
                 console.log('REDIRECT TO DISCORD-SAVE')
-                res.redirect("/auth/discord-save");
+                res.redirect('http://localhost:4002/auth')
+                // res.redirect("/auth/discord-save");
             });
         })
         .catch(async (err) => {

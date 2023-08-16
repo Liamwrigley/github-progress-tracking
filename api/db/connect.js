@@ -44,12 +44,15 @@ const Event = mongoose.model('Event', eventSchema);
 
 const userSchema = new mongoose.Schema({
     _id: { type: String }, // this is discord id
+    discordId: { type: String, required: true },
     discordUsername: { type: String, required: true },
     discordAvatar: { type: String, required: true },
-    timezone: { type: String, required: true },
-    repoName: { type: String, required: true },
-    githubName: { type: String, required: true },
-    webhookId: { type: String, required: true },
+    timezone: { type: String },
+    repoName: { type: String },
+    githubUsername: { type: String },
+    githubId: { type: String },
+    githubAvatar: { type: String },
+    webhookId: { type: String },
     totalPushes: { type: Number, default: 0 },
     currentStreak: { type: Number, default: 0 },
     bestStreak: { type: Number, default: 0 },
@@ -60,6 +63,7 @@ const userSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
+userSchema.index({ githubId: 1 });
 userSchema.index({ endStreakAt_UTC: 1, hasCurrentStreak: 1 });
 userSchema.index({ currentStreak: -1 });
 

@@ -37,7 +37,7 @@ app.use(cors({
   preflightContinue: true,
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
 }));
-app.options('*', cors());
+// app.options('*', cors());
 
 app.use(session({
   secret: "secretKey",//crypto.randomBytes(256).toString('hex'),
@@ -65,7 +65,7 @@ const io = socketIo(server, {
 //routes
 app.use((req, res, next) => {
   res.locals.currentRoute = req.path;
-  res.header("Access-Control-Allow-Origin", "*"); // update in prod
+  res.header("Access-Control-Allow-Origin", "http://localhost:4002"); // update in prod
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   next();
@@ -79,11 +79,15 @@ const eventRoutes = require("./webhook/event")
 const indexRoute = require('./routes/index');
 const realtimeRoute = require('./routes/realtime');
 const deployRoute = require('./deploy');
-app.use('/auth', [authGithubRoutes, authDiscordRoutes, authHelperRoutes])
+
+app.use('/auth_old', [authGithubRoutes, authDiscordRoutes, authHelperRoutes])
 app.use('/event', eventRoutes(io))
 app.use('/', [indexRoute, leaderboardRoute])
 app.use('/realtime', realtimeRoute)
 app.use('/admin', deployRoute)
+
+const auth2 = require('./routes/new_auth/auth')
+app.use('/auth', auth2)
 
 
 //DB
