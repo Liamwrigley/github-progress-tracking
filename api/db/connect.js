@@ -57,6 +57,7 @@ const userSchema = new mongoose.Schema({
     currentStreak: { type: Number, default: 0 },
     bestStreak: { type: Number, default: 0 },
     hasCurrentStreak: { type: Boolean, default: false },
+    setupComplete: { type: Boolean, default: false },
     lastPush_UTC: { type: Date },
     endStreakAt_UTC: { type: Date },
     nextStreakAt_UTC: { type: Date, default: () => moment().utc() },

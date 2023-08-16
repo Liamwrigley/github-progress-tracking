@@ -160,6 +160,7 @@ router.post('repo-select', sessionPrinter, hasGithubToken, isAuthenticated, asyn
         if (user) {
             user.webhookId = webhook.id;
             user.repoName = "test name please change"
+            user.setupComplete = true
         } else {
             console.error("Error in webhook creation:", error);
             res.status(500).send("Authentication error");
