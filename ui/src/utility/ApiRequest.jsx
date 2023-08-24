@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 const instance = axios.create({
     baseURL: process.env.REACT_APP_API_URL,
     timeout: 10000,
+    withCredentials: true
 });
 
 // Response interceptor for handling global error logic:

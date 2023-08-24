@@ -41,14 +41,16 @@ app.use(cors({
 
 app.use(session({
   secret: "secretKey",//crypto.randomBytes(256).toString('hex'),
-  // resave: false,
-  // saveUninitialized: true,
-  // cookie: {
-  //   maxAge: 10 * 60 * 1000,  // 10 minutes
-  //   secure: process.env.PRODUCTION == "true", // Set to true if using HTTPS
-  //   httpOnly: true,
-  //   sameSite: 'strict'
-  // }
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 60 * 60 * 1000,  // 1 hour
+    secure: process.env.PRODUCTION == "true", // Set to true if using HTTPS
+    httpOnly: true,
+    sameSite: 'lax',
+    domain: 'http://localhost:4002/',
+    path: '/'
+  }
 }))
 
 //socket io
@@ -58,7 +60,7 @@ const socketIo = require('socket.io')
 const io = socketIo(server, {
   cors: {
     origin: "http://localhost:4002",
-    methods: ["GET", "POST"]
+    methods: ["GET", "POST"],
   }
 });;
 

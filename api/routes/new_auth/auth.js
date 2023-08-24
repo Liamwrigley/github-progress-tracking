@@ -32,7 +32,6 @@ const sessionPrinter = (req, res, next) => {
 const getCallbackUrl = (req) => `${helpers.getBaseUrl(req)}/auth/discord-oauth-callback`
 
 router.get('/status', sessionPrinter, (req, res) => {
-    debugger;
     if (req.session && req.session.user) {
         res.json({ authenticated: true, user: req.session.user });
     } else {
@@ -74,7 +73,7 @@ router.get('/discord-oauth-callback', sessionPrinter, async (req, res) => {
         if (err) {
             return res.status(500).send("Authentication error");
         }
-        res.redirect('http://localhost:4002/auth/discord-complete')
+        res.redirect('http://localhost:4002/auth')
     })
 })
 
@@ -95,7 +94,7 @@ router.get('/github-oauth-callback', sessionPrinter, CameFromDiscordAuth, async 
 
         const githubUser = await github.getGithubUserDetails(accessToken);
 
-        const user = db.User.findOne({ discordId: userSession.discord.id }).exec()
+        const user = await db.User.findOne({ discordId: userSession.discord.id }).exec()
 
         if (user) {
             user.githubId = githubUser.id
@@ -106,7 +105,7 @@ router.get('/github-oauth-callback', sessionPrinter, CameFromDiscordAuth, async 
         }
 
         setSession(req, user, user.githubId, 'github')
-        req.session.githubtoken = accessToken;
+        req.session.githubToken = accessToken;
 
 
     } catch (error) {
@@ -118,7 +117,7 @@ router.get('/github-oauth-callback', sessionPrinter, CameFromDiscordAuth, async 
         if (err) {
             return res.status(500).send("Authentication error");
         }
-        res.redirect('http://localhost:4002/auth/github-complete')
+        res.redirect('http://localhost:4002/auth')
     })
 })
 
