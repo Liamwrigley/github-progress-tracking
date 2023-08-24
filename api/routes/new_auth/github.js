@@ -62,7 +62,7 @@ exports.getGithubRepoDetails = async (accessToken) => {
 
 exports.postGithubCreateWebhook = async (accessToken, repo, webhookUrl) => {
     try {
-        const response = await axios.post(GITHUB_CREATE_WEBHOOK_URL(repo.name), {
+        const response = await axios.post(GITHUB_CREATE_WEBHOOK_URL(repo.full_name), {
             name: 'web',
             active: true,
             config: {

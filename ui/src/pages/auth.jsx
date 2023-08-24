@@ -1,7 +1,52 @@
+// const [data, setData] = useState(null)
+// const [repoData, setRepoData] = useState(null)
+// const [loading, setLoading] = useState(true)
+// const [error, setError] = useState(false)
+
+
+// useEffect(() => {
+// const fetchData = async () => {
+//     try {
+//         const res = await axios.get('http://localhost:4001/auth/status', {
+//             headers: {
+//             },
+//             withCredentials: true
+//         })
+//         console.log(res)
+//         setData(res.data)
+//         setLoading(false)
+//     } catch (err) {
+//         setError(err.message)
+//         setLoading(false)
+//     }
+// };
+
+// const fetchRepoData = async () => {
+//     try {
+//         const res = await axios.get('http://localhost:4001/auth/github-repos', {
+//             headers: {
+//             },
+//             withCredentials: true
+//         })
+//         console.log(res)
+//         setRepoData(res.data)
+//         setLoading(false)
+//     } catch (err) {
+//         setError(err.message)
+//         setLoading(false)
+//     }
+// };
+
+// fetchData();
+// }, [])
+
+// if (loading) return <p>Loading...</p>;
+// if (error) return <p>Error: {error}</p>;
 
 import React, { useState, useEffect } from 'react'
 import { Get, Post } from '../utility/ApiRequest'
 import { useQuery } from 'react-query';
+import { SelectRepo } from '../components/selectRepo';
 
 
 const fetchUser = () => Get('/auth/status')
@@ -9,50 +54,6 @@ const fetchUser = () => Get('/auth/status')
 
 export const Auth = () => {
     const { data: userData, isLoading } = useQuery('userData', fetchUser);
-    // const [data, setData] = useState(null)
-    // const [repoData, setRepoData] = useState(null)
-    // const [loading, setLoading] = useState(true)
-    // const [error, setError] = useState(false)
-
-
-    // useEffect(() => {
-    // const fetchData = async () => {
-    //     try {
-    //         const res = await axios.get('http://localhost:4001/auth/status', {
-    //             headers: {
-    //             },
-    //             withCredentials: true
-    //         })
-    //         console.log(res)
-    //         setData(res.data)
-    //         setLoading(false)
-    //     } catch (err) {
-    //         setError(err.message)
-    //         setLoading(false)
-    //     }
-    // };
-
-    // const fetchRepoData = async () => {
-    //     try {
-    //         const res = await axios.get('http://localhost:4001/auth/github-repos', {
-    //             headers: {
-    //             },
-    //             withCredentials: true
-    //         })
-    //         console.log(res)
-    //         setRepoData(res.data)
-    //         setLoading(false)
-    //     } catch (err) {
-    //         setError(err.message)
-    //         setLoading(false)
-    //     }
-    // };
-
-    // fetchData();
-    // }, [])
-
-    // if (loading) return <p>Loading...</p>;
-    // if (error) return <p>Error: {error}</p>;
     const DISCORD_CLIENT_ID = process.env.REACT_APP_DISCORD_CLIENT_ID
     const DISCORD_REDIRECT = () => {
         var callbackUrl = `${process.env.REACT_APP_API_URL}/auth/discord-oauth-callback`
@@ -65,12 +66,17 @@ export const Auth = () => {
 
     if (!isLoading) {
         if (!userData.authenticated) {
-            debugger;
             window.location.href = DISCORD_REDIRECT()
         }
+        // github not setup at all
         if (userData.authenticated && userData.user && Object.keys(userData.user.github).length === 0) {
-            debugger;
             window.location.href = GITHUB_REDIRECT()
+        }
+        if (userData.authenticated && userData.user && !userData.user.github.repo && userData.needsGithubToken) {
+            window.location.href = GITHUB_REDIRECT()
+        }
+        if (userData.authenticated && userData.user && !userData.user.github.repo) {
+            return <SelectRepo user={userData.user} />
         }
     }
 
@@ -80,10 +86,36 @@ export const Auth = () => {
                 <h1>Auth test</h1>
                 <a className='btn' href={DISCORD_REDIRECT()}>Start Discord Auth Process</a>
                 <a className='btn' href={GITHUB_REDIRECT()}>Start Github Auth Process</a>
-                {/* <button className='btn' onClick={() => fetchData()}>Test endpoint</button> */}
-                <p>{JSON.stringify(userData)}</p>
-                {/* <button className='btn' onClick={() => fetchRepoData()}>Repo endpoint</button>
-                <p>{JSON.stringify(repoData)}</p> */}
+                {userData?.user && <>
+                    <div className="flex items-center space-x-3">
+                        <div className="group-hover/list:animate-blink opacity-0 -translate-x-1 group-hover/list:opacity-100 group-hover/list:translate-x-0 duration-100">
+                            {/* <i className="bi bi-caret-right-fill"></i> */}
+                            <i className="bi bi-chevron-right"></i>
+                        </div>
+                        <div className="avatar group-hover/list:translate-x-2 duration-100">
+                            <div className="mask mask-circle w-12 h-12">
+                                <img src={userData.user.discord.avatar} alt="Avatar" />
+                            </div>
+                        </div>
+                        <div className=" group-hover/list:translate-x-2 duration-100">
+                            <div className="font-bold"><i className="bi bi-discord"></i> {userData.user.discord.name}</div>
+                        </div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                        <div className="group-hover/list:animate-blink opacity-0 -translate-x-1 group-hover/list:opacity-100 group-hover/list:translate-x-0 duration-100">
+                            {/* <i className="bi bi-caret-right-fill"></i> */}
+                            <i className="bi bi-chevron-right"></i>
+                        </div>
+                        <div className="avatar group-hover/list:translate-x-2 duration-100">
+                            <div className="mask mask-circle w-12 h-12">
+                                <img src={userData.user.github.avatar} alt="Avatar" />
+                            </div>
+                        </div>
+                        <div className=" group-hover/list:translate-x-2 duration-100">
+                            <div className="font-bold"><i className="bi bi-github"></i> {userData.user.github.name}</div>
+                        </div>
+                    </div>
+                </>}
             </div>
         </div>
     );

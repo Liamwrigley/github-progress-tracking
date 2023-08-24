@@ -30,14 +30,27 @@ app.use(bodyParser.json({
 app.use(express.urlencoded({ extended: true }));
 app.use(favicon(__dirname + '/favicon.ico'));
 
+const IS_PROD = process.env.PRODUCTION == "true"
+
+const allowedOrigins = [
+  'http://localhost:4001',
+  'http://localhost:4002',
+  'https://github-tracker.rowrisoft.xyz',
+  'https://api.github-tracker.rowrisoft.xyz'
+];
+
 app.use(cors({
-  origin: ['http://localhost:4001/', 'http://localhost:4002/', 'https://github-tracker.rowrisoft.xyz/', 'https://api.github-tracker.rowrisoft.xyz/'],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   methods: ["GET", "POST", "OPTIONS"],
-  preflightContinue: true,
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
 }));
-// app.options('*', cors());
 
 app.use(session({
   secret: "secretKey",//crypto.randomBytes(256).toString('hex'),
@@ -45,10 +58,10 @@ app.use(session({
   saveUninitialized: true,
   cookie: {
     maxAge: 60 * 60 * 1000,  // 1 hour
-    secure: process.env.PRODUCTION == "true", // Set to true if using HTTPS
+    secure: IS_PROD, // Set to true if using HTTPS
     httpOnly: true,
     sameSite: 'lax',
-    domain: 'http://localhost:4002/',
+    domain: IS_PROD ? '.rowrisoft.xyz' : 'localhost',
     path: '/'
   }
 }))
@@ -59,7 +72,7 @@ const server = http.createServer(app);
 const socketIo = require('socket.io')
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:4002",
+    origin: IS_PROD ? "https://github-tracker.rowrisoft.xyz" : "http://localhost:4002",
     methods: ["GET", "POST"],
   }
 });;
@@ -67,9 +80,9 @@ const io = socketIo(server, {
 //routes
 app.use((req, res, next) => {
   res.locals.currentRoute = req.path;
-  res.header("Access-Control-Allow-Origin", "http://localhost:4002"); // update in prod
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  // res.header("Access-Control-Allow-Origin", "http://localhost:4002"); // update in prod
+  // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  // res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   next();
 });
 
@@ -104,5 +117,5 @@ const streakEnder = require('./functions/streak');
 
 server.listen(config.PORT, async () => {
   console.log(`Server started on port ${config.PORT}`)
-  await webhook_helper.sendInfoReport(`<@181435740264202240> - Server has started (${process.env.PRODUCTION === "true" ? "PROD" : "DEV"}):${config.PORT}`)
+  await webhook_helper.sendInfoReport(`<@181435740264202240> - Server has started (${IS_PROD ? "PROD" : "DEV"}):${config.PORT}`)
 })

@@ -55,5 +55,5 @@ module.exports = {
       scale: ['group-hover'],
     },
   },
-  plugins: [require("daisyui")],
+  plugins: [require("@tailwindcss/typography"), require("daisyui")],
 }

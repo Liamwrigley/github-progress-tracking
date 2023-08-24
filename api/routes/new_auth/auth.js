@@ -19,7 +19,8 @@ const setSession = (req, user, id, source) => {
         github: {
             id: user.githubId,
             name: user.githubUsername,
-            avatar: user.githubAvatar
+            avatar: user.githubAvatar,
+            repo: user.repoName
         }
     }
 }
@@ -33,7 +34,12 @@ const getCallbackUrl = (req) => `${helpers.getBaseUrl(req)}/auth/discord-oauth-c
 
 router.get('/status', sessionPrinter, (req, res) => {
     if (req.session && req.session.user) {
-        res.json({ authenticated: true, user: req.session.user });
+        res.json({
+            authenticated: true,
+            needsDiscordToken: !req.session?.discordToken,
+            needsGithubToken: !req.session?.githubToken,
+            user: req.session.user
+        });
     } else {
         res.json({ authenticated: false });
     }
@@ -55,7 +61,7 @@ router.get('/discord-oauth-callback', sessionPrinter, async (req, res) => {
                 _id: discordUser.id,
                 discordId: discordUser.id,
                 discordUsername: discordUser.username,
-                discordAvatar: discordUser.avatar,
+                discordAvatar: `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png`,
             })
         }
 
@@ -77,16 +83,15 @@ router.get('/discord-oauth-callback', sessionPrinter, async (req, res) => {
     })
 })
 
-const CameFromDiscordAuth = (req, res, next) => {
-    console.log(req)
-    if (req.session && req.session && req.session.user.id && req.session.user.source == 'discord') {
-        next()
+const HasDiscordId = (req, res, next) => {
+    if (req.session && req.session.user && req.session.user.discord.id) {
+        return next()
     } else {
         res.status(401).send("Please start auth process again.")
     }
 }
 
-router.get('/github-oauth-callback', sessionPrinter, CameFromDiscordAuth, async (req, res) => {
+router.get('/github-oauth-callback', sessionPrinter, HasDiscordId, async (req, res) => {
     console.log('github callback')
     var userSession = req.session.user
     try {
@@ -97,9 +102,10 @@ router.get('/github-oauth-callback', sessionPrinter, CameFromDiscordAuth, async 
         const user = await db.User.findOne({ discordId: userSession.discord.id }).exec()
 
         if (user) {
-            user.githubId = githubUser.id
+            user.githubId = githubUser.id;
             user.githubUsername = githubUser.login;
-            user.githubAvatar = githubUser.avatar_url
+            user.githubAvatar = githubUser.avatar_url;
+            await user.save();
         } else {
             res.status(401).send("Please start auth process again.")
         }
@@ -123,18 +129,20 @@ router.get('/github-oauth-callback', sessionPrinter, CameFromDiscordAuth, async 
 
 const isAuthenticated = (req, res, next) => {
     if (req.session && req.session.user) {
-        next();
+        return next();
     }
+    console.log('isAuthenticated')
     res.status(401).send('Not Authenticated');
 }
 const hasGithubToken = (req, res, next) => {
     if (req.session && req.session.githubToken) {
-        next()
+        return next()
     }
+    console.log('hasGithubToken')
     res.status(401).send('Not Authenticated');
 }
 
-router.get('/github-repos', sessionPrinter, hasGithubToken, async (res, req) => {
+router.get('/github-repos', sessionPrinter, hasGithubToken, async (req, res) => {
     var token = req.session.githubToken
     try {
         var repos = await github.getGithubRepoDetails(token)
@@ -145,25 +153,28 @@ router.get('/github-repos', sessionPrinter, hasGithubToken, async (res, req) => 
     }
 })
 
-router.post('repo-select', sessionPrinter, hasGithubToken, isAuthenticated, async (req, res) => {
+router.post('/repo-select', sessionPrinter, hasGithubToken, isAuthenticated, async (req, res) => {
     var token = req.session.githubToken
     var userSession = req.session.user
     try {
-        var hostname = helpers.getBaseUrl(req)
-        const repoInfo = JSON.parse(req.body.repoInfo)
+        var hostname = "https://github-tracker.rowrisoft.xyz"//helpers.getBaseUrl(req)
+        const repoInfo = JSON.parse(req.body.data.repoInfo)
 
-        const user = db.User.findOne({ discordId: userSession.discord.id }).exec()
+        const user = await db.User.findOne({ discordId: userSession.discord.id }).exec()
         var webhookUrl = `${hostname}/event/push/${userSession.discord.id}`
-        var webhook = github.postGithubCreateWebhook(token, { name: 'test name please change' }, webhookUrl)
+        var webhook = await github.postGithubCreateWebhook(token, repoInfo, webhookUrl)
 
         if (user) {
             user.webhookId = webhook.id;
-            user.repoName = "test name please change"
+            user.repoName = repoInfo.name
             user.setupComplete = true
+            await user.save()
         } else {
             console.error("Error in webhook creation:", error);
             res.status(500).send("Authentication error");
         }
+
+        setSession(req, user, user.githubId, 'github')
 
         // maybe send back to '/'?
         res.send(user)
