@@ -10,6 +10,7 @@ var favicon = require('serve-favicon');
 
 
 const express = require("express")
+const cookieParser = require('cookie-parser')
 const session = require('express-session');
 const app = express();
 
@@ -18,7 +19,7 @@ const app = express();
 app.set('view engine', 'ejs');
 app.use(ejsLayouts);
 
-
+app.use(cookieParser());
 app.use(bodyParser.json({
   verify: function (req, res, buf) {
     req.rawBody = buf.toString();
