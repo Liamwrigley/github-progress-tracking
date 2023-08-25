@@ -21,13 +21,13 @@ router.get('/leaderboard', async (req, res) => {
         console.error("Error: ", err)
         await webhook_helper.sendErrorReport("loading leaderboard", err)
     }
-
-    res.render('leaderboard',
-        {
-            title: "Leaderboard!",
-            users: users
-        }
-    )
+    res.send(users)
+    // res.render('leaderboard',
+    //     {
+    //         title: "Leaderboard!",
+    //         users: users
+    //     }
+    // )
 })
 
 module.exports = router;

@@ -1,0 +1,59 @@
+/* Hide default scrollbar */
+body::-webkit-scrollbar {
+    width: 0.5em;
+    display: none;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0); /* semi-transparent black */
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background-clip: padding-box;  /* Prevents the background color from leaking outside the border */
+}
+
+body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+
+/* HEADER */
+.custom-link::before {
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) scaleX(1);
+  width: 75%;
+  height: 2px;
+  background-color: currentColor;
+  transition: all 0.3s ease;
+}
+
+.custom-link:hover::before {
+  width: 50%;
+  transform: translateX(-50%) scaleX(0.9);
+}
+
+.custom-link.active::before {
+  bottom: -15px;
+  height: 20px;
+}
+
+
+/* STYLED BUTTON */
+button.styled-button {
+  position: relative;
+  z-index: 1;
+  background-color: transparent; /* Making sure the button has a transparent background */
+}
+
+button.styled-button span {
+  z-index: -1;
+  transform-origin: bottom left; /* Starting point for the hover effect */
+}
+
+/* The span scales from 0% width to 100% width on hover */
+button.styled-button:hover span {
+  transform: skewX(-12deg) skewY(-12deg);
+}
