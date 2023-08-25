@@ -30,7 +30,7 @@ app.use(bodyParser.json({
 app.use(express.urlencoded({ extended: true }));
 app.use(favicon(__dirname + '/favicon.ico'));
 
-const IS_PROD = process.env.PRODUCTION == "true"
+const IS_PROD = process.env.PRODUCTION === "true"
 
 const allowedOrigins = [
   'http://localhost:4001',

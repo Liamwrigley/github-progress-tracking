@@ -23,11 +23,10 @@ router.get('/', async (req, res) => {
                 ts: e.ts
             })
         })
-        console.log(events)
-        res.send(events)
     } catch (err) {
         console.error("Error fetching latest events:", err);
     }
+    res.send(events)
     // res.render('realtime', { title: "Realtime Events", data: events })
 })
 
