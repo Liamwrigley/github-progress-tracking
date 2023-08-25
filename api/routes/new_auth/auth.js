@@ -54,7 +54,7 @@ router.get('/discord-oauth-callback', sessionPrinter, async (req, res) => {
 
         const discordUser = await discord.getDiscordUserDetails(accessToken);
 
-        const user = await db.User.findOne({ discordId: discordUser.id }).exec()
+        var user = await db.User.findOne({ discordId: discordUser.id }).exec()
 
         if (!user) {
             user = await db.User.create({

@@ -9,24 +9,13 @@ const postRepoSelection = (repoInfo) => {
 };
 
 
-export const SelectRepo = (_user) => {
-    const user = _user.user;
+export const SelectRepo = ({ user, refetch }) => {
     const { data: repos, isLoading } = useQuery('repos', fetchRepos);
     const [selected, setSelected] = useState(null)
 
     const mutation = useMutation(postRepoSelection, {
         onSuccess: () => {
-            console.log('webhook setup')
-            // toast.success("Webhook setup successful!", {
-            //     position: "bottom-right",
-            //     autoClose: 5000,
-            //     hideProgressBar: false,
-            //     closeOnClick: true,
-            //     pauseOnHover: true,
-            //     draggable: true,
-            //     progress: undefined,
-            //     theme: "colored",
-            // });
+            refetch();
         },
         onError: (error) => {
             console.error("Error setting up webhook:", error);
@@ -50,7 +39,7 @@ export const SelectRepo = (_user) => {
     }, [isLoading, repos]);
 
     const format = (v) => v == null ? "-" : v
-    console.log(user)
+
     if (isLoading) return <></>
 
     return (
@@ -82,12 +71,6 @@ export const SelectRepo = (_user) => {
             </div>}
             <div className=" mt-auto group relative w-full" onClick={handleConfirm}>
                 <button disabled={mutation.isLoading} className="btn w-full border-2 rounded-none bg-transparent hover:text-white transition-all duration-300 ease-in-out text-custom-highlight2 border-custom-highlight2 hover:border-custom-highlight2 hover:bg-custom-highlight2">Confirm</button>
-                {/* <button
-                    className={` w-full styled-button px-4 py-1 relative overflow-hidden border-2 hover:text-white transition-all duration-300 ease-in-out text-custom-highlight2 border-custom-highlight2 hover:bg-custom-highlight2`}
-                >
-                    Confirm
-                    <span className={`absolute inset-0 transform -skew-x-12 -skew-y-12 bg-custom-highlight2 scale-x-0 group-hover:scale-x-100 transition-transform`}></span>
-                </button> */}
             </div>
         </div>
     )
