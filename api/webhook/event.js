@@ -23,7 +23,10 @@ module.exports = (io) => {
                 io.emit('/realtime',
                     {
                         username: user.discordUsername,
-                        discordAvatar: `https://cdn.discordapp.com/avatars/${user._id}/${user.discordAvatar}.png`,
+                        discordAvatar: user.discordAvatar,
+                        githubName: user.githubUsername,
+                        githubAvatar: user.githubAvatar,
+                        repoName: user.repoName,
                         currentStreak: user.currentStreak,
                         totalPushes: user.totalPushes,
                         ts: user.lastPush_UTC
