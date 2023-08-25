@@ -21,4 +21,8 @@ npm run build
 cd ..
 
 # Restart PM2 process
-pm2 restart github-project-tracker
+pm2 restart github-tracker-api
+
+#reload ui config
+sudo nginx -t
+sudo systemctl reload nginx
