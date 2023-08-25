@@ -12,9 +12,6 @@ router.get('/leaderboard', async (req, res) => {
             .limit(50)
             .exec()
 
-        usersFromDb.forEach(u =>
-            u.discordAvatar = `https://cdn.discordapp.com/avatars/${u._id}/${u.discordAvatar}.png`,
-        )
         users = usersFromDb
 
     } catch (err) {
@@ -22,12 +19,6 @@ router.get('/leaderboard', async (req, res) => {
         await webhook_helper.sendErrorReport("loading leaderboard", err)
     }
     res.send(users)
-    // res.render('leaderboard',
-    //     {
-    //         title: "Leaderboard!",
-    //         users: users
-    //     }
-    // )
 })
 
 module.exports = router;
