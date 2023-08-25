@@ -16,7 +16,8 @@ module.exports = (io) => {
                 await user.save();
                 await db.Event.create({
                     user: user._id,
-                    currentPushes: user.totalPushes
+                    currentPushes: user.totalPushes,
+                    currentStreak: user.currentStreak
                 })
 
                 io.emit('/realtime',

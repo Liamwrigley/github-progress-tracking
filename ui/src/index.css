@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import '~bootstrap-icons/font/bootstrap-icons';
+
+
+@layer base {
+  body {
+    @apply bg-custom-primarybg text-custom-primarytext;
+  }
+}

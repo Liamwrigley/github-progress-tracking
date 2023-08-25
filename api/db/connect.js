@@ -29,7 +29,8 @@ const eventSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    currentPushes: { type: Number, required: true }
+    currentPushes: { type: Number, required: true },
+    currentStreak: { type: Number, required: true }
 }, {
     timestamps: true
 });
@@ -43,22 +44,27 @@ const Event = mongoose.model('Event', eventSchema);
 
 const userSchema = new mongoose.Schema({
     _id: { type: String }, // this is discord id
+    discordId: { type: String, required: true },
     discordUsername: { type: String, required: true },
     discordAvatar: { type: String, required: true },
-    timezone: { type: String, required: true },
-    repoName: { type: String, required: true },
-    githubName: { type: String, required: true },
-    webhookId: { type: String, required: true },
+    timezone: { type: String },
+    repoName: { type: String },
+    githubUsername: { type: String },
+    githubId: { type: String },
+    githubAvatar: { type: String },
+    webhookId: { type: String },
     totalPushes: { type: Number, default: 0 },
     currentStreak: { type: Number, default: 0 },
     bestStreak: { type: Number, default: 0 },
     hasCurrentStreak: { type: Boolean, default: false },
+    setupComplete: { type: Boolean, default: false },
     lastPush_UTC: { type: Date },
     endStreakAt_UTC: { type: Date },
     nextStreakAt_UTC: { type: Date, default: () => moment().utc() },
 }, {
     timestamps: true
 });
+userSchema.index({ githubId: 1 });
 userSchema.index({ endStreakAt_UTC: 1, hasCurrentStreak: 1 });
 userSchema.index({ currentStreak: -1 });
 
