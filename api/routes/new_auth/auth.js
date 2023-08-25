@@ -27,7 +27,7 @@ const setSession = (req, user, id, source) => {
 }
 
 const sessionPrinter = (req, res, next) => {
-    console.log(req.get("host"), req.session)
+    console.log(req.get("host"), "Session ID:", req.session.id, "Session Data:", req.session);
     next()
 }
 
