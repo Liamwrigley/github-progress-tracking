@@ -8,9 +8,11 @@ const verifyGitHubPayload = middleware.verifyGitHubPayload;
 router.post("/deploy", verifyGitHubPayload, async (req, res) => {
     await webhook_helper.sendInfoReport("incomming deploy event")
 
-    exec('"sudo ./deploy.sh"', (error, stdout, stderr) => {
+    exec('sudo /root/github-progress-tracking/api/deploy.sh', (error, stdout, stderr) => {
         if (error) {
-            console.error(`exec error: ${error}`);
+            console.error(`Error Code: ${error.code}`);
+            console.error(`Signal: ${error.signal}`);
+            console.error(`Exec error: ${error.message}`);
             return;
         }
         console.log(`stdout: ${stdout}`);
