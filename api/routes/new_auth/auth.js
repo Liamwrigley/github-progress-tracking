@@ -156,7 +156,7 @@ router.post('/repo-select', sessionPrinter, hasGithubToken, isAuthenticated, asy
     var token = req.session.githubToken
     var userSession = req.session.user
     try {
-        var hostname = "https://github-tracker.rowrisoft.xyz"//helpers.getBaseUrl(req)
+        var hostname = helpers.getBaseUrl(req)
         const repoInfo = JSON.parse(req.body.data.repoInfo)
 
         const user = await db.User.findOne({ discordId: userSession.discord.id }).exec()
