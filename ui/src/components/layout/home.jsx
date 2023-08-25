@@ -1,4 +1,6 @@
 export const Home = () => {
+
+    console.log(process.env.REACT_APP_API_URL)
     return (
         <div className="flex flex-col gap-4">
             <div>
