@@ -80,9 +80,6 @@ const io = socketIo(server, {
 //routes
 app.use((req, res, next) => {
   res.locals.currentRoute = req.path;
-  // res.header("Access-Control-Allow-Origin", "http://localhost:4002"); // update in prod
-  // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  // res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   next();
 });
 

@@ -1,4 +1,3 @@
-const middleware = require('../../functions/middleware')
 const helpers = require("../../functions/helpers")
 const db = require('../../db/connect')
 const discord = require('./discord')
@@ -6,6 +5,8 @@ const github = require('./github')
 
 const express = require("express");
 const router = express.Router();
+
+const UI_URL = process.env.PRODUCTION === "true" ? "https://github-tracker.rowrisoft.xyz" : "http://localhost:4002"
 
 const setSession = (req, user, id, source) => {
     return req.session.user = {
@@ -30,8 +31,6 @@ const sessionPrinter = (req, res, next) => {
     next()
 }
 
-const getCallbackUrl = (req) => `${helpers.getBaseUrl(req)}/auth/discord-oauth-callback`
-
 router.get('/status', sessionPrinter, (req, res) => {
     if (req.session && req.session.user) {
         res.json({
@@ -49,7 +48,7 @@ router.get('/discord-oauth-callback', sessionPrinter, async (req, res) => {
     try {
         const accessToken = await discord.getDiscordAccessToken(
             req.query.code,
-            getCallbackUrl(req)
+            `${helpers.getBaseUrl(req)}/auth/discord-oauth-callback`
         );
 
         const discordUser = await discord.getDiscordUserDetails(accessToken);
@@ -79,7 +78,7 @@ router.get('/discord-oauth-callback', sessionPrinter, async (req, res) => {
         if (err) {
             return res.status(500).send("Authentication error");
         }
-        res.redirect('http://localhost:4002/auth')
+        res.redirect(`${UI_URL}/auth`)
     })
 })
 
@@ -123,7 +122,7 @@ router.get('/github-oauth-callback', sessionPrinter, HasDiscordId, async (req, r
         if (err) {
             return res.status(500).send("Authentication error");
         }
-        res.redirect('http://localhost:4002/auth')
+        res.redirect(`${UI_URL}/auth`)
     })
 })
 
@@ -188,7 +187,7 @@ router.post('/repo-select', sessionPrinter, hasGithubToken, isAuthenticated, asy
 
 router.get('/logout', sessionPrinter, (req, res) => {
     req.session.destroy();
-    res.redirect('http://localhost:4002/');
+    res.redirect(`${UI_URL}`)
 });
 
 module.exports = router;
