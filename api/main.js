@@ -1,7 +1,6 @@
 
 require('dotenv').config();
 const config = require('./config.json')
-const crypto = require('crypto');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const ejsLayouts = require('express-ejs-layouts');
@@ -29,6 +28,7 @@ app.use(bodyParser.json({
 // http
 app.use(express.urlencoded({ extended: true }));
 app.use(favicon(__dirname + '/favicon.ico'));
+app.set('trust proxy', 1);
 
 const IS_PROD = process.env.PRODUCTION === "true"
 
@@ -53,12 +53,12 @@ app.use(cors({
 }));
 
 app.use(session({
-  secret: "secretKey",//crypto.randomBytes(256).toString('hex'),
+  secret: "secretKey",
   resave: false,
   saveUninitialized: true,
   cookie: {
     maxAge: 60 * 60 * 1000,  // 1 hour
-    secure: IS_PROD, // Set to true if using HTTPS
+    secure: IS_PROD,
     httpOnly: true,
     sameSite: 'lax',
     domain: IS_PROD ? '.rowrisoft.xyz' : 'localhost',
