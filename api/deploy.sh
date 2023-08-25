@@ -24,5 +24,5 @@ cd ..
 pm2 restart github-tracker-api
 
 #reload ui config
-sudo nginx -t
-sudo systemctl reload nginx
+nginx -t
+systemctl reload nginx
