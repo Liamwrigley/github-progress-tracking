@@ -28,6 +28,7 @@ export const Realtime = () => {
         });
 
         return () => {
+            console.log('closing', newSocket.readyState)
             newSocket.off('/realtime');
             newSocket.close();
         };
