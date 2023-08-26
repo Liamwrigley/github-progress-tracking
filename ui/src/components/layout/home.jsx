@@ -3,7 +3,7 @@ export const Home = () => {
     console.log(process.env.REACT_APP_API_URL)
     return (
         <div className="flex flex-col gap-4">
-            <div>
+            <div className="prose">
                 <h2>TODO</h2>
             </div>
             <div className="border-2 border-custom-highlight2 rounded p-2">
