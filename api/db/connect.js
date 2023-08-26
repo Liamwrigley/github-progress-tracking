@@ -87,8 +87,8 @@ userSchema.methods.UpdateFromPush = function (_userTime) {
         - nextStreakAt_UTC is the github timestamp add 1 day, strip time back to 12:00am and convert to UTC
         - endStreakAt_UTC is the github timestamp add 2 days, strip time back to 12:00am and convert to UTC
         */
-        this.nextStreakAt_UTC = moment(_userTime).add(1, 'day').startOf('day').utc();
-        this.endStreakAt_UTC = moment(_userTime).add(2, 'day').startOf('day').utc();
+        this.nextStreakAt_UTC = moment.parseZone(_userTime).add(1, 'day').startOf('day').utc();
+        this.endStreakAt_UTC = moment.parseZone(_userTime).add(2, 'day').startOf('day').utc();
     }
 }
 
