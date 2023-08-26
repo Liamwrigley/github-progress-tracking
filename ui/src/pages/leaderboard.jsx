@@ -47,7 +47,7 @@ export const Leaderboard = () => {
                                             </div>
                                             <div className=" group-hover/list:translate-x-2 duration-100">
                                                 <div className="font-bold"><i className="bi bi-discord"></i> {data.discordUsername}</div>
-                                                <div className="text-sm opacity-50"><i className="bi bi-github"></i> {data.githubName}</div>
+                                                <div className="text-sm opacity-50"><i className="bi bi-github"></i> {data.githubUsername}</div>
                                             </div>
                                         </div>
                                     </td>
