@@ -77,8 +77,8 @@ if (IS_PROD) {
 
   // SSL/TLS options
   const options = {
-    key: fs.readFileSync('/etc/letsencrypt/live/api.github-tracker.rowrisoft.xyz/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/api.github-tracker.rowrisoft.xyz/fullchain.pem')
+    key: fs.readFileSync('/etc/letsencrypt/live/github-tracker.rowrisoft.xyz/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/github-tracker.rowrisoft.xyz/fullchain.pem')
   };
   server = http.createServer(options, app);
 } else {
