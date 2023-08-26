@@ -32,11 +32,15 @@ export const TimeSince = (ts) => {
 }
 
 export const TimeUntil = (ts) => {
-    var timeUtc = dayjs.utc(ts)
+    // var timeUtc = dayjs.utc(ts)
+    // return dayjs.utc().to(timeUtc)
 
-    console.log('incoming ts', ts)
-    console.log('dayjs utc', dayjs().utc().format())
-    console.log('time until ts: ', dayjs.utc().to(timeUtc))
+    var timeUtc = dayjs.utc(ts);
+    var now = dayjs.utc();
 
-    return dayjs.utc().to(timeUtc)
+    // Calculate the difference in hours
+    var hoursDiff = timeUtc.diff(now, 'hour');
+    var minutesDiff = timeUtc.subtract(hoursDiff, 'hour').diff(now, 'minute');
+
+    return hoursDiff + ' hours ' + minutesDiff + ' minutes';
 }
