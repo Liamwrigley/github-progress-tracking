@@ -90,14 +90,19 @@ userSchema.methods.UpdateFromPush = function (_userTime) {
 
         // Parse the _userTime with its timezone
         const userTimeWithZone = moment.parseZone(_userTime);
+        console.log("Parsed _userTime with timezone:", userTimeWithZone.format());
 
         // Calculate next streak and end streak in the user's timezone, then set to midnight
         const nextStreakUserZone = userTimeWithZone.clone().add(1, 'day').startOf('day');
         const endStreakUserZone = userTimeWithZone.clone().add(2, 'day').startOf('day');
+        console.log("Next streak in user's timezone:", nextStreakUserZone.format());
+        console.log("End streak in user's timezone:", endStreakUserZone.format());
 
         // Convert the times to UTC
         this.nextStreakAt_UTC = nextStreakUserZone.utc();
         this.endStreakAt_UTC = endStreakUserZone.utc();
+        console.log("Next streak in UTC:", this.nextStreakAt_UTC.format());
+        console.log("End streak in UTC:", this.endStreakAt_UTC.format());
     }
 }
 
