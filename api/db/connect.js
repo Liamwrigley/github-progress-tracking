@@ -88,19 +88,16 @@ userSchema.methods.UpdateFromPush = function (_userTime) {
         - endStreakAt_UTC is the github timestamp add 2 days, strip time back to 12:00am and convert to UTC
         */
 
-        // Extract timezone offset from _userTime
-        const timezoneOffset = moment.parseZone(_userTime).format('Z');
+        // Parse the _userTime with its timezone
+        const userTimeWithZone = moment.parseZone(_userTime);
 
-        // Convert the _userTime to UTC first
-        const userTimeUTC = moment.utc(_userTime);
+        // Calculate next streak and end streak in the user's timezone, then set to midnight
+        const nextStreakUserZone = userTimeWithZone.clone().add(1, 'day').startOf('day');
+        const endStreakUserZone = userTimeWithZone.clone().add(2, 'day').startOf('day');
 
-        // Calculate next streak and end streak in UTC, then set to midnight using the extracted timezone offset
-        const nextStreakUTC = userTimeUTC.clone().add(1, 'day').utcOffset(timezoneOffset).startOf('day').utc();
-        const endStreakUTC = userTimeUTC.clone().add(2, 'day').utcOffset(timezoneOffset).startOf('day').utc();
-
-        // Assign the UTC times
-        this.nextStreakAt_UTC = nextStreakUTC;
-        this.endStreakAt_UTC = endStreakUTC;
+        // Convert the times to UTC
+        this.nextStreakAt_UTC = nextStreakUserZone.utc();
+        this.endStreakAt_UTC = endStreakUserZone.utc();
     }
 }
 
