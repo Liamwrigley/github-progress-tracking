@@ -70,7 +70,7 @@ app.use(session({
 //socket io
 const socketIo = require('socket.io')
 let server;
-console.log('starting socketio')
+console.log('starting socketio!')
 if (IS_PROD) {
   const fs = require('fs')
   const http = require('https');
