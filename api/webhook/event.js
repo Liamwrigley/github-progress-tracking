@@ -7,6 +7,7 @@ module.exports = (io) => {
     const verifyGitHubPayload = middleware.verifyGitHubPayload;
 
     router.post('/push/:discordId', verifyGitHubPayload, async (req, res) => {
+        console.log("event coming for user: ", req.params.discordId)
         var incomingEvent = req.body
         var user = null;
         try {
