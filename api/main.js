@@ -88,7 +88,7 @@ if (IS_PROD) {
 }
 const io = socketIo(server, {
   path: '/socket',
-  transports: ['websocket', 'polling'],
+  withCredentials: true,
   cors: {
     origin: IS_PROD ? "https://github-tracker.rowrisoft.xyz" : "http://localhost:4002",
     credentials: true
