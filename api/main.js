@@ -91,7 +91,7 @@ if (IS_PROD) {
 const io = socketIo(server, {
   cors: {
     origin: IS_PROD ? "https://github-tracker.rowrisoft.xyz" : "http://localhost:4002",
-    methods: ["GET", "POST"],
+    // methods: ["GET", "POST"],
     credentials: true
   }
 });;
