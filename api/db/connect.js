@@ -88,13 +88,19 @@ userSchema.methods.UpdateFromPush = function (_userTime) {
         - endStreakAt_UTC is the github timestamp add 2 days, strip time back to 12:00am and convert to UTC
         */
 
-        // Calculate next streak in local time
-        const nextStreakLocal = moment.parseZone(_userTime).add(1, 'day').startOf('day');
-        const endStreakLocal = moment.parseZone(_userTime).add(2, 'day').startOf('day');
+        // Extract timezone offset from _userTime
+        const timezoneOffset = moment.parseZone(_userTime).format('Z');
 
-        // Convert the local times to UTC
-        this.nextStreakAt_UTC = nextStreakLocal.utc();
-        this.endStreakAt_UTC = endStreakLocal.utc();
+        // Convert the _userTime to UTC first
+        const userTimeUTC = moment.utc(_userTime);
+
+        // Calculate next streak and end streak in UTC, then set to midnight using the extracted timezone offset
+        const nextStreakUTC = userTimeUTC.clone().add(1, 'day').utcOffset(timezoneOffset).startOf('day').utc();
+        const endStreakUTC = userTimeUTC.clone().add(2, 'day').utcOffset(timezoneOffset).startOf('day').utc();
+
+        // Assign the UTC times
+        this.nextStreakAt_UTC = nextStreakUTC;
+        this.endStreakAt_UTC = endStreakUTC;
     }
 }
 
