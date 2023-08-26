@@ -5,7 +5,7 @@ import { TimeSince } from "../utility/timeHelpers"
 import { useQuery, useQueryClient } from 'react-query';
 import { Loading } from "../components/loading";
 
-
+const IS_PROD = process.env.REACT_APP_PRODUCTION === "true"
 
 const SOCKET_URL = `${process.env.REACT_APP_API_URL}/realtime`
 const fetchRealtimeData = () => Get('/realtime');
@@ -21,7 +21,7 @@ export const Realtime = () => {
     };
 
     useEffect(() => {
-        const newSocket = io(SOCKET_URL);
+        const newSocket = io(SOCKET_URL, { secure: IS_PROD });
         newSocket.on("/realtime", (update) => {
             // Update your local state or cache here when new data is received
             appendEventData(update)
