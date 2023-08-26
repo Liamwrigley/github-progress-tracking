@@ -68,9 +68,23 @@ app.use(session({
 }))
 
 //socket io
-const http = require('http');
-const server = http.createServer(app);
 const socketIo = require('socket.io')
+let server;
+
+if (IS_PROD) {
+  const fs = require('fs')
+  const http = require('https');
+
+  // SSL/TLS options
+  const options = {
+    key: fs.readFileSync('/etc/letsencrypt/live/api.github-tracker.rowrisoft.xyz/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/api.github-tracker.rowrisoft.xyz/fullchain.pem')
+  };
+  server = http.createServer(options, app);
+} else {
+  const http = require('http');
+  server = http.createServer(app);
+}
 const io = socketIo(server, {
   cors: {
     origin: IS_PROD ? "https://github-tracker.rowrisoft.xyz" : "http://localhost:4002",
