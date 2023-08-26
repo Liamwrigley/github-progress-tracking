@@ -99,10 +99,10 @@ userSchema.methods.UpdateFromPush = function (_userTime) {
         console.log("End streak in user's timezone:", endStreakUserZone.format());
 
         // Convert the times to UTC
-        this.nextStreakAt_UTC = nextStreakUserZone.utc();
-        this.endStreakAt_UTC = endStreakUserZone.utc();
-        console.log("Next streak in UTC:", this.nextStreakAt_UTC.format());
-        console.log("End streak in UTC:", this.endStreakAt_UTC.format());
+        this.nextStreakAt_UTC = nextStreakUserZone.toISOString();
+        this.endStreakAt_UTC = endStreakUserZone.toISOString();
+        console.log("Next streak in UTC:", this.nextStreakAt_UTC);
+        console.log("End streak in UTC:", this.endStreakAt_UTC);
     }
 }
 
