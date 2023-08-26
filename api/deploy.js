@@ -6,6 +6,7 @@ const middleware = require('./functions/middleware')
 const verifyGitHubPayload = middleware.verifyGitHubPayload;
 
 router.post("/deploy", verifyGitHubPayload, async (req, res) => {
+    console.log('deploy event')
     await webhook_helper.sendInfoReport("incomming deploy event")
 
     exec('sudo /root/github-progress-tracking/api/deploy.sh', (error, stdout, stderr) => {
