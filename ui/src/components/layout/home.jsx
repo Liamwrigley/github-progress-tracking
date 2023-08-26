@@ -4,7 +4,7 @@ export const Home = () => {
     return (
         <div className="flex flex-col gap-4">
             <div>
-                <h2>TODO</h2>
+                <h3>TODO</h3>
             </div>
             <div className="border-2 border-custom-highlight2 rounded p-2">
                 <h2>Auth process</h2>
