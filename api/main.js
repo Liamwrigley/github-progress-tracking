@@ -87,9 +87,9 @@ if (IS_PROD) {
   server = http.createServer(app);
 }
 const io = socketIo(server, {
+  path: '/socket',
   cors: {
     origin: IS_PROD ? "https://github-tracker.rowrisoft.xyz" : "http://localhost:4002",
-    // methods: ["GET", "POST"],
     credentials: true
   }
 });;
