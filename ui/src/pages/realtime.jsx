@@ -21,7 +21,7 @@ export const Realtime = () => {
     };
 
     useEffect(() => {
-        const newSocket = io(SOCKET_URL, { withCredentials: IS_PROD, path: IS_PROD ? '/socket.io/' : '' });
+        const newSocket = io(SOCKET_URL, { withCredentials: IS_PROD/*, path: IS_PROD ? '/socket.io/' : ''*/ });
         newSocket.on("/realtime", (update) => {
             // Update your local state or cache here when new data is received
             appendEventData(update)
