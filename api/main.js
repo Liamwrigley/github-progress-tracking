@@ -70,7 +70,7 @@ app.use(session({
 //socket io
 const socketIo = require('socket.io')
 let server;
-
+console.log('starting socketio')
 if (IS_PROD) {
   const fs = require('fs')
   const http = require('https');
@@ -80,10 +80,12 @@ if (IS_PROD) {
     key: fs.readFileSync('/etc/letsencrypt/live/github-tracker.rowrisoft.xyz/privkey.pem'),
     cert: fs.readFileSync('/etc/letsencrypt/live/github-tracker.rowrisoft.xyz/fullchain.pem')
   };
+  console.log('starting as https')
   console.log('options', options)
   server = http.createServer(options, app);
 } else {
   const http = require('http');
+  console.log('starting as http')
   server = http.createServer(app);
 }
 const io = socketIo(server, {
