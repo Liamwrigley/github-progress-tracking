@@ -73,7 +73,7 @@ let server;
 if (IS_PROD) {
   console.log('starting as https')
   const fs = require('fs')
-  const http = require('https');
+  const http = require('http'); // CHANGE BACK TO HTTPS
 
   // SSL/TLS options
   const options = {
