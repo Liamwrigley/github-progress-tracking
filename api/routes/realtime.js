@@ -18,6 +18,7 @@ router.get('/', async (req, res) => {
                 githubName: e.user.githubUsername,
                 githubAvatar: e.user.githubAvatar,
                 repoName: e.repositoryName,
+                commitMessage: e.commitMessage,
                 currentStreak: e.currentStreak,
                 totalPushes: e.currentPushes,
                 ts: e.ts

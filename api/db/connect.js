@@ -31,7 +31,8 @@ const eventSchema = new mongoose.Schema({
     },
     currentPushes: { type: Number, required: true },
     currentStreak: { type: Number, required: true },
-    repositoryName: { type: String, required: true }
+    repositoryName: { type: String, required: true },
+    commitMessage: { type: String }
 }, {
     timestamps: true
 });

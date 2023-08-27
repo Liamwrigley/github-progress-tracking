@@ -19,7 +19,8 @@ module.exports = (io) => {
                     user: user._id,
                     currentPushes: user.totalPushes,
                     currentStreak: user.currentStreak,
-                    repositoryName: incomingEvent.repository.name
+                    repositoryName: incomingEvent.repository.name,
+                    commitMessage: incomingEvent.head_commit.message
                 })
 
                 io.emit('realtime',
@@ -29,6 +30,7 @@ module.exports = (io) => {
                         githubName: user.githubUsername,
                         githubAvatar: user.githubAvatar,
                         repoName: event.repositoryName,
+                        commitMessage: event.commitMessage,
                         currentStreak: user.currentStreak,
                         totalPushes: user.totalPushes,
                         ts: user.lastPush_UTC
