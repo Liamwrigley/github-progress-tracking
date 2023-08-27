@@ -7,7 +7,8 @@ import { Loading } from "../components/loading";
 
 const IS_PROD = process.env.REACT_APP_PRODUCTION === "true"
 
-const SOCKET_URL = `${process.env.REACT_APP_API_URL}/realtime`
+const SOCKET_URL = `https://localhost:4001/realtime`
+// const SOCKET_URL = `${process.env.REACT_APP_API_URL}/realtime`
 const fetchRealtimeData = () => Get('/realtime');
 
 
