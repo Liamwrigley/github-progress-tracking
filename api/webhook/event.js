@@ -20,7 +20,7 @@ module.exports = (io) => {
                     currentStreak: user.currentStreak
                 })
 
-                io.emit('/realtime',
+                io.emit('realtime',
                     {
                         username: user.discordUsername,
                         discordAvatar: user.discordAvatar,
@@ -39,6 +39,23 @@ module.exports = (io) => {
             await webhook_helper.sendErrorReport("handling incoming event", err)
             res.status(500).send("Error updating user on push event")
         }
+    })
+
+
+    router.get('/test-ws-push', async (req, res) => {
+        console.log('incoming test')
+        io.emit('realtime',
+            {
+                username: "user.discordUsername",
+                discordAvatar: "user.discordAvatar",
+                githubName: "user.githubUsername",
+                githubAvatar: "user.githubAvatar",
+                repoName: "user.repoName",
+                currentStreak: "user.currentStreak",
+                totalPushes: "user.totalPushes",
+                ts: "user.lastPush_UTC"
+            });
+        res.status(200).send()
     })
 
     return router;

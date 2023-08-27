@@ -96,8 +96,10 @@ const io = socketIo(server, {
   }
 });;
 
+var nsp = io.of('/realtime')
+
 // socket io logging
-io.on('connection', (socket) => {
+nsp.on('connection', (socket) => {
   console.log('Client connected:', socket.id);
 
   socket.on('disconnect', (reason) => {
@@ -125,7 +127,7 @@ const realtimeRoute = require('./routes/realtime');
 const deployRoute = require('./deploy');
 
 app.use('/auth_old', [authGithubRoutes, authDiscordRoutes, authHelperRoutes])
-app.use('/event', eventRoutes(io))
+app.use('/event', eventRoutes(nsp))
 app.use('/', [indexRoute, leaderboardRoute])
 app.use('/realtime', realtimeRoute)
 app.use('/admin', deployRoute)
