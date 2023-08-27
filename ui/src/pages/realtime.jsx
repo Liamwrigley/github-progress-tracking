@@ -22,10 +22,10 @@ export const Realtime = () => {
 
     useEffect(() => {
         console.log('creating WS on url:', SOCKET_URL)
-        const newSocket = io(SOCKET_URL, { withCredentials: IS_PROD, path: '/socket', transports: ['websocket'] });
+        const newSocket = io(SOCKET_URL, { withCredentials: IS_PROD, path: '/socket' });
         console.log('socket', newSocket)
-        newSocket.on("realtime", (update) => {
-            // Update your local state or cache here when new data is received
+        newSocket.on("/realtime", (update) => {
+            console.log('socket event incoming: ', update)
             appendEventData(update)
         });
 

@@ -20,7 +20,7 @@ module.exports = (io) => {
                     currentStreak: user.currentStreak
                 })
 
-                io.emit('realtime',
+                io.emit('/realtime',
                     {
                         username: user.discordUsername,
                         discordAvatar: user.discordAvatar,
