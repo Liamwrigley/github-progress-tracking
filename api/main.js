@@ -95,6 +95,19 @@ const io = socketIo(server, {
   }
 });;
 
+// socket io logging
+io.on('connection', (socket) => {
+  console.log('Client connected:', socket.id);
+
+  socket.on('disconnect', (reason) => {
+    console.log('Client disconnected:', socket.id, 'Reason:', reason);
+  });
+
+  socket.on('error', (error) => {
+    console.log('Socket error:', error);
+  });
+});
+
 //routes
 app.use((req, res, next) => {
   res.locals.currentRoute = req.path;
