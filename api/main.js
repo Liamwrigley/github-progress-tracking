@@ -80,6 +80,7 @@ if (IS_PROD) {
     key: fs.readFileSync('/etc/letsencrypt/live/github-tracker.rowrisoft.xyz/privkey.pem'),
     cert: fs.readFileSync('/etc/letsencrypt/live/github-tracker.rowrisoft.xyz/fullchain.pem')
   };
+  console.log('options', options)
   server = http.createServer(options, app);
 } else {
   console.log('starting as http')
