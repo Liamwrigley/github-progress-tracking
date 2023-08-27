@@ -88,11 +88,11 @@ if (IS_PROD) {
   server = http.createServer(app);
 }
 const io = socketIo(server, {
-  path: '/socket',
-  withCredentials: true,
+
+  withCredentials: IS_PROD,
   cors: {
     origin: IS_PROD ? "https://github-tracker.rowrisoft.xyz" : "http://localhost:4002",
-    credentials: true
+    credentials: IS_PROD
   }
 });;
 
