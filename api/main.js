@@ -96,18 +96,6 @@ const io = socketIo(server, {
   }
 });;
 
-// socket io logging
-io.on('connection', (socket) => {
-  console.log('Client connected:', socket.id);
-
-  socket.on('disconnect', (reason) => {
-    console.log('Client disconnected:', socket.id, 'Reason:', reason);
-  });
-
-  socket.on('error', (error) => {
-    console.log('Socket error:', error);
-  });
-});
 
 //routes
 app.use((req, res, next) => {
@@ -142,6 +130,18 @@ db.connection.on('connected', () => {
 // streak control
 const streakEnder = require('./functions/streak');
 
+// socket io logging
+io.on('connection', (socket) => {
+  console.log('Client connected:', socket.id);
+
+  socket.on('disconnect', (reason) => {
+    console.log('Client disconnected:', socket.id, 'Reason:', reason);
+  });
+
+  socket.on('error', (error) => {
+    console.log('Socket error:', error);
+  });
+});
 
 
 server.listen(config.PORT, async () => {
