@@ -9,15 +9,17 @@ module.exports = (io) => {
     router.post('/push/:discordId', verifyGitHubPayload, async (req, res) => {
         var incomingEvent = req.body
         var user = null;
+        var event = null;
         try {
             user = await db.User.findById(req.params.discordId)
             if (user) {
                 user.UpdateFromPush(incomingEvent.head_commit.timestamp)
                 await user.save();
-                await db.Event.create({
+                event = await db.Event.create({
                     user: user._id,
                     currentPushes: user.totalPushes,
-                    currentStreak: user.currentStreak
+                    currentStreak: user.currentStreak,
+                    repositoryName: incomingEvent.repository.name
                 })
 
                 io.emit('realtime',
@@ -26,7 +28,7 @@ module.exports = (io) => {
                         discordAvatar: user.discordAvatar,
                         githubName: user.githubUsername,
                         githubAvatar: user.githubAvatar,
-                        repoName: user.repoName,
+                        repoName: event.repositoryName,
                         currentStreak: user.currentStreak,
                         totalPushes: user.totalPushes,
                         ts: user.lastPush_UTC

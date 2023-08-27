@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
                 discordAvatar: e.user.discordAvatar,
                 githubName: e.user.githubUsername,
                 githubAvatar: e.user.githubAvatar,
-                repoName: e.user.repoName,
+                repoName: e.repositoryName,
                 currentStreak: e.currentStreak,
                 totalPushes: e.currentPushes,
                 ts: e.ts

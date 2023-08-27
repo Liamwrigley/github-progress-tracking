@@ -30,7 +30,8 @@ const eventSchema = new mongoose.Schema({
         required: true
     },
     currentPushes: { type: Number, required: true },
-    currentStreak: { type: Number, required: true }
+    currentStreak: { type: Number, required: true },
+    repositoryName: { type: String, required: true }
 }, {
     timestamps: true
 });

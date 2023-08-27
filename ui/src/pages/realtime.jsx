@@ -21,11 +21,8 @@ export const Realtime = () => {
     };
 
     useEffect(() => {
-        console.log('creating WS on url:', SOCKET_URL)
         const newSocket = io(SOCKET_URL, { withCredentials: IS_PROD });
-        console.log('socket', newSocket)
-        newSocket.on("/realtime", (update) => {
-            console.log('socket event incoming: ', update)
+        newSocket.on("realtime", (update) => {
             appendEventData(update)
         });
 
