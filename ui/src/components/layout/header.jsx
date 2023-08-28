@@ -1,10 +1,15 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { StyledButton } from '../styledButton';
+import { Get } from '../../utility/ApiRequest'
+import { useQuery } from 'react-query';
+
+const fetchUser = () => Get('/auth/status')
 
 export const Header = ({ links }) => {
     const location = useLocation()
     const isAuthRoute = location.pathname.startsWith('/auth')
+    const { data: userData, isLoading, refetch } = useQuery('userData', fetchUser);
 
     return (
         <header className="p-4 bg-custom-secondarybg text-custom-secondarytext z-50">
@@ -22,10 +27,16 @@ export const Header = ({ links }) => {
                         )
                     })}
                 </div>
-                {!isAuthRoute &&
+                {(!isAuthRoute && !userData?.authenticated) &&
                     <div className="flex space-x-4">
-                        <StyledButton label={"Setup Auth"} to="/auth" primary={false} />
-                        <StyledButton label={"Revoke"} to="/auth/revoke" primary={true} />
+                        <StyledButton label={"Login"} to="/auth/login" primary={true} />
+                        <StyledButton label={"Setup"} to="/auth/setup" primary={false} />
+                    </div>
+                }
+                {userData && userData.authenticated &&
+                    <div className="flex space-x-4">
+                        <StyledButton label={"Logout"} to="/auth/logout" primary={true} />
+                        <StyledButton label={"Profile"} to={`/profile/${userData.user.discord.id}`} primary={false} />
                     </div>
                 }
             </div>

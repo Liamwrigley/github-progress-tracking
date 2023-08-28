@@ -12,6 +12,7 @@ const setSession = (req, user, id, source) => {
     return req.session.user = {
         source: source,
         id: id,
+        setupComplete: user.setupComplete,
         discord: {
             id: user.discordId,
             name: user.discordUsername,
@@ -81,7 +82,12 @@ router.get('/discord-oauth-callback', sessionPrinter, async (req, res) => {
         if (err) {
             return res.status(500).send("Authentication error");
         }
-        res.redirect(`${UI_URL}/auth`)
+        if (user.setupComplete) {
+            res.redirect(`${UI_URL}/profile/${user.discordId}`)
+        } else {
+            res.redirect(`${UI_URL}/auth/setup`)
+
+        }
     })
 })
 

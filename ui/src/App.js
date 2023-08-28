@@ -7,10 +7,12 @@ import {
 } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Layout } from './components/layout/layout'
-import { Auth } from './pages/auth'
+import { AuthSetup } from './pages/authSetup'
 import { Leaderboard } from './pages/leaderboard';
 import { Realtime } from './pages/realtime';
 import { Home } from './components/layout/home';
+import { Login } from './pages/login';
+import { Profile } from './pages/profile';
 
 
 const queryClient = new QueryClient();
@@ -23,7 +25,6 @@ const links = [
 
 function App() {
 
-  console.log(process.env.REACT_APP_API_URL)
   return (
     <QueryClientProvider client={queryClient}>
       <Router className="scroll-smooth">
@@ -31,7 +32,11 @@ function App() {
           <Routes>
             <Route path="/realtime" element={<Realtime />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
-            <Route path="/auth" element={<Auth />} />
+            <Route path="/auth" >
+              <Route path='setup' element={<AuthSetup />} />
+              <Route path='login' element={<Login />} />
+            </Route>
+            <Route path="/profile/:id" element={<Profile />} />
             <Route path="/" element={<Home />} />
           </Routes>
         </Layout>
