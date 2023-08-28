@@ -40,18 +40,48 @@ export const AuthSetup = () => {
     const resolve = (v) => v ? true : false
 
     const steps = [
-        { text: "Discord", status: resolve(userData?.user?.discord?.id) && resolve(!userData?.needsDiscordToken) },// && resolve(userData?.user?.github?.id || userData.needsGithubToken) && resolve(userData?.user?.github?.repoName) },
-        { text: "Github", status: resolve(userData?.user?.github?.id) && resolve(!userData?.needsGithubToken) },// && resolve(userData?.user?.github?.repoName) },
-        { text: "Select Repo", status: resolve(userData?.user?.setupComplete) },
+        { key: "discord", text: "Discord", status: resolve(userData?.user?.discord?.id) && resolve(!userData?.needsDiscordToken) },// && resolve(userData?.user?.github?.id || userData.needsGithubToken) && resolve(userData?.user?.github?.repoName) },
+        { key: "github", text: "Github", status: resolve(userData?.user?.github?.id) && resolve(!userData?.needsGithubToken) },// && resolve(userData?.user?.github?.repoName) },
+        { key: "repo", text: "Select Repo", status: resolve(userData?.user?.setupComplete) },
     ]
+
+    const activeStep = () => steps[steps.findIndex(s => !s.status)]
 
     return (
         <Loading isFetching={isFetching && !userData}>
             <div className="flex flex-col gap-4">
                 <Stepper steps={steps} />
+
+
+                <div className="flex flex-row gap-4 justify-between pt-4">
+                    <div className="w-full flex flex-col items-center justify-center gap-2">
+                        {userData && steps[0].status ? <>
+                            <div className="mask mask-circle w-12 h-12">
+                                <img src={userData.user.discord.avatar} alt="Avatar" />
+                            </div>
+                            <div>{userData.user.discord.name}</div>
+                        </> : <a disabled={activeStep().key !== steps[0].key} href={DISCORD_REDIRECT()} >discord</a>}
+                    </div>
+                    <div className="w-full flex flex-col items-center justify-center gap-2">
+                        {userData && steps[1].status ? <>
+                            <div className="mask mask-circle w-12 h-12">
+                                <img src={userData.user.github.avatar} alt="Avatar" />
+                            </div>
+                            <div>{userData.user.github.name}</div>
+                        </> : <a disabled={activeStep().key !== steps[1].key} href={GITHUB_REDIRECT()} >github</a>}
+                    </div>
+                    <div className="w-full flex flex-col items-center justify-center gap-2">
+                        {userData && steps[2].status ? <>
+                            <div>{userData.user.github.repoName}</div>
+                        </> : <a disabled={activeStep().key !== steps[2].key} href="/go" >Select Repo</a>}
+                    </div>
+                </div>
+
+
                 <div className="divider"></div>
                 <a href={DISCORD_REDIRECT()} >discord</a>
                 <a href={GITHUB_REDIRECT()} >github</a>
+                <p>{JSON.stringify(activeStep())}</p>
                 <div className="flex flex-row gap-4 justify-between">
                     <div className='prose m-w-none '>
                         <h3>Discord</h3>

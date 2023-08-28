@@ -1,8 +1,12 @@
+import React from 'react'
+
 export const Stepper = ({ steps }) => {
 
     const activeStepClass = "border-custom-highlight "
     const completedStepClass = "border-custom-highlight bg-custom-highlight text-white "
     const baseClass = "border-custom-highlight border-2 p-2 w-full flex items-center justify-between space-x-3 "
+
+    const activeStep = () => steps[steps.findIndex(s => !s.status)]
 
     return (
         <div className="flex flex-row gap-4 justify-between">
