@@ -106,7 +106,7 @@ router.get('/github-oauth-callback', sessionPrinter, HasDiscordId, async (req, r
 
         const githubUser = await github.getGithubUserDetails(accessToken);
 
-        const user = await db.User.findOne({ discordId: userSession.discord.id }).exec()
+        var user = await db.User.findOne({ discordId: userSession.discord.id }).exec()
 
         if (user) {
             user.githubId = githubUser.id;
