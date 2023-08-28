@@ -13,6 +13,7 @@ import { Realtime } from './pages/realtime';
 import { Home } from './components/layout/home';
 import { Login } from './pages/login';
 import { Profile } from './pages/profile';
+import { Logout } from './pages/logout';
 
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ function App() {
             <Route path="/auth" >
               <Route path='setup' element={<AuthSetup />} />
               <Route path='login' element={<Login />} />
+              <Route path='logout' element={<Logout />} />
             </Route>
             <Route path="/profile/:id" element={<Profile />} />
             <Route path="/" element={<Home />} />

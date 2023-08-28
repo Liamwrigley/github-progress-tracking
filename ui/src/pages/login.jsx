@@ -2,11 +2,13 @@ import React, { useEffect } from 'react'
 import { Get } from '../utility/ApiRequest'
 import { useQuery } from 'react-query';
 import { Loading } from '../components/loading';
+import { useNavigate } from 'react-router-dom';
 
 const fetchUser = () => Get('/auth/status')
 
 export const Login = () => {
     const { data: userData, isFetching, isLoading } = useQuery('userData', fetchUser);
+    const navigate = useNavigate()
 
     const DISCORD_CLIENT_ID = process.env.REACT_APP_DISCORD_CLIENT_ID
     const DISCORD_REDIRECT = () => {
@@ -16,7 +18,8 @@ export const Login = () => {
     useEffect(() => {
         if (!isLoading) {
             if (userData.authenticated && userData.user && userData.user.setupComplete) {
-                window.location.href = `/profile/${userData.user.discord.id}`
+                navigate(`/profile/${userData.user.discord.id}`)
+                // window.location.href = `/profile/${userData.user.discord.id}`
             } else {
                 window.location.href = DISCORD_REDIRECT()
             }

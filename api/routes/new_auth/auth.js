@@ -86,7 +86,6 @@ router.get('/discord-oauth-callback', sessionPrinter, async (req, res) => {
             res.redirect(`${UI_URL}/profile/${user.discordId}`)
         } else {
             res.redirect(`${UI_URL}/auth/setup`)
-
         }
     })
 })
@@ -131,7 +130,11 @@ router.get('/github-oauth-callback', sessionPrinter, HasDiscordId, async (req, r
         if (err) {
             return res.status(500).send("Authentication error");
         }
-        res.redirect(`${UI_URL}/auth`)
+        if (user.setupComplete) {
+            res.redirect(`${UI_URL}/profile/${user.discordId}`)
+        } else {
+            res.redirect(`${UI_URL}/auth/setup`)
+        }
     })
 })
 
@@ -196,7 +199,9 @@ router.post('/repo-select', sessionPrinter, hasGithubToken, isAuthenticated, asy
 
 router.get('/logout', sessionPrinter, (req, res) => {
     req.session.destroy();
-    res.redirect(`${UI_URL}`)
+    console.log('session ended, returning to', UI_URL)
+    res.status(200).send()
+    // res.redirect(`${UI_URL}/`)
 });
 
 module.exports = router;
