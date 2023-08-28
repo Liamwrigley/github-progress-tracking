@@ -3,13 +3,14 @@ import { Get } from '../utility/ApiRequest'
 import { useQuery } from 'react-query';
 import { SelectRepo } from '../components/selectRepo';
 import { Stepper } from '../components/auth/stepper';
+import { Loading } from '../components/loading';
 
 
 const fetchUser = () => Get('/auth/status')
 
 
 export const AuthSetup = () => {
-    const { data: userData, isLoading, refetch } = useQuery('userData', fetchUser);
+    const { data: userData, isFetching, refetch } = useQuery('userData', fetchUser);
     const DISCORD_CLIENT_ID = process.env.REACT_APP_DISCORD_CLIENT_ID
     const DISCORD_REDIRECT = () => {
         var callbackUrl = `${process.env.REACT_APP_API_URL}/auth/discord-oauth-callback`
@@ -45,31 +46,33 @@ export const AuthSetup = () => {
     ]
 
     return (
-        <div className="flex flex-col gap-4">
-            <Stepper steps={steps} />
-            <div className="divider"></div>
-            <a href={DISCORD_REDIRECT()} >discord</a>
-            <a href={GITHUB_REDIRECT()} >github</a>
-            <div className="flex flex-row gap-4 justify-between">
-                <div className='prose m-w-none '>
-                    <h3>Discord</h3>
-                    <ul>
-                        <li><strong>Image: </strong>img</li>
-                        <li><strong>Name: </strong>Mesiya</li>
-                    </ul>
+        <Loading isFetching={isFetching && !userData}>
+            <div className="flex flex-col gap-4">
+                <Stepper steps={steps} />
+                <div className="divider"></div>
+                <a href={DISCORD_REDIRECT()} >discord</a>
+                <a href={GITHUB_REDIRECT()} >github</a>
+                <div className="flex flex-row gap-4 justify-between">
+                    <div className='prose m-w-none '>
+                        <h3>Discord</h3>
+                        <ul>
+                            <li><strong>Image: </strong>img</li>
+                            <li><strong>Name: </strong>Mesiya</li>
+                        </ul>
+                    </div>
+                    <div className='prose m-w-none '>
+                        <h3>Github</h3>
+                        <ul>
+                            <li><strong>Image: </strong>img</li>
+                            <li><strong>Name: </strong>Mesiya</li>
+                            <li><strong>Repo: </strong>XYZHAH</li>
+                            <li><strong>Other GIthub Info: </strong>asdasdh akjsdhaksj dhaksjdh asd</li>
+                        </ul>
+                    </div>
                 </div>
-                <div className='prose m-w-none '>
-                    <h3>Github</h3>
-                    <ul>
-                        <li><strong>Image: </strong>img</li>
-                        <li><strong>Name: </strong>Mesiya</li>
-                        <li><strong>Repo: </strong>XYZHAH</li>
-                        <li><strong>Other GIthub Info: </strong>asdasdh akjsdhaksj dhaksjdh asd</li>
-                    </ul>
-                </div>
-            </div>
-            <div className="divider"></div>
-        </div>
+                <div className="divider"></div>
+            </div >
+        </Loading>
         // <div>
         //     <div className='flex flex-col gap-4'>
         //         {userData?.user && <>
