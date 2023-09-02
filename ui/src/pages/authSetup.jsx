@@ -5,6 +5,7 @@ import { SelectRepo } from '../components/selectRepo';
 import { Stepper } from '../components/auth/stepper';
 import { Loading } from '../components/loading';
 import { ProfileTicket } from '../components/profileTicket';
+import { Profile } from './profile';
 
 
 const fetchUser = () => Get('/auth/status')
@@ -51,7 +52,7 @@ export const AuthSetup = () => {
     return (
         <Loading isFetching={isFetching && !userData}>
             <div className="flex flex-col gap-4">
-                <Stepper steps={steps} />
+                {/* <Stepper steps={steps} /> */}
 
 
 
@@ -78,11 +79,28 @@ export const AuthSetup = () => {
                             type={steps[1].key} />
                     </div>
                     <div className="w-full flex flex-col items-center justify-center gap-2">
-                        {userData && steps[2].status ? <>
+                        <ProfileTicket
+                            activeStep={activeStep(steps[2].key)}
+                            showButton={steps[2].status}
+                            avatar={userData?.user?.[steps[1].key]?.avatar}
+                            username={userData?.user?.[steps[1].key]?.repo}
+                            title={steps[2].text}
+                            type={steps[2].key} >
+                        </ProfileTicket>
+                        {/* {userData && steps[2].status ? <>
                             <div>{userData.user.github.repoName}</div>
-                        </> : <a disabled={activeStep(steps[2].key)} href="/go" >Select Repo - {activeStep(steps[2].key) ? "Y" : "N"}</a>}
+                        </> : <a disabled={activeStep(steps[2].key)} href="/go" >Select Repo - {activeStep(steps[2].key) ? "Y" : "N"}</a>} */}
                     </div>
                 </div>
+                {activeStep(steps[2].key) &&
+                    <>
+                        <div className="divider"></div>
+                        <div>
+                            <SelectRepo user={userData} refetch={refetch} />
+                        </div>
+                    </>
+                }
+
 
 
                 <div className="divider"></div>
@@ -108,37 +126,5 @@ export const AuthSetup = () => {
                 <div className="divider"></div>
             </div >
         </Loading>
-        // <div>
-        //     <div className='flex flex-col gap-4'>
-        //         {userData?.user && <>
-        //             <div className="flex items-center space-x-3">
-        //                 <div className="group-hover/list:animate-blink opacity-0 -translate-x-1 group-hover/list:opacity-100 group-hover/list:translate-x-0 duration-100">
-        //                     <i className="bi bi-chevron-right"></i>
-        //                 </div>
-        //                 <div className="avatar group-hover/list:translate-x-2 duration-100">
-        //                     <div className="mask mask-circle w-12 h-12">
-        //                         <img src={userData.user.discord.avatar} alt="Avatar" />
-        //                     </div>
-        //                 </div>
-        //                 <div className=" group-hover/list:translate-x-2 duration-100">
-        //                     <div className="font-bold"><i className="bi bi-discord"></i> {userData.user.discord.name}</div>
-        //                 </div>
-        //             </div>
-        //             <div className="flex items-center space-x-3">
-        //                 <div className="group-hover/list:animate-blink opacity-0 -translate-x-1 group-hover/list:opacity-100 group-hover/list:translate-x-0 duration-100">
-        //                     <i className="bi bi-chevron-right"></i>
-        //                 </div>
-        //                 <div className="avatar group-hover/list:translate-x-2 duration-100">
-        //                     <div className="mask mask-circle w-12 h-12">
-        //                         <img src={userData.user.github.avatar} alt="Avatar" />
-        //                     </div>
-        //                 </div>
-        //                 <div className=" group-hover/list:translate-x-2 duration-100">
-        //                     <div className="font-bold"><i className="bi bi-github"></i> {userData.user.github.name}</div>
-        //                 </div>
-        //             </div>
-        //         </>}
-        //     </div>
-        // </div>
     );
 }

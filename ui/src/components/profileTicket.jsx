@@ -1,12 +1,14 @@
 import React from 'react'
 
-export const ProfileTicket = ({ activeStep, showButton, url, avatar, username, title, type }) => {
+export const ProfileTicket = ({ activeStep, showButton, url, avatar, username, title, type, children }) => {
     const typeClass = type === "discord" ? "bi bi-discord" : "bi bi-github"
-    const activeClass = " border border-custom-highlight2 hover:scale-105 hover:shadow-lg "
+    const activeClass = " border border-custom-highlight2 hover:scale-105 hover:shadow-lg  "
     const baseClass = "  min-h-[80px] flex flex-col gap-4 bg-black shadow-sm bg-opacity-20 duration-100 w-full p-4 rounded-lg relative "
 
     const handleClick = () => {
-        window.location.href = url;
+        if (url) {
+            window.location.href = url;
+        }
     }
 
     return (
@@ -15,7 +17,7 @@ export const ProfileTicket = ({ activeStep, showButton, url, avatar, username, t
             {showButton ?
                 <div className="flex flex-row gap-4 justify-center items-center h-full">
                     <div className="avatar">
-                        <div className="w-12 rounded">
+                        <div className="w-12 rounded-full">
                             {avatar ?
                                 <img src={avatar} alt='avatar' />
                                 :
@@ -32,10 +34,10 @@ export const ProfileTicket = ({ activeStep, showButton, url, avatar, username, t
                 :
                 <div className="flex flex-row gap-4 justify-center items-center h-full">
                     <button
-                        className='absolute w-full h-full text-white'
+                        className={'absolute w-full h-full ' + (activeStep && !showButton && 'text-white')}
                         disabled={!activeStep}
                         onClick={() => handleClick()}>
-                        Connect
+                        {url ? "Connect" : "Select"}
                     </button>
                 </div>
             }
