@@ -4,6 +4,7 @@ import { useQuery } from 'react-query';
 import { SelectRepo } from '../components/selectRepo';
 import { Stepper } from '../components/auth/stepper';
 import { Loading } from '../components/loading';
+import { ProfileTicket } from '../components/profileTicket';
 
 
 const fetchUser = () => Get('/auth/status')
@@ -45,7 +46,7 @@ export const AuthSetup = () => {
         { key: "repo", text: "Select Repo", status: resolve(userData?.user?.setupComplete) },
     ]
 
-    const activeStep = () => steps[steps.findIndex(s => !s.status)]
+    const activeStep = (key) => steps[steps.findIndex(s => !s.status)].key === key
 
     return (
         <Loading isFetching={isFetching && !userData}>
@@ -53,34 +54,38 @@ export const AuthSetup = () => {
                 <Stepper steps={steps} />
 
 
+
                 <div className="flex flex-row gap-4 justify-between pt-4">
                     <div className="w-full flex flex-col items-center justify-center gap-2">
-                        {userData && steps[0].status ? <>
-                            <div className="mask mask-circle w-12 h-12">
-                                <img src={userData.user.discord.avatar} alt="Avatar" />
-                            </div>
-                            <div>{userData.user.discord.name}</div>
-                        </> : <a disabled={activeStep().key !== steps[0].key} href={DISCORD_REDIRECT()} >discord</a>}
+                        <ProfileTicket
+                            activeStep={activeStep(steps[0].key)}
+                            showButton={steps[0].status}
+                            url={DISCORD_REDIRECT()}
+                            avatar={userData?.user?.[steps[0].key]?.avatar}
+                            username={userData?.user?.[steps[0].key]?.name}
+                            title={steps[0].text}
+                            type={steps[0].key}
+                        />
                     </div>
                     <div className="w-full flex flex-col items-center justify-center gap-2">
-                        {userData && steps[1].status ? <>
-                            <div className="mask mask-circle w-12 h-12">
-                                <img src={userData.user.github.avatar} alt="Avatar" />
-                            </div>
-                            <div>{userData.user.github.name}</div>
-                        </> : <a disabled={activeStep().key !== steps[1].key} href={GITHUB_REDIRECT()} >github</a>}
+                        <ProfileTicket
+                            activeStep={activeStep(steps[1].key)}
+                            showButton={steps[1].status}
+                            url={GITHUB_REDIRECT()}
+                            avatar={userData?.user?.[steps[1].key]?.avatar}
+                            username={userData?.user?.[steps[1].key]?.name}
+                            title={steps[1].text}
+                            type={steps[1].key} />
                     </div>
                     <div className="w-full flex flex-col items-center justify-center gap-2">
                         {userData && steps[2].status ? <>
                             <div>{userData.user.github.repoName}</div>
-                        </> : <a disabled={activeStep().key !== steps[2].key} href="/go" >Select Repo</a>}
+                        </> : <a disabled={activeStep(steps[2].key)} href="/go" >Select Repo - {activeStep(steps[2].key) ? "Y" : "N"}</a>}
                     </div>
                 </div>
 
 
                 <div className="divider"></div>
-                <a href={DISCORD_REDIRECT()} >discord</a>
-                <a href={GITHUB_REDIRECT()} >github</a>
                 <p>{JSON.stringify(activeStep())}</p>
                 <div className="flex flex-row gap-4 justify-between">
                     <div className='prose m-w-none '>

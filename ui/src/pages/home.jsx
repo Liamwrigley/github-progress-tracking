@@ -3,8 +3,19 @@ export const Home = () => {
     console.log(process.env.REACT_APP_API_URL)
     return (
         <div className="flex flex-col gap-8">
+            <div className="flex align-center justify-center">
+
+                <pre className="prose leading-3 hidden sm:hidden md:block">
+                    RRRR   EEEEE  PPPP    OOO   RRRR    OOO    OOO   K  K  III  EEEEE<br />
+                    R   R  E      P   P  O   O  R   R  O   O  O   O  K K    I   E<br />
+                    RRRR   EEEE   PPPP   O   O  RRRR   O   O  O   O  KK     I   EEEE<br />
+                    R  R   E      P      O   O  R  R   O   O  O   O  K K    I   E<br />
+                    R   R  EEEEE  P       OOO   R   R   OOO    OOO   K  K  III  EEEEE<br />
+                </pre>
+            </div>
+            <div className="divider hidden sm:hidden md:flex"></div>
             <div className="prose max-w-none text-left">
-                <h2>{`>`} RepoRookie 🚀</h2>
+                <h2 className="sm:block md:hidden">{`>`} RepoRookie 🚀</h2>
                 <p>Embark on your coding adventure with RepoRookie! Dive into a gamified journey, track your progress, and transform every commit into a milestone. Are you ready to level up your coding game? Join the RepoRookie revolution now!</p>
             </div>
             <div className="divider"></div>
