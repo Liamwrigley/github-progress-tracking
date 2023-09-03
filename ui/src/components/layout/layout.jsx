@@ -7,8 +7,8 @@ import { Toast } from './toast';
 
 const formatTitle = (str) => {
     var title = str
-    if (str.startsWith("/profile")) {
-        title = "/profile"
+    if (str.startsWith("/user")) {
+        title = "/user"
     }
     return `./${title.replace("/", "")}`
 }

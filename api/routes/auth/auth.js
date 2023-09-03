@@ -82,7 +82,7 @@ router.get('/discord-oauth-callback', sessionPrinter, async (req, res) => {
             res.redirect(500, `${UI_URL}/auth/setup`)
         }
         if (user.setupComplete) {
-            res.redirect(`${UI_URL}/profile/${user.discordId}`)
+            res.redirect(`${UI_URL}/user/${user.discordId}`)
         } else {
             res.redirect(`${UI_URL}/auth/setup`)
         }

@@ -38,7 +38,7 @@ export const Home = () => {
                 <ul className="mr-auto list-none divide-y divide-slate-600/25">
                     <li>
                         <div className="flex flex-row items-center  gap-4">
-                            <input type="checkbox" checked="" className="checkbox" />
+                            <input type="checkbox" checked className="checkbox" />
                             <p>Improve auth flow's UX. Dont automatically redirect</p>
                         </div>
                     </li>
