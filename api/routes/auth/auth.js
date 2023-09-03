@@ -174,7 +174,7 @@ router.post('/repo-select', sessionPrinter, hasGithubToken, isAuthenticated, asy
             var webhookUrl = `${hostname}/event/push/${userSession.discord.id}`
             var webhook = await github.postGithubCreateWebhook(token, repoInfo, webhookUrl)
 
-            const repo = await new db.Repo.create({
+            const repo = await db.Repo.create({
                 _id: repoInfo.id,
                 name: repoInfo.name,
                 webhookId: webhook.id,
