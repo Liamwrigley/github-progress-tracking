@@ -4,6 +4,7 @@ import { Get } from '../utility/ApiRequest'
 import { TimeSince } from "../utility/timeHelpers"
 import { useQuery, useQueryClient } from 'react-query';
 import { Loading } from "../components/loading";
+import { useNavigate } from 'react-router-dom'
 
 const IS_PROD = process.env.REACT_APP_PRODUCTION === "true"
 
@@ -12,6 +13,7 @@ const fetchRealtimeData = () => Get('/realtime');
 
 
 export const Realtime = () => {
+    const navigate = useNavigate()
     const queryClient = useQueryClient();
 
     const { data: eventData, isFetching } = useQuery('realtimeData', fetchRealtimeData);
@@ -19,6 +21,10 @@ export const Realtime = () => {
     const appendEventData = (newData) => {
         queryClient.setQueryData('realtimeData', old => [newData, ...old]);
     };
+
+    const onRowClick = (id) => {
+        navigate(`/user/${id}`)
+    }
 
     useEffect(() => {
         const newSocket = io(SOCKET_URL, { withCredentials: IS_PROD });
@@ -51,7 +57,7 @@ export const Realtime = () => {
                             eventData && eventData.map((data, i) => {
                                 const time = TimeSince(data.ts)
                                 return (
-                                    <tr key={`${i}${data.ts}`} className="group/list">
+                                    <tr key={`${i}${data.ts}`} onClick={() => onRowClick(data.discordId)} className="group/list cursor-pointer">
                                         {/* USER */}
                                         <td>
                                             <div className="flex items-center space-x-3">

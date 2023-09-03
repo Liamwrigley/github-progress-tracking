@@ -34,10 +34,6 @@ exports.sendWebhook = async (title, data, webhookUrl = WEBHOOK_URL) => {
     await wh.send({ embeds: [embed] })
 }
 
-exports.updateLeaderboard = async () => {
-    // get messageId to update
-}
-
 
 exports.sendErrorReport = async (message, err) => {
     const wh = createWebhookClient(ERROR_WEBHOOK_URL)

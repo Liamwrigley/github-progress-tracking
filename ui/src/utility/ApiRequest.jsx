@@ -33,6 +33,7 @@ instance.interceptors.response.use(
 
 
 export const Get = async (url, settings = {}) => {
+    console.log('url', url)
     const response = await instance.get(url, settings)
     return response.data
 }

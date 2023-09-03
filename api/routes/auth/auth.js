@@ -22,7 +22,7 @@ const setSession = (req, user, id, source) => {
             id: user.githubId,
             name: user.githubUsername,
             avatar: user.githubAvatar,
-            repo: user.repoName
+            // repo: user.repoName
         }
     }
 }
@@ -31,7 +31,6 @@ const sessionPrinter = (req, res, next) => {
     console.log('Requesting URL:', req.originalUrl);
     console.log('Cookie Header:', req.headers.cookie);
     console.log("Session ID:", req.session.id,);
-    // console.log(req.get("host"), "Session ID:", req.session.id, "Session Data:", req.session);
     next()
 }
 
@@ -75,12 +74,12 @@ router.get('/discord-oauth-callback', sessionPrinter, async (req, res) => {
 
     } catch (error) {
         console.error("Error in Discord callback:", error);
-        res.status(500).send("Authentication error");
+        res.redirect(500, `${UI_URL}/auth/setup`)
     }
 
     req.session.save((err) => {
         if (err) {
-            return res.status(500).send("Authentication error");
+            res.redirect(500, `${UI_URL}/auth/setup`)
         }
         if (user.setupComplete) {
             res.redirect(`${UI_URL}/profile/${user.discordId}`)
@@ -94,7 +93,7 @@ const HasDiscordId = (req, res, next) => {
     if (req.session && req.session.user && req.session.user.discord.id) {
         return next()
     } else {
-        res.status(401).send("Please start auth process again.")
+        res.redirect(401, `${UI_URL}/auth/setup`)
     }
 }
 
@@ -114,7 +113,7 @@ router.get('/github-oauth-callback', sessionPrinter, HasDiscordId, async (req, r
             user.githubAvatar = githubUser.avatar_url;
             await user.save();
         } else {
-            res.status(401).send("Please start auth process again.")
+            res.redirect(401, `${UI_URL}/auth/setup`)
         }
 
         setSession(req, user, user.githubId, 'github')
@@ -123,12 +122,12 @@ router.get('/github-oauth-callback', sessionPrinter, HasDiscordId, async (req, r
 
     } catch (error) {
         console.error("Error in Github callback:", error);
-        res.status(500).send("Authentication error");
+        res.redirect(500, `${UI_URL}/auth/setup`)
     }
 
     req.session.save((err) => {
         if (err) {
-            return res.status(500).send("Authentication error");
+            res.redirect(500, `${UI_URL}/auth/setup`)
         }
         if (user.setupComplete) {
             res.redirect(`${UI_URL}/profile/${user.discordId}`)
@@ -142,15 +141,13 @@ const isAuthenticated = (req, res, next) => {
     if (req.session && req.session.user) {
         return next();
     }
-    console.log('isAuthenticated')
-    res.status(401).send('Not Authenticated');
+    res.redirect(401, `${UI_URL}/auth/setup`)
 }
 const hasGithubToken = (req, res, next) => {
     if (req.session && req.session.githubToken) {
         return next()
     }
-    console.log('hasGithubToken')
-    res.status(401).send('Not Authenticated');
+    res.redirect(401, `${UI_URL}/auth/setup`)
 }
 
 router.get('/github-repos', sessionPrinter, hasGithubToken, async (req, res) => {
@@ -160,7 +157,7 @@ router.get('/github-repos', sessionPrinter, hasGithubToken, async (req, res) => 
         res.send(repos)
     } catch (error) {
         console.error("Error in repo get:", error);
-        res.status(500).send("Cant get repositories");
+        res.redirect(500, `${UI_URL}/auth/setup`)
     }
 })
 
@@ -172,27 +169,37 @@ router.post('/repo-select', sessionPrinter, hasGithubToken, isAuthenticated, asy
         const repoInfo = JSON.parse(req.body.data.repoInfo)
 
         const user = await db.User.findOne({ discordId: userSession.discord.id }).exec()
-        var webhookUrl = `${hostname}/event/push/${userSession.discord.id}`
-        var webhook = await github.postGithubCreateWebhook(token, repoInfo, webhookUrl)
 
         if (user) {
-            user.webhookId = webhook.id;
-            user.repoName = repoInfo.name
+            var webhookUrl = `${hostname}/event/push/${userSession.discord.id}`
+            var webhook = await github.postGithubCreateWebhook(token, repoInfo, webhookUrl)
+
+            const repo = await new db.Repo.create({
+                _id: repoInfo.id,
+                name: repoInfo.name,
+                webhookId: webhook.id,
+                url: repoInfo.html_url,
+                description: repoInfo.description,
+                private: repoInfo.private,
+                user: user._id
+            })
+
+            user.repositories.push(repo);
             user.setupComplete = true
+
             await user.save()
         } else {
             console.error("Error in webhook creation:", error);
-            res.status(500).send("Authentication error");
+            res.redirect(500, `${UI_URL}/auth/setup`)
         }
 
         setSession(req, user, user.githubId, 'github')
 
-        // maybe send back to '/'?
         res.send(user)
 
     } catch (error) {
         console.error("Error in webhook setup:", error);
-        res.status(500).send("Cant setup webhook");
+        res.redirect(500, `${UI_URL}/auth/setup`)
     }
 })
 
@@ -201,7 +208,6 @@ router.get('/logout', sessionPrinter, (req, res) => {
     req.session.destroy();
     console.log('session ended, returning to', UI_URL)
     res.status(200).send()
-    // res.redirect(`${UI_URL}/`)
 });
 
 module.exports = router;

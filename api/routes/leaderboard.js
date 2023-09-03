@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/leaderboard', async (req, res) => {
     let users = [];
     try {
-        var usersFromDb = await db.User.find({ hasCurrentStreak: true })
+        var usersFromDb = await db.User.find({ setupComplete: true })
             .sort({ currentStreak: -1 })
             .limit(50)
             .exec()

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Get, Post } from '../utility/ApiRequest'
+import { Get, Post } from '../../utility/ApiRequest'
 import { useQuery, useMutation } from 'react-query';
-import { Loading } from "./loading";
+import { Loading } from "../loading";
 
 
 const fetchRepos = () => Get('/auth/github-repos')

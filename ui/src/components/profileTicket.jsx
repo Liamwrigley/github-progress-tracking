@@ -1,7 +1,18 @@
 import React from 'react'
 
-export const ProfileTicket = ({ activeStep, showButton, url, avatar, username, title, type, children }) => {
+export const ProfileTicket = ({
+    activeStep = false,
+    showDetails = true,
+    dynamic = true,
+    url,
+    avatar,
+    username,
+    title,
+    type
+}) => {
+
     const typeClass = type === "discord" ? "bi bi-discord" : "bi bi-github"
+    const dynamicClass = " hover:scale-105 hover:shadow-lg  "
     const activeClass = " border border-custom-highlight2 hover:scale-105 hover:shadow-lg  "
     const baseClass = "  min-h-[80px] flex flex-col gap-4 bg-black shadow-sm bg-opacity-20 duration-100 w-full p-4 rounded-lg relative "
 
@@ -12,9 +23,9 @@ export const ProfileTicket = ({ activeStep, showButton, url, avatar, username, t
     }
 
     return (
-        <div className={baseClass + (activeStep && !showButton && activeClass)}>
+        <div className={baseClass + (activeStep && !showDetails && activeClass) + (!dynamic && dynamicClass)}>
             {title && <p className=' absolute left-2 top-1 text-xs tracking-widest uppercase'><i className={typeClass}></i> {title}</p>}
-            {showButton ?
+            {showDetails ?
                 <div className="flex flex-row gap-4 justify-center items-center h-full">
                     <div className="avatar">
                         <div className="w-12 rounded-full">
@@ -27,14 +38,14 @@ export const ProfileTicket = ({ activeStep, showButton, url, avatar, username, t
                         </div>
                     </div>
 
-                    <div className='flex justify-center items-center'>
+                    <div className='flex flex-col justify-center items-center'>
                         <div className="font-bold opacity-50">{username}</div>
                     </div>
                 </div>
                 :
                 <div className="flex flex-row gap-4 justify-center items-center h-full">
                     <button
-                        className={'absolute w-full h-full ' + (activeStep && !showButton && 'text-white')}
+                        className={'absolute w-full h-full ' + (activeStep && !showDetails && 'text-white')}
                         disabled={!activeStep}
                         onClick={() => handleClick()}>
                         {url ? "Connect" : "Select"}

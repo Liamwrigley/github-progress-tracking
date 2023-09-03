@@ -20,15 +20,37 @@ mongoose.connection.on('disconnected', () => {
     // You can add logic here to try and reconnect if needed.
 });
 
+//#region Repos
+const repoSchema = new mongoose.Schema({
+    _id: { type: Number },
+    name: { type: String, required: true },
+    webhookId: { type: String, required: true },
+    url: { type: String, required: true },
+    description: { type: String },
+    private: { type: Boolean, default: false },
+
+    totalPushes: { type: Number, default: 0 },
+    totalCommits: { type: Number, default: 0 },
+
+    user: { type: String, ref: 'User', required: true },
+
+}, {
+    timestamps: true
+});
+repoSchema.index({ webhookId: 1 })
+repoSchema.index({ name: 1 })
+
+const Repo = mongoose.model('Repo', repoSchema);
+
+//#endregion
 
 //#region Events
 const eventSchema = new mongoose.Schema({
     ts: { type: Date, required: true, default: () => moment().utc() },
-    user: {
-        type: String,
-        ref: 'User',
-        required: true
-    },
+
+    user: { type: String, ref: 'User', required: true },
+    repo: { type: Number, ref: 'Repo', required: true },
+
     currentPushes: { type: Number, required: true },
     currentStreak: { type: Number, required: true },
     repositoryName: { type: String, required: true },
@@ -49,20 +71,30 @@ const userSchema = new mongoose.Schema({
     discordId: { type: String, required: true },
     discordUsername: { type: String, required: true },
     discordAvatar: { type: String, required: true },
-    timezone: { type: String },
-    repoName: { type: String },
+
     githubUsername: { type: String },
     githubId: { type: String },
     githubAvatar: { type: String },
-    webhookId: { type: String },
+    // repoName: { type: String },
+    // webhookId: { type: String },
+
     totalPushes: { type: Number, default: 0 },
     currentStreak: { type: Number, default: 0 },
     bestStreak: { type: Number, default: 0 },
     hasCurrentStreak: { type: Boolean, default: false },
+
     setupComplete: { type: Boolean, default: false },
+
     lastPush_UTC: { type: Date },
     endStreakAt_UTC: { type: Date },
     nextStreakAt_UTC: { type: Date, default: () => moment().utc() },
+    timezone: { type: String },
+
+
+    repositories: [{ type: Number, ref: 'Repo' }],
+    events: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event' }],
+
+
 }, {
     timestamps: true
 });
@@ -92,19 +124,14 @@ userSchema.methods.UpdateFromPush = function (_userTime) {
 
         // Parse the _userTime with its timezone
         const userTimeWithZone = moment.parseZone(_userTime);
-        console.log("Parsed _userTime with timezone:", userTimeWithZone.format());
 
         // Calculate next streak and end streak in the user's timezone, then set to midnight
         const nextStreakUserZone = userTimeWithZone.clone().add(1, 'day').startOf('day');
         const endStreakUserZone = userTimeWithZone.clone().add(2, 'day').startOf('day');
-        console.log("Next streak in user's timezone:", nextStreakUserZone.format());
-        console.log("End streak in user's timezone:", endStreakUserZone.format());
 
         // Convert the times to UTC
         this.nextStreakAt_UTC = nextStreakUserZone.toISOString();
         this.endStreakAt_UTC = endStreakUserZone.toISOString();
-        console.log("Next streak in UTC:", this.nextStreakAt_UTC);
-        console.log("End streak in UTC:", this.endStreakAt_UTC);
     }
 }
 
@@ -130,5 +157,6 @@ module.exports = {
     connection: mongoose.connection,
     User: User,
     Event: Event,
+    Repo: Repo,
     DoesUserExist: DoesUserExist,
 }

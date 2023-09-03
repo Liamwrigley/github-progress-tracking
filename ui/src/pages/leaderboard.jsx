@@ -3,11 +3,17 @@ import { Get } from '../utility/ApiRequest'
 import { TimeSince, TimeUntil } from "../utility/timeHelpers"
 import { useQuery } from 'react-query';
 import { Loading } from "../components/loading";
+import { useNavigate } from 'react-router-dom'
 
 const fetchLeaderboardData = () => Get('/leaderboard');
 
 export const Leaderboard = () => {
+    const navigate = useNavigate()
     const { data: userData, isFetching } = useQuery('leaderboardData', fetchLeaderboardData);
+
+    const onRowClick = (id) => {
+        navigate(`/user/${id}`)
+    }
 
     return (
         <Loading isFetching={isFetching && !userData}>
@@ -29,7 +35,7 @@ export const Leaderboard = () => {
                                 const latestPush = TimeSince(data.lastPush_UTC)
                                 const streakEnd = TimeUntil(data.endStreakAt_UTC)
                                 return (
-                                    <tr key={`${i}${data.ts}`} className="group/list">
+                                    <tr key={`${i}${data.ts}`} onClick={() => onRowClick(data.discordId)} className="group/list cursor-pointer">
                                         {/* USER */}
                                         <td>
                                             <div className="flex items-center space-x-3">
@@ -87,27 +93,4 @@ export const Leaderboard = () => {
             </div>
         </Loading>
     )
-    // return (
-    //     <>
-    //         <div className="flex pb-4 group flex-row justify-start  items-center">
-    //             <div className="w-32" ><strong>#</strong></div>
-    //             <div className="basis-1/5" ><strong>User</strong></div>
-    //             <div className="basis-1/5" ><strong>Total Pushes</strong></div>
-    //             <div className="basis-1/5" ><strong>Current Streak</strong></div>
-    //             <div className="basis-1/5" ><strong>Best Streak</strong></div>
-    //         </div>
-    //         {userData.map((data, i) => {
-    //             const time = TimeSince(data.ts)
-    //             return (
-    //                 <div className="flex pb-4 group flex-row justify-start  items-center">
-    //                     <div className="w-32" >{i + 1}</div>
-    //                     <DiscordProfile name={data.discordUsername} avatar={data.discordAvatar} basis={5} />
-    //                     <div className="basis-1/5" ><i class="bi bi-github"></i> {data.totalPushes}</div>
-    //                     <div className="basis-1/5" ><span>&#128293;</span> {data.currentStreak}</div>
-    //                     <div className="basis-1/5" ><span>&#127942;</span> {data.bestStreak}</div>
-    //                 </div>
-    //             )
-    //         })}
-    //     </>
-    // )
 }

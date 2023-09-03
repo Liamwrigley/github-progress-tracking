@@ -8,11 +8,12 @@ router.get('/', async (req, res) => {
         const recentEvents = await db.Event.find()
             .sort({ ts: -1 })
             .limit(50)
-            .populate('user', '_id discordUsername currentStreak githubUsername repoName discordAvatar githubAvatar lastPush_UTC')
+            .populate('user', '_id discordUsername currentStreak githubUsername discordAvatar githubAvatar lastPush_UTC')
             .exec();
 
         recentEvents.forEach(e => {
             events.push({
+                discordId: e.user._id,
                 username: e.user.discordUsername,
                 discordAvatar: e.user.discordAvatar,
                 githubName: e.user.githubUsername,
@@ -28,7 +29,6 @@ router.get('/', async (req, res) => {
         console.error("Error fetching latest events:", err);
     }
     res.send(events)
-    // res.render('realtime', { title: "Realtime Events", data: events })
 })
 
 module.exports = router;

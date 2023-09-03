@@ -3,21 +3,14 @@ require('dotenv').config();
 const config = require('./config.json')
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const ejsLayouts = require('express-ejs-layouts');
 const db = require('./db/connect')
 const webhook_helper = require('./functions/discord')
 var favicon = require('serve-favicon');
-
 
 const express = require("express")
 const cookieParser = require('cookie-parser')
 const session = require('express-session');
 const app = express();
-
-
-// layouts
-app.set('view engine', 'ejs');
-app.use(ejsLayouts);
 
 app.use(cookieParser());
 app.use(bodyParser.json({
@@ -116,23 +109,22 @@ app.use((req, res, next) => {
   next();
 });
 
-const authGithubRoutes = require("./routes/auth/github")
-const authDiscordRoutes = require("./routes/auth/discord")
-const authHelperRoutes = require("./routes/auth/helpers")
+
+const authRoutes = require('./routes/auth/auth')
 const leaderboardRoute = require('./routes/leaderboard');
 const eventRoutes = require("./webhook/event")
 const indexRoute = require('./routes/index');
 const realtimeRoute = require('./routes/realtime');
 const deployRoute = require('./deploy');
+const userRoute = require('./routes/user')
 
-app.use('/auth_old', [authGithubRoutes, authDiscordRoutes, authHelperRoutes])
+app.use('/auth', authRoutes)
 app.use('/event', eventRoutes(nsp))
 app.use('/', [indexRoute, leaderboardRoute])
 app.use('/realtime', realtimeRoute)
 app.use('/admin', deployRoute)
+app.use('/user', userRoute)
 
-const auth2 = require('./routes/new_auth/auth')
-app.use('/auth', auth2)
 
 
 //DB

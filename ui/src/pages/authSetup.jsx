@@ -1,7 +1,7 @@
 import React from 'react'
 import { Get } from '../utility/ApiRequest'
 import { useQuery } from 'react-query';
-import { SelectRepo } from '../components/selectRepo';
+import { SelectRepo } from '../components/auth/selectRepo';
 import { Stepper } from '../components/auth/stepper';
 import { Loading } from '../components/loading';
 import { ProfileTicket } from '../components/profileTicket';
@@ -47,12 +47,12 @@ export const AuthSetup = () => {
         { key: "repo", text: "Select Repo", status: resolve(userData?.user?.setupComplete) },
     ]
 
-    const activeStep = (key) => steps[steps.findIndex(s => !s.status)].key === key
+    const activeStep = (key) => steps[steps.findIndex(s => !s.status)]?.key === key
 
     return (
         <Loading isFetching={isFetching && !userData}>
             <div className="flex flex-col gap-4">
-                {/* <Stepper steps={steps} /> */}
+                <Stepper steps={steps} />
 
 
 
@@ -60,7 +60,7 @@ export const AuthSetup = () => {
                     <div className="w-full flex flex-col items-center justify-center gap-2">
                         <ProfileTicket
                             activeStep={activeStep(steps[0].key)}
-                            showButton={steps[0].status}
+                            showDetails={steps[0].status}
                             url={DISCORD_REDIRECT()}
                             avatar={userData?.user?.[steps[0].key]?.avatar}
                             username={userData?.user?.[steps[0].key]?.name}
@@ -71,7 +71,7 @@ export const AuthSetup = () => {
                     <div className="w-full flex flex-col items-center justify-center gap-2">
                         <ProfileTicket
                             activeStep={activeStep(steps[1].key)}
-                            showButton={steps[1].status}
+                            showDetails={steps[1].status}
                             url={GITHUB_REDIRECT()}
                             avatar={userData?.user?.[steps[1].key]?.avatar}
                             username={userData?.user?.[steps[1].key]?.name}
@@ -81,15 +81,12 @@ export const AuthSetup = () => {
                     <div className="w-full flex flex-col items-center justify-center gap-2">
                         <ProfileTicket
                             activeStep={activeStep(steps[2].key)}
-                            showButton={steps[2].status}
+                            showDetails={steps[2].status}
                             avatar={userData?.user?.[steps[1].key]?.avatar}
-                            username={userData?.user?.[steps[1].key]?.repo}
+                            username={userData?.user?.[steps[1].key]?.name}
                             title={steps[2].text}
                             type={steps[2].key} >
                         </ProfileTicket>
-                        {/* {userData && steps[2].status ? <>
-                            <div>{userData.user.github.repoName}</div>
-                        </> : <a disabled={activeStep(steps[2].key)} href="/go" >Select Repo - {activeStep(steps[2].key) ? "Y" : "N"}</a>} */}
                     </div>
                 </div>
                 {activeStep(steps[2].key) &&
@@ -101,10 +98,8 @@ export const AuthSetup = () => {
                     </>
                 }
 
-
-
-                <div className="divider"></div>
-                <p>{JSON.stringify(activeStep())}</p>
+                {/* <div className="divider"></div> */}
+                {/* <p>{JSON.stringify(activeStep())}</p>
                 <div className="flex flex-row gap-4 justify-between">
                     <div className='prose m-w-none '>
                         <h3>Discord</h3>
@@ -123,7 +118,7 @@ export const AuthSetup = () => {
                         </ul>
                     </div>
                 </div>
-                <div className="divider"></div>
+                <div className="divider"></div> */}
             </div >
         </Loading>
     );

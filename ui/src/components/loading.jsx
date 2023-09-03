@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-const MIN_LOADING_TIME = 500;
 const FADE_OUT_DURATION = 500; // This should match the CSS transition duration
 
 export const Loading = ({ isFetching, children }) => {
@@ -14,7 +13,7 @@ export const Loading = ({ isFetching, children }) => {
             setFadeLoader(true);
             timeout = setTimeout(() => {
                 setShowLoader(false);
-                setFadeLoader(false); // Reset for next time
+                setFadeLoader(false);
             }, FADE_OUT_DURATION);
         } else {
             setShowLoader(true);
