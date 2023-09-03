@@ -195,7 +195,7 @@ router.post('/repo-select', sessionPrinter, hasGithubToken, isAuthenticated, asy
 
         setSession(req, user, user.githubId, 'github')
 
-        res.send(user)
+        res.redirect(`${UI_URL}/user/${user.discordId}`)
 
     } catch (error) {
         console.error("Error in webhook setup:", error);

@@ -5,13 +5,14 @@ import { SelectRepo } from '../components/auth/selectRepo';
 import { Stepper } from '../components/auth/stepper';
 import { Loading } from '../components/loading';
 import { ProfileTicket } from '../components/profileTicket';
-import { Profile } from './profile';
+import { useNavigate } from 'react-router-dom';
 
 
 const fetchUser = () => Get('/auth/status')
 
 
 export const AuthSetup = () => {
+    const navigate = useNavigate()
     const { data: userData, isFetching, refetch } = useQuery('userData', fetchUser);
     const DISCORD_CLIENT_ID = process.env.REACT_APP_DISCORD_CLIENT_ID
     const DISCORD_REDIRECT = () => {
@@ -22,23 +23,6 @@ export const AuthSetup = () => {
     const GITHUB_CLIENT_ID = process.env.REACT_APP_GITHUB_CLIENT_ID;
     const GITHUB_REDIRECT = () => `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&scope=repo_hook%20repo%20user`
 
-
-    // if (!isLoading) {
-    //     if (!userData.authenticated) {
-    //         window.location.href = DISCORD_REDIRECT()
-    //     }
-    //     // github not setup at all
-    //     if (userData.authenticated && userData.user && Object.keys(userData.user.github).length === 0) {
-    //         window.location.href = GITHUB_REDIRECT()
-    //     }
-    //     if (userData.authenticated && userData.user && !userData.user.github.repo && userData.needsGithubToken) {
-    //         window.location.href = GITHUB_REDIRECT()
-    //     }
-    //     if (userData.authenticated && userData.user && !userData.user.github.repo) {
-    //         return <SelectRepo user={userData.user} refetch={refetch} />
-    //     }
-    // }
-    console.log(userData)
     const resolve = (v) => v ? true : false
 
     const steps = [
@@ -48,6 +32,10 @@ export const AuthSetup = () => {
     ]
 
     const activeStep = (key) => steps[steps.findIndex(s => !s.status)]?.key === key
+
+    if (userData?.user?.setupComplete) {
+        navigate(`/user/${userData.user.discord.id}`)
+    }
 
     return (
         <Loading isFetching={isFetching && !userData}>
@@ -97,28 +85,6 @@ export const AuthSetup = () => {
                         </div>
                     </>
                 }
-
-                {/* <div className="divider"></div> */}
-                {/* <p>{JSON.stringify(activeStep())}</p>
-                <div className="flex flex-row gap-4 justify-between">
-                    <div className='prose m-w-none '>
-                        <h3>Discord</h3>
-                        <ul>
-                            <li><strong>Image: </strong>img</li>
-                            <li><strong>Name: </strong>Mesiya</li>
-                        </ul>
-                    </div>
-                    <div className='prose m-w-none '>
-                        <h3>Github</h3>
-                        <ul>
-                            <li><strong>Image: </strong>img</li>
-                            <li><strong>Name: </strong>Mesiya</li>
-                            <li><strong>Repo: </strong>XYZHAH</li>
-                            <li><strong>Other GIthub Info: </strong>asdasdh akjsdhaksj dhaksjdh asd</li>
-                        </ul>
-                    </div>
-                </div>
-                <div className="divider"></div> */}
             </div >
         </Loading>
     );

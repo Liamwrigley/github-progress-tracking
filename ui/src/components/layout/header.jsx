@@ -9,7 +9,7 @@ const fetchUser = () => Get('/auth/status')
 export const Header = ({ links }) => {
     const location = useLocation()
     const isAuthRoute = location.pathname.startsWith('/auth')
-    const { data: userData, isLoading, refetch } = useQuery('userData', fetchUser);
+    const { data: userData, isLoading } = useQuery('userData', fetchUser);
 
     return (
         <header className="p-4 bg-custom-secondarybg text-custom-secondarytext z-50">
@@ -27,16 +27,16 @@ export const Header = ({ links }) => {
                         )
                     })}
                 </div>
-                {(!isAuthRoute && !userData?.authenticated) &&
+                {!isLoading && (!isAuthRoute && !userData?.authenticated) &&
                     <div className="flex space-x-4">
                         <StyledButton label={"Login"} to="/auth/login" primary={true} />
                         <StyledButton label={"Setup"} to="/auth/setup" primary={false} />
                     </div>
                 }
-                {userData && userData.authenticated &&
+                {!isLoading && userData && userData.authenticated &&
                     <div className="flex space-x-4">
                         <StyledButton label={"Logout"} to="/auth/logout" primary={true} />
-                        <StyledButton label={"Profile"} to={`/profile/${userData.user.discord.id}`} primary={false} />
+                        <StyledButton label={"Profile"} to={`/user/${userData.user.discord.id}`} primary={false} />
                     </div>
                 }
             </div>
