@@ -6,7 +6,7 @@ const github = require('./github')
 const express = require("express");
 const router = express.Router();
 
-const UI_URL = process.env.PRODUCTION === "true" ? "https://github-tracker.rowrisoft.xyz" : "http://localhost:4002"
+const UI_URL = process.env.PRODUCTION === "true" ? "https://reporookie.rowrisoft.xyz" : "http://localhost:4002"
 
 const setSession = (req, user, id, source) => {
     return req.session.user = {

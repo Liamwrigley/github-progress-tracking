@@ -12,7 +12,7 @@ export const ProfileTicket = ({
 }) => {
 
     const typeClass = type === "discord" ? "bi bi-discord" : "bi bi-github"
-    const dynamicClass = " hover:scale-105 hover:shadow-lg  "
+    const dynamicClass = " hover:scale-105 hover:shadow-lg "
     const activeClass = " border border-custom-highlight2 hover:scale-105 hover:shadow-lg  "
     const baseClass = "  min-h-[80px] flex flex-col gap-4 bg-black shadow-sm bg-opacity-20 duration-100 w-full p-4  relative "
 

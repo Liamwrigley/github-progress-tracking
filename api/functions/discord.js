@@ -17,7 +17,7 @@ const buildEmbed = (color = 0x00FF22, title = null) => {
         .setColor(color)
         .setTitle(title)
         .setAuthor({ name: "Gitub Progress Tracker" })
-        .setURL("https://github-tracker.rowrisoft.xyz")
+        .setURL("https://reporookie.rowrisoft.xyz")
         .setTimestamp()
 }
 

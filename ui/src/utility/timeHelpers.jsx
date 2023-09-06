@@ -1,11 +1,13 @@
 import * as dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime';
 import updateLocale from 'dayjs/plugin/updateLocale';
+import duration from 'dayjs/plugin/duration';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale)
+dayjs.extend(duration)
 
 // dayjs.updateLocale('en', {
 //     relativeTime: {
@@ -45,4 +47,12 @@ export const TimeUntil = (ts) => {
     } else {
         return `00:00:00`
     }
+}
+
+export const TimeDuration = (ts) => {
+    const now = dayjs.utc();
+    const target = dayjs.utc(ts);
+    const duration = dayjs.duration(target.diff(now));
+
+    return duration;
 }

@@ -42,8 +42,6 @@ export const AuthSetup = () => {
             <div className="flex flex-col gap-4">
                 <Stepper steps={steps} />
 
-
-
                 <div className="flex flex-row gap-4 justify-between pt-4">
                     <div className="w-full flex flex-col items-center justify-center gap-2">
                         <ProfileTicket

@@ -29,8 +29,8 @@ const IS_PROD = process.env.PRODUCTION === "true"
 const allowedOrigins = [
   'http://localhost:4001',
   'http://localhost:4002',
-  'https://github-tracker.rowrisoft.xyz',
-  'https://api.github-tracker.rowrisoft.xyz'
+  'https://reporookie.rowrisoft.xyz',
+  'https://api.reporookie.rowrisoft.xyz'
 ];
 
 app.use(cors({
@@ -70,8 +70,8 @@ if (IS_PROD) {
 
   // SSL/TLS options
   const options = {
-    key: fs.readFileSync('/etc/letsencrypt/live/github-tracker.rowrisoft.xyz/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/github-tracker.rowrisoft.xyz/fullchain.pem')
+    key: fs.readFileSync('/etc/letsencrypt/live/reporookie.rowrisoft.xyz/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/reporookie.rowrisoft.xyz/fullchain.pem')
   };
   server = http.createServer(options, app);
 } else {
@@ -83,7 +83,7 @@ const io = socketIo(server, {
 
   withCredentials: IS_PROD,
   cors: {
-    origin: IS_PROD ? "https://github-tracker.rowrisoft.xyz" : "http://localhost:4002",
+    origin: IS_PROD ? "https://reporookie.rowrisoft.xyz" : "http://localhost:4002",
     credentials: IS_PROD
   }
 });;
