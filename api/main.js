@@ -70,8 +70,8 @@ if (IS_PROD) {
 
   // SSL/TLS options
   const options = {
-    key: fs.readFileSync('/etc/letsencrypt/live/reporookie.rowrisoft.xyz/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/reporookie.rowrisoft.xyz/fullchain.pem')
+    key: fs.readFileSync('/etc/letsencrypt/live/health.rowrisoft.xyz/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/health.rowrisoft.xyz/fullchain.pem')
   };
   server = http.createServer(options, app);
 } else {
