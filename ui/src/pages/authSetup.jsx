@@ -4,7 +4,7 @@ import { useQuery } from 'react-query';
 import { SelectRepo } from '../components/auth/selectRepo';
 import { Stepper } from '../components/auth/stepper';
 import { Loading } from '../components/loading';
-import { ProfileTicket } from '../components/profileTicket';
+import { AuthTicket } from '../components/authTicket';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -44,7 +44,7 @@ export const AuthSetup = () => {
 
                 <div className="flex flex-row gap-4 justify-between pt-4">
                     <div className="w-full flex flex-col items-center justify-center gap-2">
-                        <ProfileTicket
+                        <AuthTicket
                             activeStep={activeStep(steps[0].key)}
                             showDetails={steps[0].status}
                             url={DISCORD_REDIRECT()}
@@ -55,7 +55,7 @@ export const AuthSetup = () => {
                         />
                     </div>
                     <div className="w-full flex flex-col items-center justify-center gap-2">
-                        <ProfileTicket
+                        <AuthTicket
                             activeStep={activeStep(steps[1].key)}
                             showDetails={steps[1].status}
                             url={GITHUB_REDIRECT()}
@@ -65,14 +65,14 @@ export const AuthSetup = () => {
                             type={steps[1].key} />
                     </div>
                     <div className="w-full flex flex-col items-center justify-center gap-2">
-                        <ProfileTicket
+                        <AuthTicket
                             activeStep={activeStep(steps[2].key)}
                             showDetails={steps[2].status}
                             avatar={userData?.user?.[steps[1].key]?.avatar}
                             username={userData?.user?.[steps[1].key]?.name}
                             title={steps[2].text}
                             type={steps[2].key} >
-                        </ProfileTicket>
+                        </AuthTicket>
                     </div>
                 </div>
                 {activeStep(steps[2].key) &&

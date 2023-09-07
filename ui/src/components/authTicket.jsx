@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const ProfileTicket = ({
+export const AuthTicket = ({
     activeStep = false,
     showDetails = true,
     dynamic = true,

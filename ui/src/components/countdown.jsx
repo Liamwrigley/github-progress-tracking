@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { TimeDuration } from '../utility/timeHelpers';
 
-export const Countdown = ({ title, icon, target }) => {
+export const Countdown = ({ target, countToStreakEnd = false }) => {
     const [time, setTime] = useState({
         days: 0,
         hours: 0,
@@ -28,15 +28,28 @@ export const Countdown = ({ title, icon, target }) => {
         return () => clearInterval(interval);
     }, [target]);
 
+    const getColor = () => {
+        if (countToStreakEnd) {
+
+            if (time.days === 0 && time.hours < 1) {
+                return "text-red-600"
+            }
+            if (time.days < 1) {
+                return "text-orange-600"
+            }
+        } else {
+            if (time.days === 0 && time.hours === 0 && time.minutes === 0 && time.seconds === 0) {
+                return "text-green-600"
+            }
+        }
+    }
+
     return (
-        <div className='min-h-[80px] flex flex-col gap-4 bg-black shadow-sm bg-opacity-20 duration-100 w-full p-4 relative hover:scale-105 hover:shadow-lg'>
-            {title && <p className=' absolute left-2 top-1 text-xs tracking-widest uppercase'><i className={icon}></i> {title}</p>}
-            <div className="flex flex-row gap-4 justify-center items-center h-full text-center">
-                <TimeUnit value={time.days} label="days" />
-                <TimeUnit value={time.hours} label="hours" />
-                <TimeUnit value={time.minutes} label="min" />
-                <TimeUnit value={time.seconds} label="sec" />
-            </div>
+        <div className={`flex flex-row gap-4 justify-center items-center h-full text-center ${getColor()}`}>
+            <TimeUnit value={time.days} label="days" />
+            <TimeUnit value={time.hours} label="hours" />
+            <TimeUnit value={time.minutes} label="min" />
+            <TimeUnit value={time.seconds} label="sec" />
         </div>
     );
 }
